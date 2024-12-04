@@ -1,0 +1,14 @@
+{{define "body"}}
+    <div class="content">
+        {{ template "nav.html" . }}
+        <article class="uses">
+            <div class="uses-title">
+                <img src="{{ .App.Icon }}" loading=lazy>
+                <h1>{{ .App.Title }}</h1>
+            </div>
+            {{ .App.Content }}
+            <a href="{{ .App.URL }}" target=_blank>Visit website</a>
+        </article>
+    </div>
+    <footer><span>&copy; Antonio Pitasi, hope you like it ✨</span></footer>
+{{end}}

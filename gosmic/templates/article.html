@@ -1,0 +1,20 @@
+{{define "title"}}{{ .Article.Title }} - Antonio Pitasi{{end}}
+{{define "headers"}}
+<meta name="description" content="{{ .Article.Description }}">
+<meta property="og:title" content="{{ .Article.Title }}">
+<meta property="og:description" content="{{ .Article.Description }}">
+<meta property="og:image" content="/static/images/propic.webp">
+<meta property="og:type" content="article">
+{{end}}
+{{define "body"}}
+    <div class="content">
+        {{ template "nav.html" . }}
+        <article>
+            <h1>{{ .Article.Title }}</h1>
+            <p class="date">Written on {{ .Article.Date.Format "02 Jan, 2006" }}.</p>
+            {{ .Article.Content }}
+        </article>
+        {{ template "intro.html" . }}
+    </div>
+    <footer><span>&copy; Antonio Pitasi, hope you like it ✨</span></footer>
+{{end}}

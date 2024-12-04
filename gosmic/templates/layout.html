@@ -1,0 +1,25 @@
+{{define "layout"}}<!DOCTYPE html>
+<html>
+<head>
+    <title>{{block "title" .}}Antonio Pitasi{{end}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Antonio Pitasi: Cosmonaut, software engineer, and amateur photographer. Read articles, learn about my projects, and connect.">
+    <meta name="keywords" content="Antonio Pitasi, software engineer, blockchain, distributed systems, photography">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
+    <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/style.css?v={{ index .Site.StaticFileHash "static/style.css" }}" rel="preload" as="style">
+    <script defer data-domain="anto.pt" src="/js/ps.js"></script>
+    {{ if and .User.Preferences .User.Preferences.Background }}
+    <style>:root { --background: {{ .User.Preferences.Background }} }</style>
+    {{ end }}
+    {{block "head" .}}{{end}}
+</head>
+
+<body>
+    {{block "body" .}}
+        Nothing to see here
+    {{end}}
+</body>
+</html>{{end}}
