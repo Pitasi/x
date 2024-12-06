@@ -49,6 +49,7 @@ func TestCountLoops(t *testing.T) {
 		},
 	}
 
+	Run(m)
 	count := CountLoops(m)
 
 	if count != 6 {

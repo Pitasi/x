@@ -42,7 +42,7 @@ func CountLoops(m Map) int {
 			if x == m.guard.position.x && y == m.guard.position.y {
 				continue
 			}
-			if _, ok := m.grid[y][x].(Obstacle); ok {
+			if cell, ok := m.grid[y][x].(Marker); ok && !cell.IsMarked() {
 				continue
 			}
 			newMap := m.With(x, y, tmpObstacle)
