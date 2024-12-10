@@ -22,12 +22,16 @@ type Mul struct {
 func (t *Tokenizer) Next() (Mul, bool) {
 	for t.cur < len(t.input) {
 		if t.mulDisabled {
-			t.consumeNonD()
+			if found := t.consumeNonD(); !found {
+				break
+			}
 			if t.tryConsumeDo() {
 				t.mulDisabled = false
 			}
 		} else {
-			t.consumeNonMD()
+			if found := t.consumeNonMD(); !found {
+				break
+			}
 			if t.input[t.cur] == 'd' {
 				if t.tryConsumeDont() {
 					t.mulDisabled = true
@@ -44,16 +48,18 @@ func (t *Tokenizer) Next() (Mul, bool) {
 	return Mul{}, false
 }
 
-func (t *Tokenizer) consumeNonD() {
+func (t *Tokenizer) consumeNonD() bool {
 	for t.cur < len(t.input) && t.input[t.cur] != 'd' {
 		t.cur++
 	}
+	return t.cur < len(t.input)
 }
 
-func (t *Tokenizer) consumeNonMD() {
+func (t *Tokenizer) consumeNonMD() bool {
 	for t.cur < len(t.input) && t.input[t.cur] != 'm' && t.input[t.cur] != 'd' {
 		t.cur++
 	}
+	return t.cur < len(t.input)
 }
 
 func (t *Tokenizer) tryConsumeMul() (Mul, bool) {
