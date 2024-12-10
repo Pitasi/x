@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"gosmic/nofrills"
 )
 
 var devMode = os.Getenv("DEV_MODE") == "true"
@@ -22,6 +24,7 @@ func main() {
 	static(mux)
 	plausible(mux)
 	notfound(mux)
+	nofrills.Register(mux)
 
 	var h http.Handler = mux
 	h = recoverer(h)
