@@ -1,5 +1,9 @@
 anto.pt/x/socialimg v0.0.0-20241219155847-9ff4907d0bc1 h1:Acl3HAjNmo9vAPQ4pYTrG2w2ZdLc3Dn93SA8E4+ZuJI=
 anto.pt/x/socialimg v0.0.0-20241219155847-9ff4907d0bc1/go.mod h1:VpZ21gcyFYybNxCmEG73V1lDV/xa+PRDECBCxMuu+7I=
+anto.pt/x/socialimg v0.0.0-20241219171508-0abb406737ea h1:7HlbB59UU+mrPWHdj3T25XGKm45JXuz+HZHoBqifpFY=
+anto.pt/x/socialimg v0.0.0-20241219171508-0abb406737ea/go.mod h1:VpZ21gcyFYybNxCmEG73V1lDV/xa+PRDECBCxMuu+7I=
+anto.pt/x/socialimg v0.0.0-20241219172039-5bf5606915db h1:ntfrLjB5sxkNybSlGdjJtmHK1+7YW/L7+m6C5VkG9Mw=
+anto.pt/x/socialimg v0.0.0-20241219172039-5bf5606915db/go.mod h1:VpZ21gcyFYybNxCmEG73V1lDV/xa+PRDECBCxMuu+7I=
 github.com/BurntSushi/toml v1.2.1 h1:9F2/+DoOYIOksmaJFPw1tGFy1eDnIJXg+UHjuD8lTak=
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=

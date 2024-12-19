@@ -3,7 +3,7 @@ module gosmic
 go 1.23.4
 
 require (
-	anto.pt/x/socialimg v0.0.0-20241219155847-9ff4907d0bc1
+	anto.pt/x/socialimg v0.0.0-20241219172039-5bf5606915db
 	github.com/prometheus/client_golang v1.20.5
 	github.com/yuin/goldmark v1.7.8
 	go.abhg.dev/goldmark/frontmatter v0.2.0
