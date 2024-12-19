@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
+    <meta name="description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
     <meta property="og:site_name" content="Antonio Pitasi's Photos">
     <meta property="og:url" content="https://anto.ph/pic/{{ .ID }}">
     <meta property="og:title" content="Antonio Pitasi's Photos">
-    <meta property="og:description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
+    <meta property="og:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="{{ .URL }}/l.webp">
     <meta name="twitter:card" content="summary_large_image">
@@ -16,8 +16,9 @@
     <meta name="twitter:site" content="@zaphodias">
     <meta name="twitter:creator" content="@zaphodias">
     <meta name="twitter:title" content="Antonio Pitasi's Photos">
-    <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
+    <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
     <title>Photos - Antonio Pitasi</title>
+    <script defer data-domain="anto.ph" src="/js/ps.js"></script>
     <style>
         *,
         *:before,
