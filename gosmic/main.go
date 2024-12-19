@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"gosmic/antoph"
 	"gosmic/nofrills"
 )
 
@@ -25,6 +26,7 @@ func main() {
 	plausible(mux)
 	notfound(mux)
 	nofrills.Register(mux)
+	antoph.Register(mux)
 
 	var h http.Handler = mux
 	h = recoverer(h)
@@ -32,6 +34,9 @@ func main() {
 	h = compress(h)
 	h = userMiddleware(h)
 	h = metricsMiddleware(h)
+	if devMode {
+		h = rewriteHost(h)
+	}
 
 	log.Println("Listening on", addr)
 	log.Fatal(http.ListenAndServe(addr, h))

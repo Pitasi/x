@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
+    <meta property="og:site_name" content="Antonio Pitasi's Photos">
+    <meta property="og:url" content="https://anto.ph/pic/{{ .ID }}">
+    <meta property="og:title" content="Antonio Pitasi's Photos">
+    <meta property="og:description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="{{ .URL }}/l.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ .URL }}/l.webp">
+    <meta name="twitter:site" content="@zaphodias">
+    <meta name="twitter:creator" content="@zaphodias">
+    <meta name="twitter:title" content="Antonio Pitasi's Photos">
+    <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
+    <title>Photos - Antonio Pitasi</title>
+    <style>
+        *,
+        *:before,
+        *:after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: sans-serif;
+            font-size: 16px;
+        }
+
+        header {
+            padding: 10px;
+            width: 100%;
+            max-width: 625px;
+            margin: 0 auto;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            font-size: 0.875rem;
+
+            a {
+                color: white;
+                text-decoration: none;
+                font-weight: bold;
+            }
+        }
+
+        section {
+            width: 100%;
+            max-width: 625px;
+            margin: 0 auto;
+
+            img {
+                background: rgba(255, 255, 255, 0.1);
+                display: block;
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+        }
+
+        .title {
+            display: block;
+            margin-top: 1rem;
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .info {
+            margin-left: 0.5rem;
+            opacity: 0.5;
+
+            &:hover {
+                opacity: 1;
+            }
+
+            p {
+                line-height: 1.5;
+            }
+        }
+
+        footer {
+            padding: 0 0.5rem;
+            max-width: 625px;
+            margin: 2rem auto 0 auto;
+
+            a {
+                color: white;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            p {
+                margin-top: 0.5rem;
+                color: rgba(255, 255, 255, 0.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/">
+            antonio pitasi
+        </a>
+        <a href="https://anto.pt">
+            anto.pt →
+        </a>
+    </header>
+    <section>
+        <img src="{{ .URL }}/l.webp" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+        <p class="title">metadata</p>
+        <div class="info">
+            <p>{{ .Meta.Date | prettyDate }}</p>
+            <p>{{ .Meta.Camera }}</p>
+            <p>{{ .Meta.Lens }}</p>
+            <p>ISO {{ .Meta.ISO }}</p>
+            <p>{{ .Meta.ShutterSpeed }}s</p>
+            <p>f/{{ .Meta.Aperture }}</p>
+        </div>
+    </section>
+
+    <footer>
+        <a href="/random">👉 random photo</a>
+        <p>images are mine and can't be used by anyone else unless otherwise stated</p>
+    </footer>
+</body>
+
+</html>

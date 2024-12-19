@@ -23,6 +23,7 @@ func logger(next http.Handler) http.Handler {
 		slog.Info(r.URL.String(),
 			"remote_addr", r.RemoteAddr,
 			"method", r.Method,
+			"host", r.Host,
 			"took", time.Since(start))
 	})
 }
