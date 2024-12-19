@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"anto.pt/x/socialimg"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -206,6 +207,31 @@ func articles(mux *http.ServeMux) {
 		}
 	})
 
+	propic, err := staticFS.Open("static/images/propic_nobg.png")
+	if err != nil {
+		panic(fmt.Sprintf("can't open propic_nobg.png: %s", err))
+	}
+
+	font, err := staticFS.Open("static/fonts/PPWriter-Bold.ttf")
+	if err != nil {
+		panic(fmt.Sprintf("can't open propic_nobg.png: %s", err))
+	}
+
+	coverGenerator, err := socialimg.NewGenerator(font, propic)
+	if err != nil {
+		panic(fmt.Sprintf("can't create cover generator: %s", err))
+	}
+
+	mux.HandleFunc("GET /socialimg", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/jpeg")
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
+		if err := coverGenerator.Generate(w, "Antonio Pitasi", "https://anto.pt"); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Printf("error generating social image: %v", err)
+			return
+		}
+	})
+
 	mux.HandleFunc("GET /articles/{slug}", func(w http.ResponseWriter, r *http.Request) {
 		user, _ := r.Context().Value("user").(*User)
 		slug := r.PathValue("slug")
@@ -233,4 +259,21 @@ func articles(mux *http.ServeMux) {
 		}
 	})
 
+	mux.HandleFunc("GET /articles/covers/{slug}", func(w http.ResponseWriter, r *http.Request) {
+		slug := r.PathValue("slug")
+		article, found := articles.Get(slug)
+		if !found {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		w.Header().Set("Content-Type", "image/jpeg")
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
+		subtitle := fmt.Sprintf("written on %s", article.Date.Format("02 Jan 2006"))
+		if err := coverGenerator.Generate(w, article.Title, subtitle); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Printf("error generating social image: %v", err)
+			return
+		}
+	})
 }
