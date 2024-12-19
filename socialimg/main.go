@@ -99,7 +99,7 @@ func (gen *Generator) Generate(w io.Writer, title, subtitle string) error {
 	titleH = titleH * float64(len(txtLines))
 
 	dateColor := "#00000070"
-	dateFontSize := 25.0
+	dateFontSize := 35.0
 	dc.SetFontFace(gen.font(dateFontSize))
 	dc.SetHexColor(dateColor)
 	dateMarginTop := 50.
