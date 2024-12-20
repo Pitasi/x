@@ -146,39 +146,7 @@ func TestExample2(t *testing.T) {
 		76: 3,
 	}
 	if !reflect.DeepEqual(savings, expected) {
-		t.Errorf("Expected %v, got %v", expected, savings)
-	}
-}
-
-func TestGetCheatCost(t *testing.T) {
-	g := Parse([]byte(testInput))
-	start := Vec{1, 3}
-	end := Vec{3, 7}
-	maxCheatTime := 20
-
-	cost, found := getCheatCost(g, start, end, maxCheatTime)
-	if !found {
-		t.Fatalf("Expected to find a path from %v to %v", start, end)
-	}
-	expected := 6
-	if cost != expected {
-		t.Errorf("Expected cost %d, got %d", expected, cost)
-	}
-}
-
-func TestGetCheatCost2(t *testing.T) {
-	g := Parse([]byte(testInput))
-	start := Vec{1, 3}
-	end := Vec{4, 7}
-	maxCheatTime := 20
-
-	cost, found := getCheatCost(g, start, end, maxCheatTime)
-	if !found {
-		t.Fatalf("Expected to find a path from %v to %v", start, end)
-	}
-	expected := 13
-	if cost != expected {
-		t.Errorf("Expected cost %d, got %d", expected, cost)
+		t.Errorf("Expected:\n%v\nGot:\n%v", expected, savings)
 	}
 }
 

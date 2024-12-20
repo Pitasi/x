@@ -58,20 +58,10 @@ func CheatV2Candidates(g *Grid, minSaving, maxCheatTime int) []CheatV2 {
 				continue
 			}
 
-			maxSaving := CheatV2Saving(g, CheatV2{s, e, minCost})
-			if maxSaving < minSaving {
-				continue
-			}
-
-			cost, found := getCheatCost(g, s, e, maxCheatTime)
-			if !found {
-				continue
-			}
-
 			if _, ok := candidates[s]; !ok {
 				candidates[s] = make(map[Vec]int)
 			}
-			candidates[s][e] = cost
+			candidates[s][e] = minCost
 		}
 	}
 
@@ -88,70 +78,8 @@ func CheatV2Candidates(g *Grid, minSaving, maxCheatTime int) []CheatV2 {
 	return c
 }
 
-func getCheatCost(g *Grid, s, e Vec, maxCheatTime int) (int, bool) {
-	if g.Cell(s.X, s.Y).remainingTime >= g.Cell(e.X, e.Y).remainingTime {
-		// going backwards is not allowed
-		return 0, false
-	}
-	d := distance(s, e)
-	if d <= 1 || d > maxCheatTime {
-		return 0, false
-	}
-
-	return findWallPath(g, s, e, make(map[Vec]int), maxCheatTime)
-}
-
 func CheatV2Saving(g *Grid, c CheatV2) int {
 	return abs(g.Cell(c.Start.X, c.Start.Y).remainingTime-g.Cell(c.End.X, c.End.Y).remainingTime) - c.Cost
-}
-
-func findWallPath(g *Grid, s, e Vec, visited map[Vec]int, availSteps int) (int, bool) {
-	if s == e {
-		return 0, true
-	}
-
-	if availSteps < 0 {
-		return 0, false
-	}
-
-	visited[s] = availSteps
-	moves := []Vec{
-		{s.X, s.Y - 1},
-		{s.X, s.Y + 1},
-		{s.X - 1, s.Y},
-		{s.X + 1, s.Y},
-	}
-
-	var (
-		minCost = 9999999999999
-		found   bool
-	)
-	for _, m := range moves {
-		if m == e {
-			return 1, true
-		}
-		if m.X < 0 || m.X >= g.Width() || m.Y < 0 || m.Y >= g.Height() {
-			continue
-		}
-		if !g.Cell(m.X, m.Y).IsWall() {
-			continue
-		}
-		if s, ok := visited[m]; ok && availSteps < s {
-			// we already have a better path to m
-			continue
-		}
-		cost, f := findWallPath(g, m, e, visited, availSteps-1)
-		cost = cost + 1
-		if f && cost < minCost {
-			minCost = cost
-			found = true
-		}
-	}
-
-	if !found {
-		return 0, false
-	}
-	return minCost, true
 }
 
 func saving(g *Grid, v1, v2 Vec) int {
