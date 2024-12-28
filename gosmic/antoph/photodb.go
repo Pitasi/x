@@ -202,7 +202,8 @@ type photoInfo struct {
 			Icc struct {
 				Length int `json:"length"`
 			} `json:"icc"`
-			Xmp struct {
+			Iptc map[string]json.RawMessage `json:"iptc"`
+			Xmp  struct {
 				Length int `json:"length"`
 			} `json:"xmp"`
 		} `json:"profiles"`
@@ -248,6 +249,13 @@ func extractMeta(p string) ImgMeta {
 	}
 
 	props := infos[0].Image.Properties
+	iptc := infos[0].Image.Profiles.Iptc
+	var keywords []string
+	if iptcKeywords, found := iptc["Keyword[2,25]"]; found {
+		if err := json.Unmarshal(iptcKeywords, &keywords); err != nil {
+			panic(err)
+		}
+	}
 
 	var dt time.Time
 	d := props.ExifDateTimeOriginal
@@ -275,6 +283,7 @@ func extractMeta(p string) ImgMeta {
 		ISO:          iso,
 		ShutterSpeed: shutterSpeed,
 		Aperture:     aperture,
+		Keywords:     keywords,
 	}
 }
 

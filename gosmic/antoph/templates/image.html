@@ -79,6 +79,24 @@
             font-weight: bold;
         }
 
+        .tags {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+
+            a {
+                color: white;
+                text-decoration: none;
+                background: rgba(255, 255, 255, 0.1);
+                padding: 0.2rem 0.5rem;
+                border-radius: 0.2rem;
+                margin-right: 0.5rem;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                }
+            }
+        }
+
         .info {
             margin-left: 0.5rem;
             opacity: 0.5;
@@ -122,6 +140,12 @@
     </header>
     <section>
         <img src="{{ .URL }}/l.webp" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+        <div class="tags">
+            {{ range .Meta.Keywords }}
+            <a href="/tags/{{ . }}">#{{ . }}</a>
+            {{ end }}
+        </div>
+
         <p class="title">metadata</p>
         <div class="info">
             <p>{{ .Meta.Date | prettyDate }}</p>

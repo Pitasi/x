@@ -43,6 +43,7 @@ type ImgMeta struct {
 	ISO          string
 	ShutterSpeed string
 	Aperture     string
+	Keywords     []string
 }
 
 func openPhotoDB(base string) ([]Img, error) {
@@ -84,6 +85,19 @@ func byID(imgs []Img) map[string]Img {
 	return m
 }
 
+func byKeywords(imgs []Img) map[string][]Img {
+	m := make(map[string][]Img)
+	for _, img := range imgs {
+		for _, keyword := range img.Meta.Keywords {
+			m[keyword] = append(m[keyword], img)
+		}
+	}
+	for _, imgs := range m {
+		sort.Slice(imgs, func(i, j int) bool { return imgs[i].Meta.Date.After(imgs[j].Meta.Date) })
+	}
+	return m
+}
+
 func prettyDate(t time.Time) string {
 	return t.Format(time.RFC822)
 }
@@ -101,8 +115,8 @@ func Register(mux *http.ServeMux) {
 	}
 
 	imgsByID := byID(imgs)
-
 	imgsByYear := byYear(imgs)
+	imgsByKeywords := byKeywords(imgs)
 
 	var data = Index{}
 	for y, imgs := range imgsByYear {
@@ -146,6 +160,27 @@ func Register(mux *http.ServeMux) {
 		err := imagepage.Execute(w, img)
 		if err != nil {
 			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)
+		}
+	})
+
+	mux.HandleFunc("GET anto.ph/tags/{tag}", func(w http.ResponseWriter, r *http.Request) {
+		tag := r.PathValue("tag")
+		imgs, ok := imgsByKeywords[tag]
+		if !ok {
+			http.NotFound(w, r)
+			return
+		}
+
+		err := homepage.Execute(w, Index{
+			Sections: []Section{
+				{
+					Title: fmt.Sprintf("#%s (%d photos)", tag, len(imgs)),
+					Imgs:  imgs,
+				},
+			},
+		})
+		if err != nil {
+			slog.Error("rendering anto.ph tag", "err", err, "tag", tag)
 		}
 	})
 
