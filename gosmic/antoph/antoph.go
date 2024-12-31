@@ -49,8 +49,10 @@ type ImgMeta struct {
 }
 
 type ImgNav struct {
-	PrevURL string
-	NextURL string
+	PrevCanonicalURL template.URL
+	PrevURL          string
+	NextCanonicalURL template.URL
+	NextURL          string
 }
 
 type Images []Img
@@ -123,7 +125,9 @@ func newByKeywordView(keyword string) *ByKeywordView {
 func (v *ByKeywordView) Append(img Img) {
 	if len(v.imgs) > 0 {
 		img.Nav.PrevURL = fmt.Sprintf("/tags/%s/pic/%s", v.keyword, v.imgs[len(v.imgs)-1].ID)
+		img.Nav.PrevCanonicalURL = template.URL(fmt.Sprintf("/pic/%s", v.imgs[len(v.imgs)-1].ID))
 		v.imgs[len(v.imgs)-1].Nav.NextURL = fmt.Sprintf("/tags/%s/pic/%s", v.keyword, img.ID)
+		v.imgs[len(v.imgs)-1].Nav.NextCanonicalURL = template.URL(fmt.Sprintf("/pic/%s", img.ID))
 	}
 	img.URL = template.URL(fmt.Sprintf("/tags/%s/pic/%s", v.keyword, img.ID))
 	v.ids[img.ID] = len(v.imgs)
@@ -225,6 +229,7 @@ func Register(mux *http.ServeMux) {
 			img.Nav.NextURL = fmt.Sprintf("/pic/%s", imgs[idx+1].ID)
 		}
 
+		w.Header().Set("Cache-Control", "public, max-age=2629746")
 		err := imagepage.Execute(w, img)
 		if err != nil {
 			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)
@@ -267,6 +272,7 @@ func Register(mux *http.ServeMux) {
 			return
 		}
 
+		w.Header().Set("Cache-Control", "public, max-age=2629746")
 		err := imagepage.Execute(w, img)
 		if err != nil {
 			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)

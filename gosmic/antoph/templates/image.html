@@ -20,6 +20,18 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
     <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
     <link rel="icon" href="/static/images/favicon.ico">
+    {{ if .Nav.NextURL }}
+    <link rel="prefetch" href="{{ .Nav.NextURL }}">
+    {{ end }}
+    {{ if .Nav.NextCanonicalURL }}
+    <link rel="prefetch" href="{{ .Nav.NextCanonicalURL }}/l.webp">
+    {{ end }}
+    {{ if .Nav.PrevURL }}
+    <link rel="prefetch" href="{{ .Nav.PrevURL }}">
+    {{ end }}
+    {{ if .Nav.PrevCanonicalURL }}
+    <link rel="prefetch" href="{{ .Nav.PrevCanonicalURL }}/l.webp">
+    {{ end }}
     <title>Photos - Antonio Pitasi</title>
     <script defer data-domain="anto.ph" src="/js/ps.js"></script>
     <style>
