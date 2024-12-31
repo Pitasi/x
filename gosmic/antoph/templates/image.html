@@ -10,9 +10,9 @@
     <meta property="og:title" content="Antonio Pitasi's Photos">
     <meta property="og:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="{{ .URL }}/l.webp">
+    <meta property="og:image" content="{{ .CanonicalURL }}/l.webp">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{ .URL }}/l.webp">
+    <meta name="twitter:image" content="{{ .CanonicalURL }}/l.webp">
     <meta name="twitter:site" content="@zaphodias">
     <meta name="twitter:creator" content="@zaphodias">
     <meta name="twitter:title" content="Antonio Pitasi's Photos">
@@ -23,6 +23,10 @@
     <title>Photos - Antonio Pitasi</title>
     <script defer data-domain="anto.ph" src="/js/ps.js"></script>
     <style>
+        @view-transition {
+            navigation: auto;
+        }
+
         *,
         *:before,
         *:after {
@@ -62,12 +66,51 @@
             max-width: 625px;
             margin: 0 auto;
 
-            img {
-                background: rgba(255, 255, 255, 0.1);
-                display: block;
+            .image {
+                position: relative;
                 width: 100%;
-                height: auto;
-                object-fit: contain;
+
+                a {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    padding: 0.5rem;
+                    margin: 0;
+                    z-index: 1;
+
+                    div {
+                        background: rgba(255, 255, 255, 0.6);
+                        border: none;
+                        width: 1.5rem;
+                        height: 1.5rem;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: black;
+
+                        svg {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+
+                    &.left {
+                        left: 0;
+                    }
+
+                    &.right {
+                        right: 0;
+                    }
+                }
+
+                img {
+                    background: rgba(255, 255, 255, 0.1);
+                    display: block;
+                    width: 100%;
+                    height: auto;
+                    object-fit: contain;
+                }
             }
         }
 
@@ -139,7 +182,42 @@
         </a>
     </header>
     <section>
-        <img src="{{ .URL }}/l.webp" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+        <div class="image">
+            {{ if .Nav.PrevURL }}
+            <a class="left" href="{{ .Nav.PrevURL }}">
+                <div>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M6.29289 8.79289C6.68342 8.40237 7.31658 8.40237 7.70711 8.79289L12 13.0858L16.2929 8.79289C16.6834 8.40237 17.3166 8.40237 17.7071 8.79289C18.0976 9.18342 18.0976 9.81658 17.7071 10.2071L12.7071 15.2071C12.3166 15.5976 11.6834 15.5976 11.2929 15.2071L6.29289 10.2071C5.90237 9.81658 5.90237 9.18342 6.29289 8.79289Z"
+                                fill="currentColor"></path>
+                        </g>
+                    </svg>
+                </div>
+            </a>
+            {{ end }}
+
+            <img src="{{ .CanonicalURL }}/l.webp" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy"
+                decoding="async">
+
+            {{ if .Nav.NextURL }}
+            <a class="right" href="{{ .Nav.NextURL }}">
+                <div>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(270)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M6.29289 8.79289C6.68342 8.40237 7.31658 8.40237 7.70711 8.79289L12 13.0858L16.2929 8.79289C16.6834 8.40237 17.3166 8.40237 17.7071 8.79289C18.0976 9.18342 18.0976 9.81658 17.7071 10.2071L12.7071 15.2071C12.3166 15.5976 11.6834 15.5976 11.2929 15.2071L6.29289 10.2071C5.90237 9.81658 5.90237 9.18342 6.29289 8.79289Z"
+                                fill="currentColor"></path>
+                        </g>
+                    </svg>
+                </div>
+            </a>
+            {{ end }}
+        </div>
         <div class="tags">
             {{ range .Meta.Keywords }}
             <a href="/tags/{{ . }}">#{{ . }}</a>
@@ -161,6 +239,58 @@
         <a href="/random">👉 random photo</a>
         <p>images are mine and can't be used by anyone else unless otherwise stated</p>
     </footer>
+
+    <script>
+        const nextUrl = '{{ .Nav.NextURL }}';
+        const prevUrl = '{{ .Nav.PrevURL }}';
+        const img = document.querySelector('.image img');
+
+        let startX = 0;
+        let currentX = 0;
+        let navigateTo = undefined;
+        const maxXLeft = nextUrl ? -100 : 0;
+        const maxXRight = prevUrl ? 100 : 0;
+
+        img.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            startX = touch.clientX - currentX;
+        });
+
+        img.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+
+            const touch = event.touches[0];
+            currentX = touch.clientX - startX;
+            if (currentX < maxXLeft) {
+                currentX = maxXLeft;
+                if (nextUrl) {
+                    navigateTo = nextUrl;
+                }
+            }
+            if (currentX > maxXRight) {
+                currentX = maxXRight;
+                if (prevUrl) {
+                    navigateTo = prevUrl;
+                }
+            }
+
+            img.style.transform = `translateX(${currentX}px)`;
+        });
+
+        img.addEventListener('touchend', (event) => {
+            event.preventDefault();
+
+            if (navigateTo) {
+                window.location = navigateTo;
+                return;
+            }
+
+            img.style.transform = `translateX(0px)`;
+            startX = 0;
+            currentX = 0;
+            navigateTo = undefined;
+        });
+    </script>
 </body>
 
 </html>

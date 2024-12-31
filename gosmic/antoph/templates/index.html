@@ -12,6 +12,10 @@
     <link rel="icon" href="/static/images/favicon.ico">
     <script defer data-domain="anto.ph" src="/js/ps.js"></script>
     <style>
+        @view-transition {
+            navigation: auto;
+        }
+
         *,
         *:before,
         *:after {
@@ -95,8 +99,8 @@
         <h1>{{ .Title }}</h1>
         <div class="gallery">
             {{ range .Imgs }}
-            <a href="/pic/{{ .ID }}">
-                <img src="{{ .URL }}/q.webp" width=500 height=500 loading="lazy" decoding="async">
+            <a href="{{ if .URL }}{{ .URL }}{{ else }}/pic/{{ .ID }}{{ end }}">
+                <img src="{{ .CanonicalURL }}/q.webp" width=500 height=500 loading="lazy" decoding="async">
             </a>
             {{ end }}
         </div>
