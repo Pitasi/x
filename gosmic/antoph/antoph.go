@@ -49,10 +49,8 @@ type ImgMeta struct {
 }
 
 type ImgNav struct {
-	PrevCanonicalURL template.URL
-	PrevURL          string
-	NextCanonicalURL template.URL
-	NextURL          string
+	Prev *Img
+	Next *Img
 }
 
 type Images []Img
@@ -87,6 +85,7 @@ func openPhotoDB(base string) (Images, error) {
 				ID:           id,
 				Meta:         meta,
 				CanonicalURL: template.URL(url),
+				URL:          template.URL(url),
 			})
 		}
 		return nil
@@ -123,13 +122,11 @@ func newByKeywordView(keyword string) *ByKeywordView {
 }
 
 func (v *ByKeywordView) Append(img Img) {
-	if len(v.imgs) > 0 {
-		img.Nav.PrevURL = fmt.Sprintf("/tags/%s/pic/%s", v.keyword, v.imgs[len(v.imgs)-1].ID)
-		img.Nav.PrevCanonicalURL = template.URL(fmt.Sprintf("/pic/%s", v.imgs[len(v.imgs)-1].ID))
-		v.imgs[len(v.imgs)-1].Nav.NextURL = fmt.Sprintf("/tags/%s/pic/%s", v.keyword, img.ID)
-		v.imgs[len(v.imgs)-1].Nav.NextCanonicalURL = template.URL(fmt.Sprintf("/pic/%s", img.ID))
-	}
 	img.URL = template.URL(fmt.Sprintf("/tags/%s/pic/%s", v.keyword, img.ID))
+	if len(v.imgs) > 0 {
+		img.Nav.Prev = &v.imgs[len(v.imgs)-1]
+		v.imgs[len(v.imgs)-1].Nav.Next = &img
+	}
 	v.ids[img.ID] = len(v.imgs)
 	v.imgs = append(v.imgs, img)
 }
@@ -223,10 +220,10 @@ func Register(mux *http.ServeMux) {
 		img := imgs[idx]
 
 		if idx > 0 {
-			img.Nav.PrevURL = fmt.Sprintf("/pic/%s", imgs[idx-1].ID)
+			img.Nav.Prev = &imgs[idx-1]
 		}
 		if idx < len(imgs)-1 {
-			img.Nav.NextURL = fmt.Sprintf("/pic/%s", imgs[idx+1].ID)
+			img.Nav.Next = &imgs[idx+1]
 		}
 
 		w.Header().Set("Cache-Control", "public, max-age=2629746")

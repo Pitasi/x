@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,23 +19,24 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
     <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
     <link rel="icon" href="/static/images/favicon.ico">
-    {{ if .Nav.NextURL }}
-    <link rel="prefetch" href="{{ .Nav.NextURL }}">
+    {{ if .Nav.Next }}
+    <link rel="prefetch" href="{{ .Nav.Next.URL }}">
+    <link rel="prefetch" href="{{ .Nav.Next.CanonicalURL }}/l.webp">
     {{ end }}
-    {{ if .Nav.NextCanonicalURL }}
-    <link rel="prefetch" href="{{ .Nav.NextCanonicalURL }}/l.webp">
-    {{ end }}
-    {{ if .Nav.PrevURL }}
-    <link rel="prefetch" href="{{ .Nav.PrevURL }}">
-    {{ end }}
-    {{ if .Nav.PrevCanonicalURL }}
-    <link rel="prefetch" href="{{ .Nav.PrevCanonicalURL }}/l.webp">
+    {{ if .Nav.Prev }}
+    <link rel="prefetch" href="{{ .Nav.Prev.URL }}">
+    <link rel="prefetch" href="{{ .Nav.Prev.CanonicalURL }}/l.webp">
     {{ end }}
     <title>Photos - Antonio Pitasi</title>
     <script defer data-domain="anto.ph" src="/js/ps.js"></script>
     <style>
         @view-transition {
             navigation: auto;
+        }
+
+        ::view-transition-old(gallery-wrapper),
+        ::view-transition-new(gallery-wrapper) {
+          animation: none;
         }
 
         *,
@@ -78,9 +78,15 @@
             max-width: 625px;
             margin: 0 auto;
 
-            .image {
+            .image-container {
                 position: relative;
                 width: 100%;
+
+                @media (max-width: 625px) {
+                    a {
+                        display: none;
+                    }
+                }
 
                 a {
                     position: absolute;
@@ -116,12 +122,29 @@
                     }
                 }
 
-                img {
-                    background: rgba(255, 255, 255, 0.1);
-                    display: block;
+                .gallery-wrapper {
                     width: 100%;
-                    height: auto;
-                    object-fit: contain;
+                    max-width: 625px;
+                    overflow: hidden;
+                    view-transition-name: gallery-wrapper;
+                }
+
+                .gallery {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: start;
+                    width: 300%;
+                    transform: translateX(calc(-100% / 3));
+                    transition: transform 0.3s ease-in-out;
+
+                    img {
+                        background: rgba(255, 255, 255, 0.1);
+                        display: block;
+                        width: calc(100% / 3);
+                        height: auto;
+                        flex-shrink: 0;
+                        object-fit: contain;
+                    }
                 }
             }
         }
@@ -194,9 +217,9 @@
         </a>
     </header>
     <section>
-        <div class="image">
-            {{ if .Nav.PrevURL }}
-            <a class="left" href="{{ .Nav.PrevURL }}">
+        <div class="image-container">
+            {{ if .Nav.Prev }}
+            <a class="left" href="{{ .Nav.Prev.URL }}">
                 <div>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -211,11 +234,24 @@
             </a>
             {{ end }}
 
-            <img src="{{ .CanonicalURL }}/l.webp" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy"
-                decoding="async">
+            <div class="gallery-wrapper">
+                <div class="gallery">
+                    {{ if .Nav.Prev }}
+                    <img class="image left" src="{{ .Nav.Prev.CanonicalURL }}/l.webp" alt="Prev image" width={{ .Nav.Prev.Meta.Width }} height={{ .Nav.Prev.Meta.Height }} loading="lazy" decoding="async">
+                    {{ else }}
+                    <img class="image left" src="{{ .CanonicalURL }}/l.webp" alt="" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+                    {{ end }}
+                    <img class="image current" src="{{ .CanonicalURL }}/l.webp" alt="Current image" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+                    {{ if .Nav.Next }}
+                    <img class="image right" src="{{ .Nav.Next.CanonicalURL }}/l.webp" alt="Next image" width={{ .Nav.Next.Meta.Width }} height={{ .Nav.Next.Meta.Height }} loading="lazy" decoding="async">
+                    {{ else }}
+                    <img class="image right" src="{{ .CanonicalURL }}/l.webp" alt="" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+                    {{ end }}
+                </div>
+            </div>
 
-            {{ if .Nav.NextURL }}
-            <a class="right" href="{{ .Nav.NextURL }}">
+            {{ if .Nav.Next }}
+            <a class="right" href="{{ .Nav.Next.URL }}">
                 <div>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(270)">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -253,55 +289,159 @@
     </footer>
 
     <script>
-        const nextUrl = '{{ .Nav.NextURL }}';
-        const prevUrl = '{{ .Nav.PrevURL }}';
-        const img = document.querySelector('.image img');
+      const section = document.querySelector("section");
+      const gallery = document.querySelector(".gallery");
+      let disableSwipe = false;
+      let startX = 0; // Initial touch point
+      let currentTranslateX = -100/3; // Start centered on the current image
+      let isDragging = false;
 
-        let startX = 0;
-        let currentX = 0;
-        let navigateTo = undefined;
-        const maxXLeft = nextUrl ? -100 : 0;
-        const maxXRight = prevUrl ? 100 : 0;
+      section.addEventListener("touchstart", (e) => {
+        if (disableSwipe) return;
+        e.preventDefault();
+        startX = e.touches[0].clientX; // Track the initial touch point
+        isDragging = true;
+        gallery.style.transition = "none"; // Disable transition during swipe
+      });
 
-        img.addEventListener('touchstart', (event) => {
-            const touch = event.touches[0];
-            startX = touch.clientX - currentX;
-        });
+      section.addEventListener("touchmove", (e) => {
+        if (disableSwipe || !isDragging) return;
+        e.preventDefault();
+        const deltaX = e.touches[0].clientX - startX;
+        {{ if not .Nav.Prev }}
+        if (deltaX > 0) {
+            return;
+        }
+        {{ end }}
+        {{ if not .Nav.Next }}
+        if (deltaX < 0) {
+            return;
+        }
+        {{ end }}
+        const newTranslate = currentTranslateX + (deltaX / window.innerWidth) * 100/3;
+        gallery.style.transform = `translateX(${newTranslate}%)`; // Update transform dynamically
+      });
 
-        img.addEventListener('touchmove', (event) => {
-            event.preventDefault();
+      section.addEventListener("touchend", (e) => {
+        if (disableSwipe) return;
+        e.preventDefault();
+        isDragging = false;
+        const endX = e.changedTouches[0].clientX;
+        const deltaX = endX - startX;
 
-            const touch = event.touches[0];
-            currentX = touch.clientX - startX;
-            if (currentX < maxXLeft) {
-                currentX = maxXLeft;
-                if (nextUrl) {
-                    navigateTo = nextUrl;
-                }
-            }
-            if (currentX > maxXRight) {
-                currentX = maxXRight;
-                if (prevUrl) {
-                    navigateTo = prevUrl;
-                }
-            }
+        {{ if .Nav.Prev }}
+        if (deltaX > 50) {
+          // Swipe right
+          currentTranslateX += 100/3;
+          navigateTo("prev");
+          return;
+        }
+        {{ end }}
 
-            img.style.transform = `translateX(${currentX}px)`;
-        });
+        {{ if .Nav.Next }}
+        if (deltaX < -50) {
+          // Swipe left
+          currentTranslateX -= 100/3;
+          navigateTo("next");
+          return;
+        }
+        {{ end }}
 
-        img.addEventListener('touchend', (event) => {
-            event.preventDefault();
+        // Snap back to current
+        gallery.style.transform = `translateX(${currentTranslateX}%)`;
+        gallery.style.transition = "transform 0.3s ease-in-out";
+      });
 
-            if (navigateTo) {
-                window.location = navigateTo;
-                return;
-            }
+      function navigateTo(direction) {
+        gallery.style.transition = "transform 0.3s ease-in-out";
+        gallery.style.transform = `translateX(${currentTranslateX}%)`;
+        disableSwipe = true;
+        setTimeout(() => {
+          {{ if .Nav.Prev }}
+          if (direction === "prev") {
+            window.location.href = "{{ .Nav.Prev.URL }}";
+            return;
+          }
+          {{ end }}
+          {{ if .Nav.Next }}
+          if (direction === "next") {
+            window.location.href = "{{ .Nav.Next.URL }}";
+            return;
+          }
+          {{ end }}
+        }, 300);
+      }
 
-            img.style.transform = `translateX(0px)`;
-            startX = 0;
-            currentX = 0;
-            navigateTo = undefined;
-        });
+      function updateGalleryHeight() {
+        const gallery = document.querySelector(".gallery");
+        const currentImage = document.querySelector(".image.current");
+      
+        if (currentImage && gallery) {
+          const realW = currentImage.attributes.width.value
+          const realH = currentImage.attributes.height.value;
+          const renderH = currentImage.height;
+          const currentImageHeight = Math.min(renderH, window.innerWidth / realW * realH);
+          gallery.style.height = `${currentImageHeight}px`; // Apply it as max-height
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", updateGalleryHeight);
+      window.addEventListener("resize", updateGalleryHeight);
+      document.querySelector(".gallery").addEventListener("transitionend", updateGalleryHeight);
+
+      document.addEventListener("keydown", (e) => {
+        {{ if .Nav.Next }}
+        if (!disableSwipe && e.key === "ArrowRight") {
+          e.preventDefault();
+          currentTranslateX -= 100/3;
+          navigateTo("next");
+        }
+        {{ end }}
+        {{ if .Nav.Prev }}
+        if (!disableSwipe && e.key === "ArrowLeft") {
+          e.preventDefault();
+          currentTranslateX += 100/3;
+          navigateTo("prev");
+        }
+        {{ end }}
+      });
+
+      const btnLeft = document.querySelector(".left");
+      const btnRight = document.querySelector(".right");
+      btnLeft.addEventListener("click", (e) => {
+        {{ if .Nav.Prev }}
+        e.preventDefault();
+        currentTranslateX += 100/3;
+        navigateTo("prev");
+        {{ end }}
+      });
+      btnRight.addEventListener("click", (e) => {
+        {{ if .Nav.Next }}
+        e.preventDefault();
+        currentTranslateX -= 100/3;
+        navigateTo("next");
+        {{ end }}
+      });
+
+      if (window.innerWidth < 625 && !localStorage.getItem("galleryOnboardingShown")) {
+        localStorage.setItem("galleryOnboardingShown", "true");
+        setTimeout(() => {
+          const gallery = document.querySelector(".gallery");
+
+          {{ if .Nav.Next }}
+          gallery.style.transform = "translateX(calc(-105% / 3))";
+          {{ end }}
+
+          setTimeout(() => {
+            {{ if .Nav.Prev }}
+            gallery.style.transform = "translateX(calc(-95% / 3))";
+            {{ end }}
+            setTimeout(() => {
+              gallery.style.transform = "translateX(calc(-100% / 3))";
+            }, 300);
+          }, 300);
+        }, 500);
+      }
     </script>
 </body>
 
