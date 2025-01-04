@@ -625,6 +625,12 @@ footer {
         font-size: var(--text-sm);
         padding: var(--s-md) var(--s-lg);
     }
+
+    details {
+        color: var(--bg-dim-darker);
+        font-size: var(--text-sm);
+        padding: var(--s-md) var(--s-lg);
+    }
 }
 
 article {

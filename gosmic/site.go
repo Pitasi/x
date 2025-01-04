@@ -1,11 +1,22 @@
 package main
 
-import "html/template"
+import (
+	"html/template"
+	"runtime/debug"
+)
 
 type Site struct {
 	Nav            []NavItem
 	StaticFileHash map[string]string
 	Colors         []template.CSS
+	Debug          SiteDebug
+}
+
+type SiteDebug struct {
+	GoVersion     string
+	GosmicVersion string
+	BuildOS       string
+	BuildArch     string
 }
 
 type NavItem struct {
@@ -28,6 +39,23 @@ type ArticleLink struct {
 var site Site
 
 func init() {
+	var dbg SiteDebug
+	info, ok := debug.ReadBuildInfo()
+	if ok {
+		dbg.GoVersion = info.GoVersion
+		for _, kv := range info.Settings {
+			if kv.Key == "GOARCH" {
+				dbg.BuildArch = kv.Value
+			}
+			if kv.Key == "GOOS" {
+				dbg.BuildOS = kv.Value
+			}
+			if kv.Key == "vcs.revision" {
+				dbg.GosmicVersion = kv.Value
+			}
+		}
+	}
+
 	site = Site{
 		Nav: []NavItem{
 			{
@@ -52,5 +80,6 @@ func init() {
 			"var(--color-orange-400)",
 		},
 		StaticFileHash: staticFileHashes,
+		Debug:          dbg,
 	}
 }
