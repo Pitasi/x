@@ -113,11 +113,11 @@
                         }
                     }
 
-                    &.left {
+                    &.btn-left {
                         left: 0;
                     }
 
-                    &.right {
+                    &.btn-right {
                         right: 0;
                     }
                 }
@@ -135,7 +135,7 @@
                     align-items: start;
                     width: 300%;
                     transform: translateX(calc(-100% / 3));
-                    transition: transform 0.3s ease-in-out;
+                    transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
 
                     img {
                         background: rgba(255, 255, 255, 0.1);
@@ -219,7 +219,7 @@
     <section>
         <div class="image-container">
             {{ if .Nav.Prev }}
-            <a class="left" href="{{ .Nav.Prev.URL }}">
+            <a class="btn-left" href="{{ .Nav.Prev.URL }}">
                 <div>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -251,7 +251,7 @@
             </div>
 
             {{ if .Nav.Next }}
-            <a class="right" href="{{ .Nav.Next.URL }}">
+            <a class="btn-right" href="{{ .Nav.Next.URL }}">
                 <div>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(270)">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -291,12 +291,13 @@
     <script>
       const section = document.querySelector("section");
       const gallery = document.querySelector(".gallery");
+      const galleryTransitionOriginal = gallery.style.transition;
       let disableSwipe = false;
       let startX = 0; // Initial touch point
       let currentTranslateX = -100/3; // Start centered on the current image
       let isDragging = false;
 
-      section.addEventListener("touchstart", (e) => {
+      gallery.addEventListener("touchstart", (e) => {
         if (disableSwipe) return;
         e.preventDefault();
         startX = e.touches[0].clientX; // Track the initial touch point
@@ -304,7 +305,7 @@
         gallery.style.transition = "none"; // Disable transition during swipe
       });
 
-      section.addEventListener("touchmove", (e) => {
+      gallery.addEventListener("touchmove", (e) => {
         if (disableSwipe || !isDragging) return;
         e.preventDefault();
         const deltaX = e.touches[0].clientX - startX;
@@ -320,9 +321,19 @@
         {{ end }}
         const newTranslate = currentTranslateX + (deltaX / window.innerWidth) * 100/3;
         gallery.style.transform = `translateX(${newTranslate}%)`; // Update transform dynamically
+
+        const startImage = document.querySelector(".image.current");
+        const startImageHeight = getImageHeight(startImage);
+        const nextImage = deltaX > 0 ?
+          document.querySelector(".image.left") :
+          document.querySelector(".image.right");
+        const nextImageHeight = getImageHeight(nextImage);
+        const deltaH = nextImageHeight-startImageHeight;
+        const h = startImageHeight + Math.abs(deltaX / window.innerWidth) * deltaH;
+        gallery.style.height = `${h}px`;
       });
 
-      section.addEventListener("touchend", (e) => {
+      gallery.addEventListener("touchend", (e) => {
         if (disableSwipe) return;
         e.preventDefault();
         isDragging = false;
@@ -348,14 +359,20 @@
         {{ end }}
 
         // Snap back to current
+        gallery.style.transition = galleryTransitionOriginal;
         gallery.style.transform = `translateX(${currentTranslateX}%)`;
-        gallery.style.transition = "transform 0.3s ease-in-out";
       });
 
       function navigateTo(direction) {
-        gallery.style.transition = "transform 0.3s ease-in-out";
-        gallery.style.transform = `translateX(${currentTranslateX}%)`;
         disableSwipe = true;
+        const nextImage = direction === "prev" ?
+              document.querySelector(".image.left") :
+              document.querySelector(".image.right");
+        gallery.style.transition = galleryTransitionOriginal;
+        if (nextImage) {
+          updateGalleryHeight(nextImage);
+        }
+        gallery.style.transform = `translateX(${currentTranslateX}%)`;
         setTimeout(() => {
           {{ if .Nav.Prev }}
           if (direction === "prev") {
@@ -372,22 +389,27 @@
         }, 300);
       }
 
-      function updateGalleryHeight() {
+      function getImageHeight(image) {
         const gallery = document.querySelector(".gallery");
-        const currentImage = document.querySelector(".image.current");
-      
-        if (currentImage && gallery) {
-          const realW = currentImage.attributes.width.value
-          const realH = currentImage.attributes.height.value;
-          const renderH = currentImage.height;
-          const currentImageHeight = Math.min(renderH, window.innerWidth / realW * realH);
-          gallery.style.height = `${currentImageHeight}px`; // Apply it as max-height
-        }
+        const realW = image.attributes.width.value
+        const realH = image.attributes.height.value;
+        const renderH = image.height;
+        const currentImageHeight = Math.min(renderH, window.innerWidth / realW * realH);
+        return currentImageHeight;
       }
 
-      document.addEventListener("DOMContentLoaded", updateGalleryHeight);
-      window.addEventListener("resize", updateGalleryHeight);
-      document.querySelector(".gallery").addEventListener("transitionend", updateGalleryHeight);
+      function updateGalleryHeight(image) {
+        const currentImageHeight = getImageHeight(image);
+        gallery.style.height = `${currentImageHeight}px`; // Apply it as max-height
+      }
+
+      function updateGalleryCurrentImageHeight() {
+          const currentImage = document.querySelector(".image.current");
+          updateGalleryHeight(currentImage);
+      }
+
+      document.addEventListener("DOMContentLoaded", updateGalleryCurrentImageHeight);
+      window.addEventListener("resize", updateGalleryCurrentImageHeight);
 
       document.addEventListener("keydown", (e) => {
         {{ if .Nav.Next }}
@@ -406,8 +428,8 @@
         {{ end }}
       });
 
-      const btnLeft = document.querySelector(".left");
-      const btnRight = document.querySelector(".right");
+      const btnLeft = document.querySelector(".btn-left");
+      const btnRight = document.querySelector(".btn-right");
       btnLeft.addEventListener("click", (e) => {
         {{ if .Nav.Prev }}
         e.preventDefault();
