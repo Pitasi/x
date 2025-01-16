@@ -297,6 +297,18 @@
       let startX = 0; // Initial touch point
       let currentTranslateX = -100/3; // Start centered on the current image
       let isDragging = false;
+      gallery.style.transform = `translateX(calc(-100% / 3))`;
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+          // handle back button to reset slide position
+          disableSwipe = false;
+          startX = 0;
+          currentTranslateX = -100/3;
+          isDragging = false;
+          gallery.style.transform = `translateX(calc(-100% / 3))`;
+          updateGalleryCurrentImageHeight();
+        }
+      });
 
       gallery.addEventListener("touchstart", (e) => {
         if (disableSwipe) return;
