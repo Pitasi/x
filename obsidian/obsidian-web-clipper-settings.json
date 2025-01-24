@@ -1,0 +1,1036 @@
+{
+  "general_settings": {
+    "betaFeatures": false,
+    "legacyMode": false,
+    "showMoreActionsButton": false,
+    "silentOpen": false
+  },
+  "highlighter_settings": {
+    "alwaysShowHighlights": true,
+    "highlightBehavior": "highlight-inline",
+    "highlighterEnabled": true
+  },
+  "interpreter_settings": {
+    "defaultPromptContext": "",
+    "interpreterAutoRun": false,
+    "interpreterEnabled": false,
+    "interpreterModel": "gpt-4o-mini",
+    "models": [],
+    "providers": []
+  },
+  "property_types": [
+    {
+      "defaultValue": "{{title}}",
+      "name": "title",
+      "type": "text"
+    },
+    {
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{author|split:\", \"|wikilink|join}}",
+      "name": "author",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{published}}",
+      "name": "published",
+      "type": "date"
+    },
+    {
+      "name": "created",
+      "type": "date"
+    },
+    {
+      "defaultValue": "{{description}}",
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "tags",
+      "type": "multitext"
+    },
+    {
+      "name": "category",
+      "type": "multitext"
+    },
+    {
+      "name": "type",
+      "type": "multitext"
+    },
+    {
+      "name": "loc",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{url|split:\\\"/@\\\"|slice:1|split:\\\",\\\"|slice:0,2}}",
+      "name": "location",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{selector:button[aria-label^=\\\"Address:\\\"]:aria-label|split:\\\"Address: \\\"|slice:1}}",
+      "name": "address",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:div[aria-label^=\\\"Information for\\\"] a[href*=\\\"http\\\"]:href|slice:0,1}}",
+      "name": "url",
+      "type": "text"
+    },
+    {
+      "name": "rating",
+      "type": "number"
+    },
+    {
+      "defaultValue": "{{selector:div[jsaction*=\\\"moreReviews\\\"] .fontDisplayLarge}}",
+      "name": "scoreGoogle",
+      "type": "number"
+    },
+    {
+      "name": "last",
+      "type": "date"
+    },
+    {
+      "defaultValue": "{{schema:thumbnailUrl|slice:0}}",
+      "name": "image",
+      "type": "text"
+    },
+    {
+      "name": "genre",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{schema:director[*].name|wikilink|join}}",
+      "name": "director",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{schema:aggregateRating.ratingValue}}",
+      "name": "scoreImdb",
+      "type": "number"
+    },
+    {
+      "defaultValue": "{{schema:actor[*].name|slice:0,5|wikilink|join}}",
+      "name": "cast",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{schema:image}}",
+      "name": "cover",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{schema:description}}",
+      "name": "plot",
+      "type": "text"
+    },
+    {
+      "name": "year",
+      "type": "number"
+    },
+    {
+      "name": "imdbId",
+      "type": "text"
+    },
+    {
+      "name": "length",
+      "type": "text"
+    },
+    {
+      "name": "price",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{schema:aggregateRating.ratingValue}}",
+      "name": "scoreGr",
+      "type": "number"
+    },
+    {
+      "defaultValue": "{{schema:isbn}}",
+      "name": "isbn",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{schema:inLanguage}}",
+      "name": "language",
+      "type": "text"
+    },
+    {
+      "name": "system",
+      "type": "text"
+    },
+    {
+      "name": "maker",
+      "type": "text"
+    },
+    {
+      "name": "steamRating",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{meta:name:octolytics-dimension-user_login}}",
+      "name": "owner",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:.Layout-sidebar a?href|first}}",
+      "name": "website",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:#repo-stars-counter-star}}",
+      "name": "stars",
+      "type": "number"
+    }
+  ],
+  "stats": {
+    "addToObsidian": 163,
+    "copyToClipboard": 1,
+    "saveFile": 0,
+    "share": 0
+  },
+  "template_1734955411472p93zhcbp7": {
+    "id": "1734955411472p93zhcbp7",
+    "name": "Default",
+    "behavior": "create",
+    "noteNameFormat": "{{title}}",
+    "path": "Clippings",
+    "noteContentFormat": "{{content}}",
+    "context": "",
+    "properties": [
+      {
+        "id": "1734955411472ty3fsov1l",
+        "name": "title",
+        "value": "{{title}}"
+      },
+      {
+        "id": "1734955411472dtctej25k",
+        "name": "source",
+        "value": "{{url}}"
+      },
+      {
+        "id": "1734955411472p8a228jjr",
+        "name": "author",
+        "value": "{{author|split:\", \"|wikilink|join}}"
+      },
+      {
+        "id": "1734955411472q60eujwv2",
+        "name": "published",
+        "value": "{{published}}"
+      },
+      {
+        "id": "1734955411472afoazjy1i",
+        "name": "created",
+        "value": "{{date}}"
+      },
+      {
+        "id": "1734955411472059b2p6qe",
+        "name": "description",
+        "value": "{{description}}"
+      },
+      {
+        "id": "1734955411472a9f3zsl28",
+        "name": "tags",
+        "value": "clippings"
+      }
+    ],
+    "triggers": []
+  },
+  "template_17349555217119tqy2jv": {
+    "schemaVersion": "0.1.0",
+    "name": "Google Maps",
+    "behavior": "create",
+    "noteNameFormat": "{{selector:div[role=\"main\"]?aria-label}}",
+    "path": "References",
+    "noteContentFormat": "",
+    "properties": [
+      {
+        "id": "1734955521717ggak7u3",
+        "name": "category",
+        "value": "[[Places]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955521717fg7nwke",
+        "name": "type",
+        "value": "{{selector:button[jsaction*=category}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955521717c98tn3b",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "1735087533453v1thmxk8b",
+        "name": "loc",
+        "value": "",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955521717xiipwwi",
+        "name": "location",
+        "value": "{{url|split:\\\"/@\\\"|slice:1|split:\\\",\\\"|slice:0,2}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955521717p8z15j3",
+        "name": "address",
+        "value": "{{selector:button[data-item-id=\\\"address\\\"]?aria-label|split:\\\": \\\"|slice:1}}",
+        "type": "text"
+      },
+      {
+        "id": "17349555217178s9vdur",
+        "name": "url",
+        "value": "{{selector:a[data-item-id=\\\"authority\\\"]?href}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955521717ea0vcfm",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "1734955521717hq1av5c",
+        "name": "scoreGoogle",
+        "value": "{{selector:div[jsaction*=\\\"moreReviews\\\"] .fontDisplayLarge|replace:\\\",\\\":\\\".\\\"}}",
+        "type": "number"
+      },
+      {
+        "id": "17349555217173f1b1r0",
+        "name": "description",
+        "value": "{{selector:div .PYvSYb}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955521717pwdpnt6",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "17349555217178gadpj3",
+        "name": "last",
+        "value": "",
+        "type": "date"
+      },
+      {
+        "id": "1734955521717dk16y7j",
+        "name": "tags",
+        "value": "places, to-visit",
+        "type": "multitext"
+      },
+      {
+        "id": "17349657348608c7fpbr76",
+        "name": "price",
+        "value": "{{selector:span[class*='mgr77e']>span>span>span|replace:\\\"–\\\":\\\"-\\\"}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "https://www.google.com/maps/place/"
+    ],
+    "id": "17349555217119tqy2jv",
+    "context": ""
+  },
+  "template_1734955577525zn98p5c": {
+    "schemaVersion": "0.1.0",
+    "name": "YouTube",
+    "behavior": "create",
+    "noteNameFormat": "{{schema:author}} – {{schema:name}}",
+    "path": "Clippings",
+    "noteContentFormat": "![{{schema:name}}]({{url}})",
+    "properties": [
+      {
+        "id": "173495557752744wlykh",
+        "name": "title",
+        "value": "{{schema:name}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955577527pgsek9m",
+        "name": "author",
+        "value": "{{schema:author|wikilink}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955577527zprgi3j",
+        "name": "published",
+        "value": "{{schema:uploadDate|date:YYYY-MM-DD}}",
+        "type": "date"
+      },
+      {
+        "id": "1734955577527c2ga9vc",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955577527wfla5un",
+        "name": "image",
+        "value": "{{schema:thumbnailUrl|slice:0}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955577527tvp2gfg",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1734955577527csdl10a",
+        "name": "tags",
+        "value": "videos",
+        "type": "multitext"
+      }
+    ],
+    "triggers": [
+      "https://www.youtube.com/watch?v="
+    ],
+    "id": "1734955577525zn98p5c"
+  },
+  "template_1734955598148lj0rhlo": {
+    "schemaVersion": "0.1.0",
+    "name": "IMDB",
+    "behavior": "create",
+    "noteNameFormat": "{{schema:name}}",
+    "path": "References",
+    "noteContentFormat": "",
+    "properties": [
+      {
+        "id": "1734955598155hp0swh8",
+        "name": "category",
+        "value": "[[Movies]]",
+        "type": "multitext"
+      },
+      {
+        "id": "17349555981559510of3",
+        "name": "genre",
+        "value": "{{schema:genre|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "173495559815511mhfxd",
+        "name": "director",
+        "value": "{{schema:director[*].name|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955598155937xb94",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "1734955598155dkh2nbf",
+        "name": "scoreImdb",
+        "value": "{{schema:aggregateRating.ratingValue}}",
+        "type": "number"
+      },
+      {
+        "id": "1734955598155m6lphl9",
+        "name": "cast",
+        "value": "{{schema:actor[*].name|slice:0,5|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955598155vn9jx32",
+        "name": "cover",
+        "value": "{{schema:image}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955598155p9ih0ts",
+        "name": "plot",
+        "value": "{{schema:description}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955598155fu3sd60",
+        "name": "year",
+        "value": "{{schema:datePublished|split:\\\"-\\\"|slice:0,1}}",
+        "type": "number"
+      },
+      {
+        "id": "173495559815507jfrtz",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "17349555981554z3hut3",
+        "name": "tags",
+        "value": "movies, review, to-watch",
+        "type": "multitext"
+      },
+      {
+        "id": "17350628498565cpveoa4g",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "schema:@Movie"
+    ],
+    "id": "1734955598148lj0rhlo",
+    "context": ""
+  },
+  "template_1734955607415wncflde": {
+    "schemaVersion": "0.1.0",
+    "name": "IMDB reference",
+    "behavior": "create",
+    "noteNameFormat": "{{meta:name:title|split:\" - IMDb\"|slice:0,1}}",
+    "path": "References",
+    "noteContentFormat": "",
+    "properties": [
+      {
+        "id": "1734955607419qq9hnr1",
+        "name": "category",
+        "value": "[[Movies]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955607419d7nuhy1",
+        "name": "genre",
+        "value": "{{selector:.titlereference-header .ipl-inline-list__item a[href*='genre']|wikilink}}",
+        "type": "multitext"
+      },
+      {
+        "id": "17349556074199f1cb0y",
+        "name": "imdbId",
+        "value": "",
+        "type": "text"
+      },
+      {
+        "id": "1734955607419hedrh9f",
+        "name": "cover",
+        "value": "{{selector:.titlereference-primary-image:src}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955607419h5rt2g7",
+        "name": "director",
+        "value": "",
+        "type": "multitext"
+      },
+      {
+        "id": "173495560741956gu6zy",
+        "name": "cast",
+        "value": "",
+        "type": "multitext"
+      },
+      {
+        "id": "17349556074198b1u7le",
+        "name": "length",
+        "value": "",
+        "type": "text"
+      },
+      {
+        "id": "1734955607419txn5s3l",
+        "name": "year",
+        "value": "{{selector:h3 .titlereference-title-year}}",
+        "type": "number"
+      },
+      {
+        "id": "173495560741968x8q9r",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "17349556074196juhpm6",
+        "name": "scoreImdb",
+        "value": "{{selector:.ipl-rating-widget > .ipl-rating-star > .ipl-rating-star__rating}}",
+        "type": "number"
+      },
+      {
+        "id": "1734955607419x10ezrd",
+        "name": "last",
+        "value": "",
+        "type": "date"
+      },
+      {
+        "id": "17349556074196rruis3",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "17349556074193p37hnw",
+        "name": "tags",
+        "value": "movies, reviews, to-watch",
+        "type": "multitext"
+      },
+      {
+        "id": "17350628451366gk35vg8e",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "/^https:\\/\\/www\\.imdb\\.com\\/title\\/tt\\d+\\/reference\\/?$/"
+    ],
+    "id": "1734955607415wncflde",
+    "context": ""
+  },
+  "template_1734955674199iuel27k": {
+    "schemaVersion": "0.1.0",
+    "name": "Wikipedia",
+    "behavior": "create",
+    "noteContentFormat": "{{selectorHtml:#mw-content-text|remove_html:(\".navbox,.printfooter,.side-box\")|markdown}}",
+    "properties": [
+      {
+        "id": "1734955674199clm0q2m",
+        "name": "category",
+        "value": "[[Clippings]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955674199gxbbdsj",
+        "name": "title",
+        "value": "{{title}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955674199xmk39oa",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "173495567419938w35w2",
+        "name": "author",
+        "value": "[[Wikipedia]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955674199e9e7yta",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1734955674199ehacsow",
+        "name": "description",
+        "value": "{{description}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955674199pk46i2z",
+        "name": "tags",
+        "value": "clippings, wikipedia",
+        "type": "multitext"
+      }
+    ],
+    "triggers": [
+      "/^https:\\/\\/[a-z]{2,3}\\.wikipedia\\.org\\/wiki\\/?$/"
+    ],
+    "noteNameFormat": "{{title}}",
+    "path": "Clippings",
+    "id": "1734955674199iuel27k"
+  },
+  "template_17349556963891t2jag4": {
+    "schemaVersion": "0.1.0",
+    "name": "Product",
+    "behavior": "create",
+    "noteNameFormat": "{{title}}",
+    "path": "References",
+    "noteContentFormat": "{{description}}",
+    "properties": [
+      {
+        "id": "1734955696391ts72558",
+        "name": "category",
+        "value": "[[Products]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955696391r0fyo7f",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1734955696391rf63xqu",
+        "name": "description",
+        "value": "{{description}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955696391rdryhkc",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955696391pj7ps7q",
+        "name": "title",
+        "value": "{{schema:@Product:name}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955696391bb4ivsp",
+        "name": "price",
+        "value": "{{meta:property:product:price:amount}}",
+        "type": "number"
+      },
+      {
+        "id": "1734955696391lf9s8nc",
+        "name": "image",
+        "value": "{{image}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "schema:@Product"
+    ],
+    "id": "17349556963891t2jag4"
+  },
+  "template_1734978132478wi422wgb1": {
+    "schemaVersion": "0.1.0",
+    "name": "IMDB (TV Show)",
+    "behavior": "create",
+    "noteNameFormat": "{{schema:name}}",
+    "path": "References",
+    "noteContentFormat": "",
+    "properties": [
+      {
+        "id": "1734955598155hp0swh8",
+        "name": "category",
+        "value": "[[Shows]]",
+        "type": "multitext"
+      },
+      {
+        "id": "17349555981559510of3",
+        "name": "genre",
+        "value": "{{schema:genre|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "173495559815511mhfxd",
+        "name": "director",
+        "value": "{{schema:director[*].name|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955598155937xb94",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "1734955598155dkh2nbf",
+        "name": "scoreImdb",
+        "value": "{{schema:aggregateRating.ratingValue}}",
+        "type": "number"
+      },
+      {
+        "id": "1734955598155m6lphl9",
+        "name": "cast",
+        "value": "{{schema:actor[*].name|slice:0,5|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1734955598155vn9jx32",
+        "name": "cover",
+        "value": "{{schema:image}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955598155p9ih0ts",
+        "name": "plot",
+        "value": "{{schema:description}}",
+        "type": "text"
+      },
+      {
+        "id": "1734955598155fu3sd60",
+        "name": "year",
+        "value": "{{schema:datePublished|split:\\\"-\\\"|slice:0,1}}",
+        "type": "number"
+      },
+      {
+        "id": "173495559815507jfrtz",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "17349555981554z3hut3",
+        "name": "tags",
+        "value": "shows, review, to-watch",
+        "type": "multitext"
+      },
+      {
+        "id": "1735062839590jv6ti0xe9",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "schema:@TVSeries"
+    ],
+    "id": "1734978132478wi422wgb1",
+    "context": ""
+  },
+  "template_1735062787024ygmq53a": {
+    "schemaVersion": "0.1.0",
+    "name": "Goodreads",
+    "behavior": "create",
+    "noteNameFormat": "{{selector:.BookPageTitleSection__title h1}}",
+    "path": "References",
+    "noteContentFormat": "{{selector:.BookPageMetadataSection__description}}",
+    "properties": [
+      {
+        "id": "1735062787028yl1desq",
+        "name": "title",
+        "value": "{{schema:name}}",
+        "type": "text"
+      },
+      {
+        "id": "1735062787028bxut74v",
+        "name": "author",
+        "value": "{{schema:author[*].name|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1735062787028ek4tp2x",
+        "name": "genre",
+        "value": "{{selector:.BookPageMetadataSection__genres .BookPageMetadataSection__genreButton|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1735062787028ke997lw",
+        "name": "length",
+        "value": "{{schema:numberOfPages}}",
+        "type": "text"
+      },
+      {
+        "id": "17350627870289gu8k2g",
+        "name": "year",
+        "value": "{{selector:p[data-testid='publicationInfo']|split:\\\"First published \\\"|slice:1|date:\\\"YYYY\\\"}}",
+        "type": "number"
+      },
+      {
+        "id": "1735062787028hoc5hn7",
+        "name": "scoreGr",
+        "value": "{{schema:aggregateRating.ratingValue}}",
+        "type": "number"
+      },
+      {
+        "id": "1735062787028qm18ae8",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "1735062787028q8pj04j",
+        "name": "cover",
+        "value": "{{schema:image}}",
+        "type": "text"
+      },
+      {
+        "id": "1735062787028rwqs0i6",
+        "name": "isbn",
+        "value": "{{schema:isbn}}",
+        "type": "text"
+      },
+      {
+        "id": "1735062787028uqivkgb",
+        "name": "language",
+        "value": "{{schema:inLanguage}}",
+        "type": "text"
+      },
+      {
+        "id": "17350627870284h70tqe",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1735062787028hjajq2j",
+        "name": "tags",
+        "value": "books, to-read, review",
+        "type": "multitext"
+      },
+      {
+        "id": "1735062833715i6xwx9pw9",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "17350641270942gaywc4mi",
+        "name": "category",
+        "value": "[[Books]]",
+        "type": "multitext"
+      }
+    ],
+    "triggers": [
+      "https://www.goodreads.com/book/"
+    ],
+    "id": "1735062787024ygmq53a",
+    "context": ""
+  },
+  "template_1735319308659rspl367we": {
+    "id": "1735319308659rspl367we",
+    "name": "Steam",
+    "behavior": "create",
+    "noteNameFormat": "{{selector:#appHubAppName}}",
+    "path": "References",
+    "noteContentFormat": "{{content}}",
+    "properties": [
+      {
+        "id": "17353193367486092030bf",
+        "name": "category",
+        "value": "[[Games]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1735319346381262rrek6r",
+        "name": "maker",
+        "value": "{{selector:#developers_list|join:\\\",\\\"|wikilink}}",
+        "type": "text"
+      },
+      {
+        "id": "1735319356807z3ezc08jv",
+        "name": "genre",
+        "value": "{{selector:#genresAndManufacturer a[href*=genre]|wikilink|join:\\\",\\\"}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1735319366856nsl76ljyv",
+        "name": "year",
+        "value": "{{selector:.release_date>div.date|split:\\\",\\\"|last}}",
+        "type": "number"
+      },
+      {
+        "id": "1735319369429ck7n6426h",
+        "name": "system",
+        "value": "[[PC]]",
+        "type": "text"
+      },
+      {
+        "id": "1735319378806m9gofu078",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "1735321836729rmx1ryfex",
+        "name": "steamRating",
+        "value": "{{selector:meta[itemprop=ratingValue]?content}}",
+        "type": "text"
+      },
+      {
+        "id": "1735319391510fkqxuqnzo",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1735319396774ex5tdvqjx",
+        "name": "last",
+        "value": "",
+        "type": "date"
+      },
+      {
+        "id": "1735319405637kooq7dolc",
+        "name": "tags",
+        "value": "games, review, to-play",
+        "type": "multitext"
+      },
+      {
+        "id": "1735321826471h4nztw509",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "https://store.steampowered.com/app/"
+    ],
+    "context": ""
+  },
+  "template_1735327426812u9dcgkl": {
+    "schemaVersion": "0.1.0",
+    "name": "GitHub Repository",
+    "behavior": "create",
+    "noteContentFormat": "## README\n\n{{selectorHtml:article|markdown}}\n\n",
+    "properties": [
+      {
+        "id": "1735327426816ct3kkfn",
+        "name": "title",
+        "value": "{{selector:#repo-title-component a}}",
+        "type": "text"
+      },
+      {
+        "id": "1735327426816s6tvgis",
+        "name": "owner",
+        "value": "{{meta:name:octolytics-dimension-user_login}}",
+        "type": "text"
+      },
+      {
+        "id": "1735327426816473v6tk",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "17353274268166dd3gmq",
+        "name": "website",
+        "value": "{{selector:.Layout-sidebar a?href|first}}",
+        "type": "text"
+      },
+      {
+        "id": "1735327426816gdi8yau",
+        "name": "description",
+        "value": "{{selector:.Layout-sidebar p|first}}",
+        "type": "text"
+      },
+      {
+        "id": "1735327426816i9a2xmx",
+        "name": "stars",
+        "value": "{{selector:#repo-stars-counter-star}}",
+        "type": "number"
+      },
+      {
+        "id": "173532742681603isqmy",
+        "name": "tags",
+        "value": "github, repo, {{selector:.topic-tag|join:\\\", \\\"}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1735327426816ggd3v6s",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      }
+    ],
+    "triggers": [
+      "https://github.com/"
+    ],
+    "noteNameFormat": "{{meta:name:octolytics-dimension-user_login}} {{selector:#repo-title-component a}}: {{selector:.Layout-sidebar p|first}}",
+    "path": "Clippings/GitHub",
+    "id": "1735327426812u9dcgkl",
+    "context": ""
+  },
+  "template_list": [
+    "1734955411472p93zhcbp7",
+    "1735319308659rspl367we",
+    "1735062787024ygmq53a",
+    "1734978132478wi422wgb1",
+    "17349556963891t2jag4",
+    "1734955674199iuel27k",
+    "1734955607415wncflde",
+    "1734955598148lj0rhlo",
+    "1734955577525zn98p5c",
+    "17349555217119tqy2jv",
+    "1735327426812u9dcgkl"
+  ],
+  "vaults": []
+}
