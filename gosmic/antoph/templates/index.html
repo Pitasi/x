@@ -98,9 +98,25 @@
     <section>
         <h1>{{ .Title }}</h1>
         <div class="gallery">
-            {{ range .Imgs }}
-            <a href="{{ if .URL }}{{ .URL }}{{ else }}/pic/{{ .ID }}{{ end }}">
-                <img src="{{ .CanonicalURL }}/q.webp" width=500 height=500 loading="lazy" decoding="async">
+            {{ range $i, $img := .Imgs }}
+            <a href="{{ if $img.URL }}{{ $img.URL }}{{ else }}/pic/{{ $img.ID }}{{ end }}">
+                <img
+                  width="500"
+                  height="500"
+                  src="{{ $img.CanonicalURL }}/q_500.webp"
+                  srcset="
+                    {{ $img.CanonicalURL }}/q_500.webp 500w,
+                    {{ $img.CanonicalURL }}/q_1000.webp 1000w,
+                    {{ $img.CanonicalURL }}/q_2000.webp 2000w,
+                  "
+                  sizes="(max-width: 500px) 500px,
+                         (max-width: 1000px) 1000px,
+                         2000px"
+                  {{ if (gt $i 5) }}
+                  loading="lazy"
+                  decoding="async"
+                  {{ end }}
+                />
             </a>
             {{ end }}
         </div>

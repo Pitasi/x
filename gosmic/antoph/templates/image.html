@@ -21,11 +21,9 @@
     <link rel="icon" href="/static/images/favicon.ico">
     {{ if .Nav.Next }}
     <link rel="prefetch" href="{{ .Nav.Next.URL }}">
-    <link rel="prefetch" href="{{ .Nav.Next.CanonicalURL }}/l.webp">
     {{ end }}
     {{ if .Nav.Prev }}
     <link rel="prefetch" href="{{ .Nav.Prev.URL }}">
-    <link rel="prefetch" href="{{ .Nav.Prev.CanonicalURL }}/l.webp">
     {{ end }}
     <title>Photos - Antonio Pitasi</title>
     <script defer data-domain="anto.ph" src="/js/ps.js"></script>
@@ -137,7 +135,7 @@
                     transform: translateX(calc(-100% / 3));
                     transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
 
-                    img {
+                    & img {
                         background: rgba(255, 255, 255, 0.1);
                         display: block;
                         width: calc(100% / 3);
@@ -145,6 +143,11 @@
                         max-height: calc(100vh - 45px);
                         flex-shrink: 0;
                         object-fit: contain;
+                        transition: filter 0.5s;
+                    }
+
+                    & .current {
+                        z-index: 1;
                     }
                 }
             }
@@ -205,6 +208,11 @@
                 color: rgba(255, 255, 255, 0.5);
             }
         }
+
+        .preview {
+            filter: blur(4vw);
+            transform: scale(1.1);
+        }
     </style>
 </head>
 
@@ -238,15 +246,78 @@
             <div class="gallery-wrapper">
                 <div class="gallery">
                     {{ if .Nav.Prev }}
-                    <img class="image left" src="{{ .Nav.Prev.CanonicalURL }}/l.webp" alt="Prev image" width={{ .Nav.Prev.Meta.Width }} height={{ .Nav.Prev.Meta.Height }} loading="lazy" decoding="async">
+                    <img
+                      class="image left"
+                      alt="Previous image"
+                      width={{ .Nav.Prev.Meta.Width }}
+                      height={{ .Nav.Prev.Meta.Height }}
+                      style="background-image: url({{ .Nav.Prev.CanonicalURL }}/blur.webp); background-size: cover;"
+                      src="{{ .Nav.Prev.CanonicalURL }}/w_1200.webp"
+                      srcset="
+                        {{ if (ge .Nav.Prev.Meta.Width 1200) }}{{ .Nav.Prev.CanonicalURL }}/w_1200.webp 1200w,{{ end }}
+                        {{ if (ge .Nav.Prev.Meta.Width 1900) }}{{ .Nav.Prev.CanonicalURL }}/w_1900.webp 1900w,{{ end }}
+                        {{ if (ge .Nav.Prev.Meta.Width 2500) }}{{ .Nav.Prev.CanonicalURL }}/w_2500.webp 2500w,{{ end }}
+                      "
+                      sizes="
+                        (max-width: 1200px) 1200px,
+                        (max-width: 1900px) 1900px,
+                        2500px
+                      "
+                      loading="lazy"
+                    />
                     {{ else }}
-                    <img class="image left" src="{{ .CanonicalURL }}/l.webp" alt="" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+                    <img
+                      class="image left"
+                      width={{ .Meta.Width }}
+                      height={{ .Meta.Height }}
+                    />
                     {{ end }}
-                    <img class="image current" src="{{ .CanonicalURL }}/l.webp" alt="Current image" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+
+                    <img
+                      class="image current"
+                      alt="Current image"
+                      width={{ .Meta.Width }}
+                      height={{ .Meta.Height }}
+                      style="background-image: url({{ .CanonicalURL }}/blur.webp); background-size: cover;"
+                      src="{{ .CanonicalURL }}/w_1200.webp"
+                      srcset="
+                        {{ if (ge .Meta.Width 1200) }}{{ .CanonicalURL }}/w_1200.webp 1200w,{{ end }}
+                        {{ if (ge .Meta.Width 1900) }}{{ .CanonicalURL }}/w_1900.webp 1900w,{{ end }}
+                        {{ if (ge .Meta.Width 2500) }}{{ .CanonicalURL }}/w_2500.webp 2500w,{{ end }}
+                      "
+                      sizes="
+                        (max-width: 1200px) 1200px,
+                        (max-width: 1900px) 1900px,
+                        2500px
+                      "
+                    />
+
                     {{ if .Nav.Next }}
-                    <img class="image right" src="{{ .Nav.Next.CanonicalURL }}/l.webp" alt="Next image" width={{ .Nav.Next.Meta.Width }} height={{ .Nav.Next.Meta.Height }} loading="lazy" decoding="async">
+                    <img
+                      class="image right"
+                      alt="Next image"
+                      width={{ .Nav.Next.Meta.Width }}
+                      height={{ .Nav.Next.Meta.Height }}
+                      style="background-image: url({{ .Nav.Next.CanonicalURL }}/blur.webp); background-size: cover;"
+                      src="{{ .Nav.Next.CanonicalURL }}/w_1200.webp"
+                      srcset="
+                        {{ if (ge .Nav.Next.Meta.Width 1200) }}{{ .Nav.Next.CanonicalURL }}/w_1200.webp 1200w,{{ end }}
+                        {{ if (ge .Nav.Next.Meta.Width 1900) }}{{ .Nav.Next.CanonicalURL }}/w_1900.webp 1900w,{{ end }}
+                        {{ if (ge .Nav.Next.Meta.Width 2500) }}{{ .Nav.Next.CanonicalURL }}/w_2500.webp 2500w,{{ end }}
+                      "
+                      sizes="
+                        (max-width: 1200px) 1200px,
+                        (max-width: 1900px) 1900px,
+                        2500px
+                      "
+                      loading="lazy"
+                    />
                     {{ else }}
-                    <img class="image right" src="{{ .CanonicalURL }}/l.webp" alt="" width={{ .Meta.Width }} height={{ .Meta.Height }} loading="lazy" decoding="async">
+                    <img
+                      class="image right"
+                      width={{ .Meta.Width }}
+                      height={{ .Meta.Height }}
+                    />
                     {{ end }}
                 </div>
             </div>
@@ -476,6 +547,21 @@
             }, 300);
           }, 300);
         }, 500);
+      }
+
+      document.querySelectorAll(".image").forEach(img => {
+        if (!img.complete) {
+          addPreview(img);
+        }
+      });
+
+      function addPreview(img) {
+          img.onload = () => removePreview(img);
+          img.classList.add("preview");
+      }
+
+      function removePreview(img) {
+          img.classList.remove("preview");
       }
     </script>
 </body>

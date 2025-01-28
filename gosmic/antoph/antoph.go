@@ -276,17 +276,22 @@ func Register(mux *http.ServeMux) {
 		}
 	})
 
-	mux.HandleFunc("GET anto.ph/pic/{id}/q.webp", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		w.Header().Set("Cache-Control", "public, max-age=31536000")
-		http.ServeFile(w, r, path.Join(photodbPath, id, "q.webp"))
-	})
-
-	mux.HandleFunc("GET anto.ph/pic/{id}/l.webp", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		w.Header().Set("Cache-Control", "public, max-age=31536000")
-		http.ServeFile(w, r, path.Join(photodbPath, id, "l.webp"))
-	})
+	imageFilenames := []string{
+		"blur.webp",
+		"q_500.webp",
+		"q_1000.webp",
+		"q_2000.webp",
+		"w_1200.webp",
+		"w_1900.webp",
+		"w_2500.webp",
+	}
+	for _, name := range imageFilenames {
+		mux.HandleFunc("GET anto.ph/pic/{id}/"+name, func(w http.ResponseWriter, r *http.Request) {
+			id := r.PathValue("id")
+			w.Header().Set("Cache-Control", "public, max-age=31536000")
+			http.ServeFile(w, r, path.Join(photodbPath, id, name))
+		})
+	}
 
 	mux.Handle("GET anto.ph/js/ps.js", plausible.Proxy)
 	mux.Handle("GET anto.ph/api/event", plausible.Proxy)

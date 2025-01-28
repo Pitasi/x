@@ -232,11 +232,20 @@ func extractMeta(p string) ImgMeta {
 	}
 	defer js.Close()
 
-	img, err := os.Open(path.Join(p, "l.webp"))
-	if err != nil {
-		panic(err)
+	var img *os.File
+	for _, name := range []string{"w_2500.webp", "w_1900.webp", "w_1200.webp"} {
+		var err error
+		img, err = os.Open(path.Join(p, name))
+		if err != nil {
+			continue
+		}
+		defer img.Close()
+		break
 	}
-	defer img.Close()
+	if img == nil {
+		panic(fmt.Sprintf("cannot find image file in %s\n", p))
+	}
+
 	imgCfg, err := webp.DecodeConfig(img)
 	if err != nil {
 		panic(err)
