@@ -55,7 +55,7 @@
         header {
             padding: 10px;
             width: 100%;
-            max-width: 625px;
+            max-width: 900px;
             margin: 0 auto;
 
             display: flex;
@@ -73,14 +73,14 @@
 
         section {
             width: 100%;
-            max-width: 625px;
+            max-width: 900px;
             margin: 0 auto;
 
             .image-container {
                 position: relative;
                 width: 100%;
 
-                @media (max-width: 625px) {
+                @media (max-width: 900px) {
                     a {
                         display: none;
                     }
@@ -122,7 +122,7 @@
 
                 .gallery-wrapper {
                     width: 100%;
-                    max-width: 625px;
+                    max-width: 900px;
                     overflow: hidden;
                     view-transition-name: gallery-wrapper;
                 }
@@ -194,7 +194,7 @@
 
         footer {
             padding: 0 0.5rem;
-            max-width: 625px;
+            max-width: 900px;
             margin: 2rem auto 0 auto;
 
             a {
@@ -251,7 +251,7 @@
                       alt="Previous image"
                       width={{ .Nav.Prev.Meta.Width }}
                       height={{ .Nav.Prev.Meta.Height }}
-                      style="background-image: url({{ .Nav.Prev.CanonicalURL }}/blur.webp); background-size: cover;"
+                      data-preview="{{ .Nav.Prev.CanonicalURL }}/blur.webp"
                       src="{{ .Nav.Prev.CanonicalURL }}/w_1200.webp"
                       srcset="
                         {{ if (ge .Nav.Prev.Meta.Width 1200) }}{{ .Nav.Prev.CanonicalURL }}/w_1200.webp 1200w,{{ end }}
@@ -278,8 +278,6 @@
                       alt="Current image"
                       width={{ .Meta.Width }}
                       height={{ .Meta.Height }}
-                      style="background-image: url({{ .CanonicalURL }}/blur.webp); background-size: cover;"
-                      src="{{ .CanonicalURL }}/w_1200.webp"
                       srcset="
                         {{ if (ge .Meta.Width 1200) }}{{ .CanonicalURL }}/w_1200.webp 1200w,{{ end }}
                         {{ if (ge .Meta.Width 1900) }}{{ .CanonicalURL }}/w_1900.webp 1900w,{{ end }}
@@ -298,8 +296,7 @@
                       alt="Next image"
                       width={{ .Nav.Next.Meta.Width }}
                       height={{ .Nav.Next.Meta.Height }}
-                      style="background-image: url({{ .Nav.Next.CanonicalURL }}/blur.webp); background-size: cover;"
-                      src="{{ .Nav.Next.CanonicalURL }}/w_1200.webp"
+                      data-preview="{{ .Nav.Next.CanonicalURL }}/blur.webp"
                       srcset="
                         {{ if (ge .Nav.Next.Meta.Width 1200) }}{{ .Nav.Next.CanonicalURL }}/w_1200.webp 1200w,{{ end }}
                         {{ if (ge .Nav.Next.Meta.Width 1900) }}{{ .Nav.Next.CanonicalURL }}/w_1900.webp 1900w,{{ end }}
@@ -514,20 +511,24 @@
 
       const btnLeft = document.querySelector(".btn-left");
       const btnRight = document.querySelector(".btn-right");
-      btnLeft.addEventListener("click", (e) => {
-        {{ if .Nav.Prev }}
-        e.preventDefault();
-        currentTranslateX += 100/3;
-        navigateTo("prev");
-        {{ end }}
-      });
-      btnRight.addEventListener("click", (e) => {
-        {{ if .Nav.Next }}
-        e.preventDefault();
-        currentTranslateX -= 100/3;
-        navigateTo("next");
-        {{ end }}
-      });
+      if (btnLeft) {
+        btnLeft.addEventListener("click", (e) => {
+          {{ if .Nav.Prev }}
+          e.preventDefault();
+          currentTranslateX += 100/3;
+          navigateTo("prev");
+          {{ end }}
+        });
+      }
+      if (btnRight) {
+        btnRight.addEventListener("click", (e) => {
+          {{ if .Nav.Next }}
+          e.preventDefault();
+          currentTranslateX -= 100/3;
+          navigateTo("next");
+          {{ end }}
+        });
+      }
 
       if (window.innerWidth < 625 && !localStorage.getItem("galleryOnboardingShown")) {
         localStorage.setItem("galleryOnboardingShown", "true");
@@ -550,18 +551,26 @@
       }
 
       document.querySelectorAll(".image").forEach(img => {
-        if (!img.complete) {
-          addPreview(img);
-        }
+        setTimeout(() => {
+          if (!img.complete) {
+            addPreview(img);
+          }
+        }, 10);
       });
 
       function addPreview(img) {
-          img.onload = () => removePreview(img);
-          img.classList.add("preview");
+        if (!im.dataset.preview) {
+          return;
+        }
+        img.backgroundImage = `url(${im.dataset.preview})`;
+        img.backgroundSize = "contain";
+        img.classList.add("preview");
+        img.onload = () => removePreview(img);
       }
 
       function removePreview(img) {
           img.classList.remove("preview");
+          img.style.backgroundImage = null;
       }
     </script>
 </body>
