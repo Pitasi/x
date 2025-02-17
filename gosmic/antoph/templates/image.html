@@ -1,569 +1,269 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
-    <meta property="og:site_name" content="Antonio Pitasi's Photos">
-    <meta property="og:url" content="https://anto.ph/pic/{{ .ID }}">
-    <meta property="og:title" content="Antonio Pitasi's Photos">
-    <meta property="og:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
-    <meta property="og:type" content="article">
-    <meta property="og:image" content="{{ .CanonicalURL }}/l.webp">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{ .CanonicalURL }}/l.webp">
-    <meta name="twitter:site" content="@zaphodias">
-    <meta name="twitter:creator" content="@zaphodias">
-    <meta name="twitter:title" content="Antonio Pitasi's Photos">
-    <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
-    <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
-    <link rel="icon" href="/static/images/favicon.ico">
-    {{ if .Nav.Next }}
-    <link rel="prefetch" href="{{ .Nav.Next.URL }}">
-    {{ end }}
-    {{ if .Nav.Prev }}
-    <link rel="prefetch" href="{{ .Nav.Prev.URL }}">
-    {{ end }}
-    <title>Photos - Antonio Pitasi</title>
-    <script defer data-domain="anto.ph" src="/js/ps.js"></script>
-    <style>
-        *,
-        *:before,
-        *:after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: black;
-            color: white;
-            font-family: sans-serif;
-            font-size: 16px;
-        }
-
-        header {
-            padding: 10px;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-
-            font-size: 0.875rem;
-
-            a {
-                color: white;
-                text-decoration: none;
-                font-weight: bold;
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
+        <meta property="og:site_name" content="Antonio Pitasi's Photos">
+        <meta property="og:url" content="https://anto.ph/pic/{{ .ID }}">
+        <meta property="og:title" content="Antonio Pitasi's Photos">
+        <meta property="og:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
+        <meta property="og:type" content="article">
+        <meta property="og:image" content="{{ .CanonicalURL }}/w_1200.webp">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="{{ .CanonicalURL }}/w_1200.webp">
+        <meta name="twitter:site" content="@zaphodias">
+        <meta name="twitter:creator" content="@zaphodias">
+        <meta name="twitter:title" content="Antonio Pitasi's Photos">
+        <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
+        <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
+        <link rel="icon" href="/static/images/favicon.ico">
+        {{ if .Nav.Next }}
+        <link rel="prefetch" href="{{ .Nav.Next.URL }}">
+        {{ end }}
+        {{ if .Nav.Prev }}
+        <link rel="prefetch" href="{{ .Nav.Prev.URL }}">
+        {{ end }}
+        <title>Photos - Antonio Pitasi</title>
+        <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
+        <script defer data-domain="anto.ph" src="/js/ps.js"></script>
+        <style>
+            *,
+            ::before,
+            ::after {
+              box-sizing: border-box;
             }
-        }
 
-        section {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
+            html, body {
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
 
-            .image-container {
-                position: relative;
+            body {
+                display: flex;
+                flex-direction: column;
                 width: 100%;
+                height: 100dvh;
+                overflow: hidden;
+            }
 
-                @media (max-width: 900px) {
-                    a {
-                        display: none;
-                    }
-                }
+            section {
+                width: 100%;
+                height: 100%;
+                padding: 5px;
 
-                a {
-                    position: absolute;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    padding: 0.5rem;
-                    margin: 0;
-                    z-index: 1;
-
-                    div {
-                        background: rgba(255, 255, 255, 0.6);
-                        border: none;
-                        width: 1.5rem;
-                        height: 1.5rem;
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: black;
-
-                        svg {
-                            width: 100%;
-                            height: 100%;
-                        }
-                    }
-
-                    &.btn-left {
-                        left: 0;
-                    }
-
-                    &.btn-right {
-                        right: 0;
-                    }
-                }
-
-                .gallery-wrapper {
+                img {
                     width: 100%;
-                    max-width: 900px;
-                    overflow: hidden;
-                    view-transition-name: gallery-wrapper;
+                    height: 100%;
+                    object-fit: contain;
+                    opacity: 1;
+                    transition: opacity 0.15s ease-out;
                 }
+            }
 
-                .gallery {
+            aside {
+                position: absolute;
+                bottom: 45px;
+                background: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(10px);
+                
+                width: 100%;
+                height: 300px;
+                overflow-y: auto;
+                border-top: 1px solid rgba(0,0,0,0.07);
+
+                flex-shrink: 0;
+                padding: 20px;
+                color: rgba(0, 0, 0, 0.65);
+
+                hr {
+                    border: none;
+                    background-color: rgba(0,0,0,0.07);
+                    width: 100%;
+                    height: 1px;
+                }
+            }
+
+            nav {
+                width: 100%;
+                height: 45px;
+                border-top: 1px solid rgba(0,0,0,0.07);
+
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+
+                div {
                     display: flex;
+                    flex-direction: inherit;
+                    align-items: center;
+                }
+
+                a, button {
+                    display: block;
+                    text-decoration: none;
+                    align-content: center;
+                    text-align: center;
+                    background: none;
+                    border: 0;
+                    margin: 0;
+                    padding: 0;
+
+                    width: 50px;
+                    height: 50px;
+                    color: gray;
+                    cursor: pointer;
+
+                    position: relative;
+                }
+
+                a.active, button.active {
+                    color: black;
+                }
+
+                button.active::before {
+                    display: block;
+                    content: "";
+                    background-color: black;
+                    position: absolute;
+                    top: 2px;
+                    left: 15px;
+                    height: 1px;
+                    width: 20px;
+                }
+            }
+
+            a.tag, a.tag:visited {
+                display: inline-block;
+                border-radius: 4px;
+                padding: 2px 6px;
+                text-decoration: none;
+                color: black;
+                background-color: rgba(0, 0, 0, 0.05);
+
+                &::before {
+                    content: "#";
+                }
+            }
+
+            @media screen and (min-width:600px) {
+                body {
                     flex-direction: row;
-                    align-items: start;
-                    width: 300%;
-                    transform: translateX(calc(-100% / 3));
-                    transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
+                }
 
-                    & img {
-                        background: rgba(255, 255, 255, 0.1);
-                        display: block;
-                        width: calc(100% / 3);
-                        height: auto;
-                        max-height: calc(100vh - 45px);
-                        flex-shrink: 0;
-                        object-fit: contain;
-                        transition: filter 0.5s;
-                    }
+                section {
+                    padding: 20px;
+                }
 
-                    & .current {
-                        z-index: 1;
+                nav {
+                    width: 45px;
+                    height: 100dvh;
+                    border-left: 1px solid rgba(0,0,0,0.07);
+
+                    flex-direction: column;
+
+                    button.active::before {
+                        left: 2px;
+                        top: 15px; /* (50px / 2) - 20px */
+                        height: 20px;
+                        width: 1px;
                     }
                 }
-            }
-        }
 
-        .title {
-            display: block;
-            margin-top: 1rem;
-            margin-left: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: bold;
-        }
+                aside {
+                    position: initial;
+                    background: none;
 
-        .tags {
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-
-            a {
-                color: white;
-                text-decoration: none;
-                background: rgba(255, 255, 255, 0.1);
-                padding: 0.2rem 0.5rem;
-                border-radius: 0.2rem;
-                margin-right: 0.5rem;
-
-                &:hover {
-                    background: rgba(255, 255, 255, 0.2);
+                    width: 350px;
+                    height: 100dvh;
+                    border-left: 1px solid rgba(0,0,0,0.07);
                 }
             }
-        }
 
-        .info {
-            margin-left: 0.5rem;
-            opacity: 0.5;
-
-            &:hover {
-                opacity: 1;
+            .htmx-swapping img {
+              opacity: 0;
+              transition: opacity 0.15s ease-out;
             }
 
-            p {
-                line-height: 1.5;
+            .htmx-added img {
+              opacity: 0;
             }
-        }
+        </style>
+    </head>
+    <body x-data="{ open: false }" @keydown.right="() => document.querySelector('a.next').click()" @keydown.left="() => document.querySelector('a.prev').click()">
+        <section>
+            <img
+                class="image current"
+                alt="Current image"
+                width={{ .Meta.Width }}
+                height={{ .Meta.Height }}
+                srcset="
+                    {{ if (ge .Meta.Width 1200) }}{{ .CanonicalURL }}/w_1200.webp 1200w,{{ end }}
+                    {{ if (ge .Meta.Width 1900) }}{{ .CanonicalURL }}/w_1900.webp 1900w,{{ end }}
+                    {{ if (ge .Meta.Width 2500) }}{{ .CanonicalURL }}/w_2500.webp 2500w,{{ end }}
+                "
+                sizes="
+                    (max-width: 1200px) 1200px,
+                    (max-width: 1900px) 1900px,
+                    2500px
+                "
+            />
+        </section>
 
-        footer {
-            padding: 0 0.5rem;
-            max-width: 900px;
-            margin: 2rem auto 0 auto;
+        <aside x-show="open" style="display: none">
+            <p>Shoot on {{ .Meta.Date | prettyDate }}.</p>
+            <p>&copy; 2025 Antonio Pitasi.</p>
 
-            a {
-                color: white;
-                text-decoration: none;
-                font-weight: bold;
-            }
+            <hr>
 
-            p {
-                margin-top: 0.5rem;
-                color: rgba(255, 255, 255, 0.5);
-            }
-        }
-
-        .preview {
-            filter: blur(4vw);
-            transform: scale(1.1);
-        }
-    </style>
-</head>
-
-<body>
-    <header>
-        <a href="/">
-            antonio pitasi
-        </a>
-        <a href="https://anto.pt">
-            anto.pt →
-        </a>
-    </header>
-    <section>
-        <div class="image-container">
-            {{ if .Nav.Prev }}
-            <a class="btn-left" href="{{ .Nav.Prev.URL }}">
-                <div>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M6.29289 8.79289C6.68342 8.40237 7.31658 8.40237 7.70711 8.79289L12 13.0858L16.2929 8.79289C16.6834 8.40237 17.3166 8.40237 17.7071 8.79289C18.0976 9.18342 18.0976 9.81658 17.7071 10.2071L12.7071 15.2071C12.3166 15.5976 11.6834 15.5976 11.2929 15.2071L6.29289 10.2071C5.90237 9.81658 5.90237 9.18342 6.29289 8.79289Z"
-                                fill="currentColor"></path>
-                        </g>
-                    </svg>
-                </div>
-            </a>
-            {{ end }}
-
-            <div class="gallery-wrapper">
-                <div class="gallery">
-                    {{ if .Nav.Prev }}
-                    <img
-                      class="image left"
-                      alt="Previous image"
-                      width={{ .Nav.Prev.Meta.Width }}
-                      height={{ .Nav.Prev.Meta.Height }}
-                      data-preview="{{ .Nav.Prev.CanonicalURL }}/blur.webp"
-                      src="{{ .Nav.Prev.CanonicalURL }}/w_1200.webp"
-                      srcset="
-                        {{ if (ge .Nav.Prev.Meta.Width 1200) }}{{ .Nav.Prev.CanonicalURL }}/w_1200.webp 1200w,{{ end }}
-                        {{ if (ge .Nav.Prev.Meta.Width 1900) }}{{ .Nav.Prev.CanonicalURL }}/w_1900.webp 1900w,{{ end }}
-                        {{ if (ge .Nav.Prev.Meta.Width 2500) }}{{ .Nav.Prev.CanonicalURL }}/w_2500.webp 2500w,{{ end }}
-                      "
-                      sizes="
-                        (max-width: 1200px) 1200px,
-                        (max-width: 1900px) 1900px,
-                        2500px
-                      "
-                      loading="lazy"
-                    />
-                    {{ else }}
-                    <img
-                      class="image left"
-                      width={{ .Meta.Width }}
-                      height={{ .Meta.Height }}
-                    />
-                    {{ end }}
-
-                    <img
-                      class="image current"
-                      alt="Current image"
-                      width={{ .Meta.Width }}
-                      height={{ .Meta.Height }}
-                      srcset="
-                        {{ if (ge .Meta.Width 1200) }}{{ .CanonicalURL }}/w_1200.webp 1200w,{{ end }}
-                        {{ if (ge .Meta.Width 1900) }}{{ .CanonicalURL }}/w_1900.webp 1900w,{{ end }}
-                        {{ if (ge .Meta.Width 2500) }}{{ .CanonicalURL }}/w_2500.webp 2500w,{{ end }}
-                      "
-                      sizes="
-                        (max-width: 1200px) 1200px,
-                        (max-width: 1900px) 1900px,
-                        2500px
-                      "
-                    />
-
-                    {{ if .Nav.Next }}
-                    <img
-                      class="image right"
-                      alt="Next image"
-                      width={{ .Nav.Next.Meta.Width }}
-                      height={{ .Nav.Next.Meta.Height }}
-                      data-preview="{{ .Nav.Next.CanonicalURL }}/blur.webp"
-                      srcset="
-                        {{ if (ge .Nav.Next.Meta.Width 1200) }}{{ .Nav.Next.CanonicalURL }}/w_1200.webp 1200w,{{ end }}
-                        {{ if (ge .Nav.Next.Meta.Width 1900) }}{{ .Nav.Next.CanonicalURL }}/w_1900.webp 1900w,{{ end }}
-                        {{ if (ge .Nav.Next.Meta.Width 2500) }}{{ .Nav.Next.CanonicalURL }}/w_2500.webp 2500w,{{ end }}
-                      "
-                      sizes="
-                        (max-width: 1200px) 1200px,
-                        (max-width: 1900px) 1900px,
-                        2500px
-                      "
-                      loading="lazy"
-                    />
-                    {{ else }}
-                    <img
-                      class="image right"
-                      width={{ .Meta.Width }}
-                      height={{ .Meta.Height }}
-                    />
-                    {{ end }}
-                </div>
-            </div>
-
-            {{ if .Nav.Next }}
-            <a class="btn-right" href="{{ .Nav.Next.URL }}">
-                <div>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(270)">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M6.29289 8.79289C6.68342 8.40237 7.31658 8.40237 7.70711 8.79289L12 13.0858L16.2929 8.79289C16.6834 8.40237 17.3166 8.40237 17.7071 8.79289C18.0976 9.18342 18.0976 9.81658 17.7071 10.2071L12.7071 15.2071C12.3166 15.5976 11.6834 15.5976 11.2929 15.2071L6.29289 10.2071C5.90237 9.81658 5.90237 9.18342 6.29289 8.79289Z"
-                                fill="currentColor"></path>
-                        </g>
-                    </svg>
-                </div>
-            </a>
-            {{ end }}
-        </div>
-        <div class="tags">
-            {{ range .Meta.Keywords }}
-            <a href="/tags/{{ . }}">#{{ . }}</a>
-            {{ end }}
-        </div>
-
-        <p class="title">metadata</p>
-        <div class="info">
-            <p>{{ .Meta.Date | prettyDate }}</p>
             <p>{{ .Meta.Camera }}</p>
             <p>{{ .Meta.Lens }}</p>
-            <p>ISO {{ .Meta.ISO }}</p>
-            <p>{{ .Meta.ShutterSpeed }}s</p>
-            <p>f/{{ .Meta.Aperture }}</p>
-        </div>
-    </section>
+            <p>{{ .Meta.ShutterSpeed }}s • ƒ/{{ .Meta.Aperture }} • ISO {{ .Meta.ISO }}</p>
 
-    <footer>
-        <a href="/random">👉 random photo</a>
-        <p>images are mine and can't be used by anyone else unless otherwise stated</p>
-    </footer>
+            <hr>
 
-    <script>
-      const section = document.querySelector("section");
-      const gallery = document.querySelector(".gallery");
-      const galleryTransitionOriginal = gallery.style.transition;
-      let disableSwipe = false;
-      let startX = 0; // Initial touch point
-      let currentTranslateX = -100/3; // Start centered on the current image
-      let isDragging = false;
-      gallery.style.transform = `translateX(calc(-100% / 3))`;
-      window.addEventListener('pageshow', (event) => {
-        if (event.persisted) {
-          // handle back button to reset slide position
-          disableSwipe = false;
-          startX = 0;
-          currentTranslateX = -100/3;
-          isDragging = false;
-          gallery.style.transform = `translateX(calc(-100% / 3))`;
-          updateGalleryCurrentImageHeight();
-        }
-      });
-
-      gallery.addEventListener("touchstart", (e) => {
-        if (disableSwipe) return;
-        e.preventDefault();
-        startX = e.touches[0].clientX; // Track the initial touch point
-        isDragging = true;
-        gallery.style.transition = "none"; // Disable transition during swipe
-      });
-
-      gallery.addEventListener("touchmove", (e) => {
-        if (disableSwipe || !isDragging) return;
-        e.preventDefault();
-        const deltaX = e.touches[0].clientX - startX;
-        {{ if not .Nav.Prev }}
-        if (deltaX > 0) {
-            return;
-        }
-        {{ end }}
-        {{ if not .Nav.Next }}
-        if (deltaX < 0) {
-            return;
-        }
-        {{ end }}
-        const newTranslate = currentTranslateX + (deltaX / window.innerWidth) * 100/3;
-        gallery.style.transform = `translateX(${newTranslate}%)`; // Update transform dynamically
-
-        const startImage = document.querySelector(".image.current");
-        const startImageHeight = getImageHeight(startImage);
-        const nextImage = deltaX > 0 ?
-          document.querySelector(".image.left") :
-          document.querySelector(".image.right");
-        const nextImageHeight = getImageHeight(nextImage);
-        const deltaH = nextImageHeight-startImageHeight;
-        const h = startImageHeight + Math.abs(deltaX / window.innerWidth) * deltaH;
-        gallery.style.height = `${h}px`;
-      });
-
-      gallery.addEventListener("touchend", (e) => {
-        if (disableSwipe) return;
-        e.preventDefault();
-        isDragging = false;
-        const endX = e.changedTouches[0].clientX;
-        const deltaX = endX - startX;
-
-        {{ if .Nav.Prev }}
-        if (deltaX > 50) {
-          // Swipe right
-          currentTranslateX += 100/3;
-          navigateTo("prev");
-          return;
-        }
-        {{ end }}
-
-        {{ if .Nav.Next }}
-        if (deltaX < -50) {
-          // Swipe left
-          currentTranslateX -= 100/3;
-          navigateTo("next");
-          return;
-        }
-        {{ end }}
-
-        // Snap back to current
-        gallery.style.transition = galleryTransitionOriginal;
-        gallery.style.transform = `translateX(${currentTranslateX}%)`;
-      });
-
-      function navigateTo(direction) {
-        disableSwipe = true;
-        const nextImage = direction === "prev" ?
-              document.querySelector(".image.left") :
-              document.querySelector(".image.right");
-        gallery.style.transition = galleryTransitionOriginal;
-        if (nextImage) {
-          updateGalleryHeight(nextImage);
-        }
-        gallery.style.transform = `translateX(${currentTranslateX}%)`;
-        setTimeout(() => {
-          {{ if .Nav.Prev }}
-          if (direction === "prev") {
-            window.location.href = "{{ .Nav.Prev.URL }}";
-            return;
-          }
-          {{ end }}
-          {{ if .Nav.Next }}
-          if (direction === "next") {
-            window.location.href = "{{ .Nav.Next.URL }}";
-            return;
-          }
-          {{ end }}
-        }, 300);
-      }
-
-      function getImageHeight(image) {
-        const gallery = document.querySelector(".gallery");
-        const realW = image.attributes.width.value
-        const realH = image.attributes.height.value;
-        const renderH = image.height;
-        const currentImageHeight = Math.min(renderH, window.innerWidth / realW * realH);
-        return currentImageHeight;
-      }
-
-      function updateGalleryHeight(image) {
-        const currentImageHeight = getImageHeight(image);
-        gallery.style.height = `${currentImageHeight}px`; // Apply it as max-height
-      }
-
-      function updateGalleryCurrentImageHeight() {
-          const currentImage = document.querySelector(".image.current");
-          updateGalleryHeight(currentImage);
-      }
-
-      document.addEventListener("DOMContentLoaded", updateGalleryCurrentImageHeight);
-      window.addEventListener("resize", updateGalleryCurrentImageHeight);
-
-      document.addEventListener("keydown", (e) => {
-        {{ if .Nav.Next }}
-        if (!disableSwipe && e.key === "ArrowRight") {
-          e.preventDefault();
-          currentTranslateX -= 100/3;
-          navigateTo("next");
-        }
-        {{ end }}
-        {{ if .Nav.Prev }}
-        if (!disableSwipe && e.key === "ArrowLeft") {
-          e.preventDefault();
-          currentTranslateX += 100/3;
-          navigateTo("prev");
-        }
-        {{ end }}
-      });
-
-      const btnLeft = document.querySelector(".btn-left");
-      const btnRight = document.querySelector(".btn-right");
-      if (btnLeft) {
-        btnLeft.addEventListener("click", (e) => {
-          {{ if .Nav.Prev }}
-          e.preventDefault();
-          currentTranslateX += 100/3;
-          navigateTo("prev");
-          {{ end }}
-        });
-      }
-      if (btnRight) {
-        btnRight.addEventListener("click", (e) => {
-          {{ if .Nav.Next }}
-          e.preventDefault();
-          currentTranslateX -= 100/3;
-          navigateTo("next");
-          {{ end }}
-        });
-      }
-
-      if (window.innerWidth < 625 && !localStorage.getItem("galleryOnboardingShown")) {
-        localStorage.setItem("galleryOnboardingShown", "true");
-        setTimeout(() => {
-          const gallery = document.querySelector(".gallery");
-
-          {{ if .Nav.Next }}
-          gallery.style.transform = "translateX(calc(-105% / 3))";
-          {{ end }}
-
-          setTimeout(() => {
-            {{ if .Nav.Prev }}
-            gallery.style.transform = "translateX(calc(-95% / 3))";
+            {{ range .Meta.Keywords }}
+            <a href="/tags/{{ . }}" class="tag">{{ . }}</a>
             {{ end }}
-            setTimeout(() => {
-              gallery.style.transform = "translateX(calc(-100% / 3))";
-            }, 300);
-          }, 300);
-        }, 500);
-      }
+        </aside>
 
-      document.querySelectorAll(".image").forEach(img => {
-        setTimeout(() => {
-          if (!img.complete) {
-            addPreview(img);
-          }
-        }, 10);
-      });
+        <nav>
+            <div>
+                <a href="/">
+                    <svg height="20" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>grid [#1526]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-219.000000, -200.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M181.9,54 L179.8,54 C178.63975,54 177.7,54.895 177.7,56 L177.7,58 C177.7,59.105 178.63975,60 179.8,60 L181.9,60 C183.06025,60 184,59.105 184,58 L184,56 C184,54.895 183.06025,54 181.9,54 M174.55,54 L172.45,54 C171.28975,54 170.35,54.895 170.35,56 L170.35,58 C170.35,59.105 171.28975,60 172.45,60 L174.55,60 C175.71025,60 176.65,59.105 176.65,58 L176.65,56 C176.65,54.895 175.71025,54 174.55,54 M167.2,54 L165.1,54 C163.93975,54 163,54.895 163,56 L163,58 C163,59.105 163.93975,60 165.1,60 L167.2,60 C168.36025,60 169.3,59.105 169.3,58 L169.3,56 C169.3,54.895 168.36025,54 167.2,54 M181.9,47 L179.8,47 C178.63975,47 177.7,47.895 177.7,49 L177.7,51 C177.7,52.105 178.63975,53 179.8,53 L181.9,53 C183.06025,53 184,52.105 184,51 L184,49 C184,47.895 183.06025,47 181.9,47 M174.55,47 L172.45,47 C171.28975,47 170.35,47.895 170.35,49 L170.35,51 C170.35,52.105 171.28975,53 172.45,53 L174.55,53 C175.71025,53 176.65,52.105 176.65,51 L176.65,49 C176.65,47.895 175.71025,47 174.55,47 M167.2,47 L165.1,47 C163.93975,47 163,47.895 163,49 L163,51 C163,52.105 163.93975,53 165.1,53 L167.2,53 C168.36025,53 169.3,52.105 169.3,51 L169.3,49 C169.3,47.895 168.36025,47 167.2,47 M181.9,40 L179.8,40 C178.63975,40 177.7,40.895 177.7,42 L177.7,44 C177.7,45.105 178.63975,46 179.8,46 L181.9,46 C183.06025,46 184,45.105 184,44 L184,42 C184,40.895 183.06025,40 181.9,40 M174.55,40 L172.45,40 C171.28975,40 170.35,40.895 170.35,42 L170.35,44 C170.35,45.105 171.28975,46 172.45,46 L174.55,46 C175.71025,46 176.65,45.105 176.65,44 L176.65,42 C176.65,40.895 175.71025,40 174.55,40 M169.3,42 L169.3,44 C169.3,45.105 168.36025,46 167.2,46 L165.1,46 C163.93975,46 163,45.105 163,44 L163,42 C163,40.895 163.93975,40 165.1,40 L167.2,40 C168.36025,40 169.3,40.895 169.3,42" id="grid-[#1526]"> </path> </g> </g> </g> </g></svg>
+                </a>
+                <button onclick="if (document.fullscreenElement) { document.exitFullscreen(); } else { document.querySelector('body').requestFullscreen() }">
+                    <svg height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7.69233 18.2781L9.70711 20.2929C9.9931 20.5789 10.0787 21.009 9.92388 21.3827C9.7691 21.7564 9.40446 22 9 22H3C2.44772 22 2 21.5523 2 21V15C2 14.5955 2.24364 14.2309 2.61732 14.0761C2.99099 13.9213 3.42111 14.0069 3.70711 14.2929L5.571 16.1568L9.25289 12.4749C9.64342 12.0844 10.2766 12.0844 10.6671 12.4749L11.3742 13.182C11.7647 13.5725 11.7647 14.2057 11.3742 14.5962L7.69233 18.2781Z" fill="currentColor"></path> <path d="M16.3077 5.72187L14.2929 3.70711C14.0069 3.42111 13.9213 2.99099 14.0761 2.61732C14.2309 2.24364 14.5955 2 15 2H21C21.5523 2 22 2.44772 22 3V9C22 9.40446 21.7564 9.7691 21.3827 9.92388C21.009 10.0787 20.5789 9.9931 20.2929 9.70711L18.429 7.84319L14.7471 11.5251C14.3566 11.9156 13.7234 11.9156 13.3329 11.5251L12.6258 10.818C12.2352 10.4275 12.2352 9.7943 12.6258 9.40378L16.3077 5.72187Z" fill="currentColor"></path> </g></svg>
+                </button>
+            </div>
 
-      function addPreview(img) {
-        if (!im.dataset.preview) {
-          return;
-        }
-        img.backgroundImage = `url(${im.dataset.preview})`;
-        img.backgroundSize = "contain";
-        img.classList.add("preview");
-        img.onload = () => removePreview(img);
-      }
+            <div>
+                <button @click="open = !open" x-bind:class="open ? 'active' : ''">
+                    <svg height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path d="M48 80a48 48 0 1 1 96 0A48 48 0 1 1 48 80zM0 224c0-17.7 14.3-32 32-32l64 0c17.7 0 32 14.3 32 32l0 224 32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32l32 0 0-192-32 0c-17.7 0-32-14.3-32-32z"/></svg>
+                </button>
+            </div>
 
-      function removePreview(img) {
-          img.classList.remove("preview");
-          img.style.backgroundImage = null;
-      }
-    </script>
-</body>
-
+            <div hx-boost="true">
+                {{ if .Nav.Prev }}
+                    <a href="{{ .Nav.Prev.URL }}" class="prev">
+                        <svg height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Arrow / Caret_Left_SM"> <path id="Vector" d="M13 15L10 12L13 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
+                    </a>
+                {{ else }}
+                    <a href="#" class="prev" style="visibility: hidden"></a>
+                {{ end }}
+                {{ if .Nav.Next }}
+                    <a href="{{ .Nav.Next.URL }}" class="next">
+                        <svg height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Arrow / Caret_Right_SM"> <path id="Vector" d="M11 9L14 12L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
+                    </a>
+                {{ else }}
+                    <a href="#" class="next" style="visibility: hidden"></a>
+                {{ end }}
+            </div>
+        </nav>
+    </body>
 </html>

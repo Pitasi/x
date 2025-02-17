@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
     <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
     <link rel="icon" href="/static/images/favicon.ico">
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
     <script defer data-domain="anto.ph" src="/js/ps.js"></script>
     <style>
         @view-transition {
@@ -25,8 +26,8 @@
         }
 
         body {
-            background-color: black;
-            color: white;
+            background-color: white;
+            color: black;
             font-family: sans-serif;
             font-size: 16px;
         }
@@ -44,7 +45,7 @@
             font-size: 0.875rem;
 
             a {
-                color: white;
+                color: black;
                 text-decoration: none;
                 font-weight: bold;
             }
@@ -75,7 +76,7 @@
             border: 1px solid oklch(0.667 0.295 322.15 / 0.1);
 
             &:hover {
-                border: 1px solid white;
+                border: 1px solid black;
             }
 
             &:not([src]) {
