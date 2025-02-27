@@ -1,0 +1,34 @@
+{{define "body"}}
+<h2>movies</h2>
+<p>movies i've seen or that i'd like to see</p>
+
+<table id="moviesTable">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">My rating</th>
+            <th scope="col">IMDB Rating</th>
+            <th scope="col">Added on</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ range .Movies }}
+        <tr>
+            <th scope="row">{{ if eq .Rating 7 }}⭐ {{ end }}{{ .Title }}</th>
+            <td>{{ if .Rating }}{{ .Rating }}/7<a href="/ratings"><sup>[?]</sup></a>{{ else }}-{{ end }}</td>
+            <td>{{ if .ScoreIMDB }}{{ .ScoreIMDB }}/10{{ if .Source }}<a href="{{ .Source }}" target=_blank><sup>[o]</sup></a>{{ end }}{{ end }}</td>
+            <td>{{ .Created | prettyDate }}</td>
+        </tr>
+        {{ end }}
+    </tbody>
+</table>
+<script>
+    let table = new simpleDatatables.DataTable('#moviesTable', {
+        paging: false,
+        columns: [
+            { select: [1,2], sortSequence: ["desc", "asc"], },
+            { select: 3, type: "date", format: "YYYY-MM-DD", sortSequence: ["desc", "asc"], },
+        ],
+    });
+</script>
+{{ end }}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	_ "embed"
+	"embed"
 	"errors"
 	"fmt"
 	"html/template"
@@ -21,14 +21,11 @@ import (
 	"go.abhg.dev/goldmark/frontmatter"
 )
 
-//go:embed index.html
-var IndexHtml string
+//go:embed templates
+var TemplatesFS embed.FS
 
-//go:embed movies.html
-var MoviesHtml string
-
-//go:embed shows.html
-var ShowsHtml string
+//go:embed static/style.css
+var StyleCSS []byte
 
 func main() {
 	obsidianVault := os.Args[1]
@@ -60,31 +57,38 @@ func main() {
 		}
 	}
 
-	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		t, err := template.New("index").
-			Parse(string(IndexHtml))
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = w.Write([]byte("unexpected error"))
-			log.Println("err", err)
-			return
-		}
-
-		err = t.Execute(w, struct{}{})
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = w.Write([]byte("unexpected error"))
-			log.Println("err", err)
-			return
-		}
+	http.HandleFunc("GET /style.css", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "text/css")
+		w.WriteHeader(200)
+		_, _ = w.Write(StyleCSS)
 	})
 
-	http.HandleFunc("GET /shows", sectionHandler(ShowsHtml, struct {
+	http.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+		t, err := template.ParseFS(TemplatesFS, "templates/layout.html", "templates/index.html")
+		if err != nil {
+			log.Println("template: index.html:", err)
+			return
+		}
+
+		_ = t.Execute(w, nil)
+	})
+
+	http.HandleFunc("GET /ratings/{$}", func(w http.ResponseWriter, r *http.Request) {
+		t, err := template.ParseFS(TemplatesFS, "templates/layout.html", "templates/ratings.html")
+		if err != nil {
+			log.Println("template: ratings.html:", err)
+			return
+		}
+
+		_ = t.Execute(w, nil)
+	})
+
+	http.HandleFunc("GET /shows/{$}", sectionHandler("shows.html", struct {
 		Shows []frontmatterData
 	}{
 		Shows: shows,
 	}))
-	http.HandleFunc("GET /movies", sectionHandler(MoviesHtml, struct {
+	http.HandleFunc("GET /movies/{$}", sectionHandler("movies.html", struct {
 		Movies []frontmatterData
 	}{
 		Movies: movies,
@@ -94,14 +98,14 @@ func main() {
 	_ = http.ListenAndServe("0.0.0.0:8080", nil)
 }
 
-func sectionHandler(text string, data any) http.HandlerFunc {
+func sectionHandler(templateName string, data any) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		t, err := template.New("index").
+		t, err := template.New("root").
 			Funcs(template.FuncMap{
 				"prettyDate": prettyDate,
 				"yyyymmdd":   yyyymmdd,
 			}).
-			Parse(text)
+			ParseFS(TemplatesFS, "templates/layout.html", "templates/"+templateName)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_, _ = w.Write([]byte("unexpected error"))
@@ -109,7 +113,7 @@ func sectionHandler(text string, data any) http.HandlerFunc {
 			return
 		}
 
-		err = t.Execute(w, data)
+		err = t.ExecuteTemplate(w, "layout.html", data)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_, _ = w.Write([]byte("unexpected error"))
