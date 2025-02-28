@@ -1,0 +1,48 @@
+{{define "body"}}
+<h2>places</h2>
+<p>places i've been to or that i'd like to visit</p>
+
+<table id="placesTable">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">My rating</th>
+            <th scope="col">Google Rating</th>
+            <th scope="col">Added on</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ range .Places }}
+        <tr>
+            <th scope="row">
+                <p>{{ if eq .Rating 7 }}⭐ {{ end }}{{ .Title }}</p>
+                <small>
+                    {{ range .Loc }}
+                    <button onclick="onSearchClick(event)">{{ . | prettyLink }}</button>
+                    {{ end }}
+                </small>
+            </th>
+            <td>{{ if .Rating }}{{ .Rating }}/7<a href="/ratings"><sup>[?]</sup></a>{{ else }}-{{ end }}</td>
+            <td>{{ if .ScoreGoogle }}{{ .ScoreGoogle }}/5{{ if .Source }}<a href="{{ .Source }}" target=_blank><sup>[o]</sup></a>{{ end }}{{ end }}</td>
+            <td>{{ .Created | prettyDate }}</td>
+        </tr>
+        {{ end }}
+    </tbody>
+</table>
+<script>
+    let table = new simpleDatatables.DataTable('#placesTable', {
+        paging: false,
+        columns: [
+            { select: [1,2], sortSequence: ["desc", "asc"], },
+            { select: 3, type: "date", format: "YYYY-MM-DD", sortSequence: ["desc", "asc"], },
+        ],
+    });
+
+    function onSearchClick(e) {
+        const q = e.target.innerText;
+        const searchInput = document.querySelector(".datatable-input")
+        searchInput.value = q;
+        table.search(q);
+    }
+</script>
+{{ end }}

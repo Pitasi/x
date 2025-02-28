@@ -74,6 +74,20 @@ p {
 }
 
 button {
+    padding: 5px 0;
+    margin-bottom: 5px;
+    background: transparent;
+    color: -webkit-link;
+    font-family: 'Consolas', monospace;
+    border-width: 0;
+    cursor: pointer;
+}
+
+button:active {
+    text-decoration: underline;
+}
+
+button.primary {
     padding: 5px;
     margin-bottom: 5px;
     background-color: -webkit-link;

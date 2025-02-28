@@ -35,6 +35,7 @@ func main() {
 	var (
 		shows  []frontmatterData
 		movies []frontmatterData
+		places []frontmatterData
 	)
 
 	for _, f := range files {
@@ -54,6 +55,10 @@ func main() {
 
 		if slices.Contains(data.Category, "[[Movies]]") {
 			movies = append(movies, data)
+		}
+
+		if slices.Contains(data.Category, "[[Places]]") {
+			places = append(places, data)
 		}
 	}
 
@@ -93,6 +98,11 @@ func main() {
 	}{
 		Movies: movies,
 	}))
+	http.HandleFunc("GET /places/{$}", sectionHandler("places.html", struct {
+		Places []frontmatterData
+	}{
+		Places: places,
+	}))
 
 	log.Println("listening on", "0.0.0.0:8080")
 	_ = http.ListenAndServe("0.0.0.0:8080", nil)
@@ -104,6 +114,7 @@ func sectionHandler(templateName string, data any) http.HandlerFunc {
 			Funcs(template.FuncMap{
 				"prettyDate": prettyDate,
 				"yyyymmdd":   yyyymmdd,
+				"prettyLink": prettyLinks,
 			}).
 			ParseFS(TemplatesFS, "templates/layout.html", "templates/"+templateName)
 		if err != nil {
@@ -124,17 +135,27 @@ func sectionHandler(templateName string, data any) http.HandlerFunc {
 }
 
 type frontmatterData struct {
-	Title     string
-	Category  []string  `yaml:"category"`
-	Genre     []string  `yaml:"genre"`
-	Rating    int       `yaml:"rating"`
-	ScoreIMDB float64   `yaml:"scoreImdb"`
-	Cover     string    `yaml:"cover"`
-	Plot      string    `yaml:"plot"`
-	Year      int       `yaml:"year"`
-	Created   time.Time `yaml:"created"`
-	Tags      []string  `yaml:"tags"`
-	Source    string    `yaml:"source"`
+	Title   string
+	Source  string    `yaml:"source"`
+	Created time.Time `yaml:"created"`
+	Tags    []string  `yaml:"tags"`
+
+	// Movies/Shows
+
+	Category  []string `yaml:"category"`
+	Genre     []string `yaml:"genre"`
+	Rating    int      `yaml:"rating"`
+	ScoreIMDB float64  `yaml:"scoreImdb"`
+	Cover     string   `yaml:"cover"`
+	Plot      string   `yaml:"plot"`
+	Year      int      `yaml:"year"`
+
+	// Places
+
+	Loc         []string `yaml:"loc"`
+	ScoreGoogle float64  `yaml:"scoreGoogle"`
+	Address     string   `yaml:"address"`
+	URL         string   `yaml:"url"`
 }
 
 func P(path string, src []byte) (frontmatterData, error) {
@@ -195,4 +216,8 @@ func pathToTitle(path string) string {
 		}
 	}
 	return b
+}
+
+func prettyLinks(link string) string {
+	return strings.TrimPrefix(strings.TrimSuffix(link, "]]"), "[[")
 }
