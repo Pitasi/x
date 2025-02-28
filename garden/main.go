@@ -176,6 +176,9 @@ func P(path string, src []byte) (frontmatterData, error) {
 }
 
 func prettyDate(t time.Time) string {
+	if t.IsZero() {
+		return "2000-01-01"
+	}
 	return t.Format(time.DateOnly)
 }
 
