@@ -36,6 +36,7 @@ func main() {
 		shows  []frontmatterData
 		movies []frontmatterData
 		places []frontmatterData
+		books  []frontmatterData
 	)
 
 	for _, f := range files {
@@ -59,6 +60,10 @@ func main() {
 
 		if slices.Contains(data.Category, "[[Places]]") {
 			places = append(places, data)
+		}
+
+		if slices.Contains(data.Category, "[[Books]]") {
+			books = append(books, data)
 		}
 	}
 
@@ -102,6 +107,11 @@ func main() {
 		Places []frontmatterData
 	}{
 		Places: places,
+	}))
+	http.HandleFunc("GET /books/{$}", sectionHandler("books.html", struct {
+		Books []frontmatterData
+	}{
+		Books: books,
 	}))
 
 	log.Println("listening on", "0.0.0.0:8080")
@@ -156,6 +166,10 @@ type frontmatterData struct {
 	ScoreGoogle float64  `yaml:"scoreGoogle"`
 	Address     string   `yaml:"address"`
 	URL         string   `yaml:"url"`
+
+	// Books
+
+	ScoreGR float64 `yaml:"scoreGr"`
 }
 
 func P(path string, src []byte) (frontmatterData, error) {
@@ -192,7 +206,10 @@ func P(path string, src []byte) (frontmatterData, error) {
 		return frontmatterData{}, err
 	}
 
-	meta.Title = pathToTitle(path)
+	if meta.Title == "" {
+		meta.Title = pathToTitle(path)
+	}
+
 	return meta, nil
 }
 
