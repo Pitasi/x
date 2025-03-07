@@ -15,7 +15,11 @@ body {
     min-height: 100vh;
     background-color: white;
     color: black;
-    font-family: 'Consolas', monospace;
+    font-family: "Sono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "MONO" 1;
     max-width: 800px;
     margin: 0 auto;
     padding: 10px 10px 0 10px;
@@ -115,6 +119,11 @@ footer .social-link {
 
 table {
     white-space: nowrap;
+    border: 1px solid light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+}
+
+table tr:hover {
+    background: rgba(0, 0, 0, 0.03);
 }
 
 a:has(sup) {
@@ -136,4 +145,9 @@ header a {
 .datatable-sorter::before,
 .datatable-sorter::after {
     right: -4px;
+}
+
+.datatable-top,
+.datatable-bottom {
+    padding: 8px 0;
 }
