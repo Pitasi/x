@@ -1,0 +1,22 @@
+{{ define "title" }}Homepage{{ end }}
+
+{{ define "body" }}
+<p>
+    This is the homepage.
+    <br>
+    Files named "index.html" are treated specially, there is no need to specify
+    "/index" in the URL.
+</p>
+<p>
+    Try to open <a href=/about>About</a> for another HTML page.
+</p>
+<p>
+    Try to open <a href=/mark>Mark</a> for a page rendered from Markdown.
+</p>
+<p>
+    Try to open <a href=/nested>Nested</a> for an example of using two different _layout.html together.
+</p>
+<p>
+    Try to open <a href=/anything-really!>Some slug</a> for an example of using path parameters.
+</p>
+{{ end }}

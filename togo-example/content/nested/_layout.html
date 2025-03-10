@@ -1,0 +1,6 @@
+{{ define "body" }}
+<div class=info>
+    <span>This is a nested layout!</span>
+</div>
+{{ block "nested-slot" . }}nested-slot fallback{{ end }}
+{{ end }}

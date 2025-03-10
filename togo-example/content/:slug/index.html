@@ -1,0 +1,22 @@
+{{ define "body" }}
+{{ if eq (PathParam "slug") "easter" }} 
+<h2 style="color: green">
+    You found the Easter Egg! 🐣
+</h2>
+{{ else }}
+<h2>
+    {{ PathParam "slug" }} 📣
+</h2>
+{{ end }}
+<p>
+    This page uses a :slug path parameter that can be accessed in the HTML
+    template.
+</p>
+<p>
+    You can try different variants:
+    <ul>
+        <li><a href=./foo>foo</a></li>
+        <li><a href=./easter>easter</a></li>
+    </ul>
+<p>
+{{ end }}

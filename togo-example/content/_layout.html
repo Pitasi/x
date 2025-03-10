@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ block "title" . }}Layout title{{ end }}</title>
+        <link rel=stylesheet href=/static/style.css />
+    </head>
+    <body>
+        <nav>
+            <a href=/>Homepage</a>
+            <a href=/mark>Mark</a>
+            <a href=/about>About</a>
+            <a href=/nested>Nested</a>
+            <a href=/some-slug>Some slug</a>
+        </nav>
+        {{ block "body" . }}Fallback{{ end }}
+    </body>
+</html>
