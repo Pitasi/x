@@ -276,4 +276,15 @@ func articles(mux *http.ServeMux) {
 			return
 		}
 	})
+
+	feed, err := buildArticlesAtomFeed(articles)
+	if err != nil {
+		panic(fmt.Sprintf("can't build atom feed: %w", err))
+	}
+
+	mux.HandleFunc("GET /articles/feed.atom", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/atom+xml")
+		w.Write([]byte("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"))
+		w.Write(feed)
+	})
 }

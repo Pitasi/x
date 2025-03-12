@@ -9,6 +9,7 @@
     <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
     <link rel="icon" href="/static/images/favicon.ico">
     <link rel="stylesheet" href="/static/style.css?v={{ index .Site.StaticFileHash "static/style.css" }}" rel="preload" as="style">
+    <link href="/articles/feed.atom" type="application/atom+xml" rel="alternate" title="Articles" />
     <script defer data-domain="anto.pt" src="/js/ps.js"></script>
     {{ if and .User.Preferences .User.Preferences.Background }}
     <style>:root { --background: {{ .User.Preferences.Background }} }</style>
