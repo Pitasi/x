@@ -7,6 +7,8 @@ package main
 
 import (
 	"encoding/xml"
+	"errors"
+	"iter"
 	"time"
 )
 
@@ -55,7 +57,13 @@ func Time(t time.Time) TimeStr {
 }
 
 func buildArticlesAtomFeed(articles Articles) ([]byte, error) {
-	latest := articles.list[0]
+	next, stop := iter.Pull2(articles.Published())
+	_, latest, ok := next()
+	if !ok {
+		return nil, errors.New("no articles")
+	}
+	stop()
+
 	feed := Feed{
 		Title: "Antonio Pitasi",
 		ID:    "https://anto.pt/",
@@ -74,9 +82,12 @@ func buildArticlesAtomFeed(articles Articles) ([]byte, error) {
 }
 
 func articlesToAtomEntries(articles Articles) []*Entry {
-	var entries []*Entry
+	var (
+		max     = 10
+		entries = make([]*Entry, 0, max)
+	)
 
-	for _, a := range articles.list[0:10] {
+	for _, a := range limit2(articles.Published(), max) {
 		href := "https://anto.pt/articles/" + a.Slug
 		entry := &Entry{
 			Title: a.Title,

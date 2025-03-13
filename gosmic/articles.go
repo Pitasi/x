@@ -7,6 +7,7 @@ import (
 	"gosmic/md"
 	"html/template"
 	"io/fs"
+	"iter"
 	"log"
 	"log/slog"
 	"net/http"
@@ -91,13 +92,23 @@ func (a Articles) List() []Article {
 	return a.list
 }
 
+func (a Articles) Published() iter.Seq2[int, Article] {
+	return func(yield func(int, Article) bool) {
+		for i, a := range a.List() {
+			if !a.Published {
+				continue
+			}
+			if !yield(i, a) {
+				return
+			}
+		}
+	}
+}
+
 func (a Articles) ByYear() []ArticlesByYear {
 	var lastYear string
 	var postsByYear []ArticlesByYear
-	for _, article := range a.list {
-		if !article.Published {
-			continue
-		}
+	for _, article := range a.Published() {
 		year := article.Date.Format("2006")
 		if lastYear != year {
 			lastYear = year
@@ -279,7 +290,7 @@ func articles(mux *http.ServeMux) {
 
 	feed, err := buildArticlesAtomFeed(articles)
 	if err != nil {
-		panic(fmt.Sprintf("can't build atom feed: %w", err))
+		panic(fmt.Sprintf("can't build atom feed: %v", err))
 	}
 
 	mux.HandleFunc("GET /articles/feed.atom", func(w http.ResponseWriter, r *http.Request) {
