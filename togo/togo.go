@@ -117,6 +117,12 @@ func NewRouteTreeFromFS(ffs fs.FS) (*RouteTree, error) {
 			return registerFileMD(tree, ffs, path)
 		}
 
+		if d.Type().IsRegular() &&
+			!d.Type().IsDir() &&
+			strings.HasSuffix(path, ".slides") {
+			return registerFileSlides(tree, ffs, path)
+		}
+
 		return err
 	})
 	if err != nil {

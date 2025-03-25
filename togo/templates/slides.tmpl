@@ -1,0 +1,60 @@
+{{define "root"}}
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>{{.Title}}</title>
+	<meta charset='utf-8'>
+	<link rel="stylesheet" href="/static/slides.css">
+  </head>
+
+  <body>
+    <section>
+      <article id="intro" class="slide">
+        <h1>{{.Title}}</h1>
+        {{with .Subtitle}}<h3>{{.}}</h3>{{end}}
+        {{if not .Time.IsZero}}<h3>{{.Time.Format "2 January 2006"}}</h3>{{end}}
+        {{range .Authors}}
+          <div class="presenter">
+            {{range .TextElem}}{{elem $.Template .}}{{end}}
+          </div>
+        {{end}}
+      </article>
+
+  {{range $i, $s := .Sections}}
+  <!-- start of slide {{$s.Number}} -->
+      <article id="{{pagenum $s 1}}" {{$s.HTMLAttributes}}>
+      {{if $s.Elem}}
+        <h3>{{$s.Title}}</h3>
+        {{range $s.Elem}}{{elem $.Template .}}{{end}}
+      {{else}}
+        <h2>{{$s.Title}}</h2>
+      {{end}}
+      <span class="pagenumber">{{pagenum $s 1}}</span>
+      </article>
+  <!-- end of slide {{$s.Number}} -->
+  {{end}}{{/* of Slide block */}}
+
+      <article id="thank-you" class="slide">
+        <h3>Thank you</h3>
+        {{range .Authors}}
+          <div class="presenter">
+            {{range .Elem}}{{elem $.Template .}}{{end}}
+          </div>
+        {{end}}
+      </article>
+
+    </section>
+
+    <script src="/static/slides.js"></script>
+    <script>
+	scrollToAnchor();
+	registerObserver();
+	registerKeybindings();
+    </script>
+  </body>
+</html>
+{{end}}
+
+{{define "newline"}}
+<br>
+{{end}}

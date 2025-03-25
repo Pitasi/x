@@ -1,0 +1,128 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background: black;
+	font-size: x-large;
+	font-family: "Open Sans", sans-serif;
+	scroll-behavior: smooth;
+}
+
+*,
+*>* {
+	box-sizing: border-box;
+}
+
+section {
+	display: flex;
+	flex-direction: row;
+	overflow-x: scroll;
+	scroll-snap-type: x mandatory;
+}
+
+article {
+	position: relative;
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
+	width: 100vw;
+	min-height: 100vh;
+	flex-shrink: 0;
+	padding: 5%;
+	background: white;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.presenter {
+	background: rgba(0, 0, 0, 0.05);
+	border-radius: 10px;
+	padding: 15px;
+	margin-top: 1.5rem;
+}
+
+.presenter p {
+	margin: 0;
+}
+
+.pagenumber {
+	color: #8c8c8c;
+	font-size: 75%;
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+}
+
+/* Copy & Lists */
+p {
+	line-height: 1.5rem;
+	margin-top: 1.5rem;
+	margin-bottom: 0;
+}
+
+ul,
+ol {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+ul li,
+ol li {
+	line-height: 1.5rem;
+}
+
+ul ul,
+ol ul,
+ul ol,
+ol ol {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+blockquote {
+	line-height: 1.5rem;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 1.5rem;
+	margin-bottom: 0;
+	line-height: 1.5rem;
+}
+
+h1 {
+	font-size: 4.242rem;
+	line-height: 4.5rem;
+	margin-top: 3rem;
+}
+
+h2 {
+	font-size: 2.828rem;
+	line-height: 3rem;
+	margin-top: 3rem;
+}
+
+h3 {
+	font-size: 1.414rem;
+}
+
+h4 {
+	font-size: 0.707rem;
+}
+
+h5 {
+	font-size: 0.4713333333333333rem;
+}
+
+h6 {
+	font-size: 0.3535rem;
+}
+
+a:visited {
+	color: LinkText;
+}

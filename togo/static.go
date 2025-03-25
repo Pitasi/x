@@ -1,6 +1,7 @@
 package togo
 
 import (
+	"errors"
 	"io/fs"
 	"net/http"
 	"strings"
@@ -17,7 +18,11 @@ func (nfs neuteredFileSystem) Open(name string) (http.File, error) {
 
 	f, err := nfs.fs.Open(name)
 	if err != nil {
-		return nil, err
+		fallbackF, fallbackErr := http.FS(embedFS).Open(name)
+		if fallbackErr != nil {
+			return nil, errors.Join(err, fallbackErr)
+		}
+		f = http.File(fallbackF)
 	}
 
 	s, err := f.Stat()
