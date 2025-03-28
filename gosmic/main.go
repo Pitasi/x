@@ -19,6 +19,7 @@ func main() {
 
 	articles(mux)
 	uses(mux)
+	colophon(mux)
 	x(mux)
 	redirects(mux)
 	prefs(mux)

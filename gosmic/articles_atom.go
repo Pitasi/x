@@ -68,7 +68,7 @@ func buildArticlesAtomFeed(articles Articles) ([]byte, error) {
 		Title: "Antonio Pitasi",
 		ID:    "https://anto.pt/",
 		Link: []Link{
-			{Rel: "self", Href: "https://anto.pt/feed.atom"},
+			{Rel: "self", Href: "https://anto.pt/articles/feed.atom"},
 		},
 		Author: &Person{
 			Name:  "Antonio Pitasi",

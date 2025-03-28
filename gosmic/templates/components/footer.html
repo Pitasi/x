@@ -1,11 +1,18 @@
 <footer>
+  <div>
     <span>&copy; Antonio Pitasi, hope you like it ✨</span>
-    <details>
-        <summary>nerd stats</summary>
-        <p>go version: {{ .Site.Debug.GoVersion }}</p>
-        <p>built on {{ .Site.Debug.BuildOS }}/{{ .Site.Debug.BuildArch }}</p>
-        {{ if .Site.Debug.GosmicVersion }}
-        <p>gosmic version: <a href="https://github.com/Pitasi/x/tree/{{ .Site.Debug.GosmicVersion }}/gosmic">{{ .Site.Debug.GosmicVersion }}</a></p>
-        {{ end }}
-    </details>
+  </div>
+  <div>
+    <a href="/articles/feed.atom">RSS Feed</a>
+    <a href="/colophon">About this website</a>
+  </div>
+  <details>
+    <summary>nerd stats</summary>
+    <p>go version: {{ .Site.Debug.GoVersion }}</p>
+    <p>built on {{ .Site.Debug.BuildOS }}/{{ .Site.Debug.BuildArch }}</p>
+    {{ if .Site.Debug.GosmicVersion }}
+    <p>gosmic version:
+      <a href="https://github.com/Pitasi/x/tree/{{ .Site.Debug.GosmicVersion }}/gosmic">{{ .Site.Debug.GosmicVersion }}</a></p>
+    {{ end }}
+  </details>
 </footer>
