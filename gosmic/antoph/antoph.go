@@ -13,6 +13,7 @@ import (
 	"path"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -34,6 +35,32 @@ type Img struct {
 	URL          template.URL
 	Meta         ImgMeta
 	Nav          ImgNav
+}
+
+func (i Img) Srcset() string {
+	var sb strings.Builder
+	if i.Meta.Width >= 1200 {
+		sb.WriteString(string(i.CanonicalURL))
+		sb.WriteString("/w_1200.webp 1200w, ")
+	}
+	if i.Meta.Width >= 1900 {
+		sb.WriteString(string(i.CanonicalURL))
+		sb.WriteString("/w_1900.webp 1900w, ")
+	}
+	if i.Meta.Width >= 2500 {
+		sb.WriteString(string(i.CanonicalURL))
+		sb.WriteString("/w_2500.webp 2500w")
+	}
+	return sb.String()
+}
+
+func (i Img) PreloadElement() template.HTML {
+	s := fmt.Sprintf(`<link
+            rel="preload" as="image" href="%s/w_1900.webp"
+            imagesrcset="%s"
+            imagesizes="(max-width: 1200px) 1200px, (max-width: 1900px) 1900px, 2500px">`,
+		i.CanonicalURL, i.Srcset())
+	return template.HTML(s)
 }
 
 type ImgMeta struct {

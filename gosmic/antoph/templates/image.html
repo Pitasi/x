@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
+        <meta name="description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
         <meta property="og:site_name" content="Antonio Pitasi's Photos">
         <meta property="og:url" content="https://anto.ph/pic/{{ .ID }}">
         <meta property="og:title" content="Antonio Pitasi's Photos">
-        <meta property="og:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
+        <meta property="og:description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
         <meta property="og:type" content="article">
         <meta property="og:image" content="{{ .CanonicalURL }}/w_1200.webp">
         <meta name="twitter:card" content="summary_large_image">
@@ -15,18 +15,21 @@
         <meta name="twitter:site" content="@zaphodias">
         <meta name="twitter:creator" content="@zaphodias">
         <meta name="twitter:title" content="Antonio Pitasi's Photos">
-        <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format " 02 Jan, 2006" }}.">
+        <meta name="twitter:description" content="Shoot on {{ .Meta.Date.Format "02 Jan, 2006" }}.">
         <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
         <link rel="icon" type="image/webp" href="/static/images/favicon.webp">
         <link rel="icon" href="/static/images/favicon.ico">
         {{ if .Nav.Next }}
         <link rel="prefetch" href="{{ .Nav.Next.URL }}">
+        {{ .Nav.Next.PreloadElement }}
         {{ end }}
         {{ if .Nav.Prev }}
         <link rel="prefetch" href="{{ .Nav.Prev.URL }}">
+        {{ .Nav.Prev.PreloadElement }}
         {{ end }}
         <title>Photos - Antonio Pitasi</title>
         <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx-ext-head-support@2.0.2" crossorigin="anonymous"></script>
         <script src="//unpkg.com/alpinejs" defer></script>
         <script defer data-domain="anto.ph" src="/js/ps.js"></script>
         <style>
@@ -195,7 +198,7 @@
             }
         </style>
     </head>
-    <body x-data="{ open: false }" @keydown.right="() => document.querySelector('a.next').click()" @keydown.left="() => document.querySelector('a.prev').click()">
+    <body x-data="{ open: false }" @keydown.right="() => document.querySelector('a.next').click()" @keydown.left="() => document.querySelector('a.prev').click()" hx-ext="head-support">
         <section>
             <img
                 class="image current"
