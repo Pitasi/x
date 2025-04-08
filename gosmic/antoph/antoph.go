@@ -253,7 +253,7 @@ func Register(mux *http.ServeMux) {
 			img.Nav.Next = &imgs[idx+1]
 		}
 
-		w.Header().Set("Cache-Control", "public, max-age=2629746")
+		w.Header().Set("Cache-Control", "public, max-age=300")
 		err := imagepage.Execute(w, img)
 		if err != nil {
 			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)
@@ -296,7 +296,7 @@ func Register(mux *http.ServeMux) {
 			return
 		}
 
-		w.Header().Set("Cache-Control", "public, max-age=2629746")
+		w.Header().Set("Cache-Control", "public, max-age=300")
 		err := imagepage.Execute(w, img)
 		if err != nil {
 			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)
