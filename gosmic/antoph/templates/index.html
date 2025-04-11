@@ -106,9 +106,9 @@
                   height="500"
                   src="{{ $img.CanonicalURL }}/q_500.webp"
                   srcset="
-                    {{ $img.CanonicalURL }}/q_500.webp 500w,
-                    {{ $img.CanonicalURL }}/q_1000.webp 1000w,
-                    {{ $img.CanonicalURL }}/q_2000.webp 2000w,
+                    {{ if (ge .Meta.Width 500) }}{{ $img.CanonicalURL }}/q_500.webp 500w,{{ end }}
+                    {{ if (ge .Meta.Width 1000) }}{{ $img.CanonicalURL }}/q_1000.webp 1000w,{{ end }}
+                    {{ if (ge .Meta.Width 2000) }}{{ $img.CanonicalURL }}/q_2000.webp 2000w,{{ end }}
                   "
                   sizes="(max-width: 500px) 500px,
                          (max-width: 1000px) 1000px,
