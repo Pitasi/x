@@ -5,6 +5,8 @@
   <div>
     <a href="/articles/feed.atom">RSS Feed</a>
     <a href="/colophon">About this website</a>
+    <br>
+    <a href="https://last.fm/user/zaphodias"><span id="now-playing"></span></a>
   </div>
   <details>
     <summary>nerd stats</summary>
@@ -15,4 +17,16 @@
       <a href="https://github.com/Pitasi/x/tree/{{ .Site.Debug.GosmicVersion }}/gosmic">{{ .Site.Debug.GosmicVersion }}</a></p>
     {{ end }}
   </details>
+  <script>
+    const evtSource = new EventSource("/now-playing");
+    const txt = document.getElementById("now-playing");
+    evtSource.addEventListener("now-playing", function(event) {
+      if (event.data) {
+        const dataobj = JSON.parse(event.data);
+        txt.innerHTML = `🎶 I'm listening to ${dataobj.Name} - ${dataobj.Artist} right now 🎶`;
+      } else {
+        txt.innerHTML = "";
+      }
+    })
+  </script>
 </footer>

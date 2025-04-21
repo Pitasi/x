@@ -6,16 +6,27 @@ import (
 	"os"
 
 	"gosmic/antoph"
+	"gosmic/lastfm"
 	"gosmic/nofrills"
 )
 
-var devMode = os.Getenv("DEV_MODE") == "true"
+var (
+	devMode      = os.Getenv("DEV_MODE") == "true"
+	lastfmAPIKey = os.Getenv("LASTFM_API_KEY")
+)
 
 func main() {
 	addr := "0.0.0.0:8080"
 	go serveMetrics(":9090")
 
 	mux := http.NewServeMux()
+
+	if lastfmAPIKey != "" {
+		c := &lastfm.Client{
+			APIKey: lastfmAPIKey,
+		}
+		NowPlaying(c, mux)
+	}
 
 	articles(mux)
 	uses(mux)
