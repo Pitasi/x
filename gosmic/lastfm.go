@@ -47,7 +47,9 @@ func NowPlaying(c *lastfm.Client, mux *http.ServeMux) {
 
 	go func() {
 		for track := range nowPlayingIter(c) {
-			log.Println("now playing", track.Name, "-", track.Artist)
+			if track != nil {
+				log.Println("now playing", track.Name, "-", track.Artist)
+			}
 			data, err := json.Marshal(track)
 			if err != nil {
 				log.Println("error marshalling now playing track:", err)
