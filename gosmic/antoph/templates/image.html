@@ -93,6 +93,9 @@
                 height: 45px;
                 border-top: 1px solid rgba(0,0,0,0.07);
 
+                z-index: 10;
+                background: white;
+
                 flex-shrink: 0;
                 display: flex;
                 flex-direction: row;
@@ -125,6 +128,10 @@
 
                 a.active, button.active {
                     color: black;
+                }
+
+                a.disabled {
+                    visibility: hidden;
                 }
 
                 button.active::before {
@@ -246,16 +253,47 @@
                         <svg height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Arrow / Caret_Left_SM"> <path id="Vector" d="M13 15L10 12L13 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
                     </a>
                 {{ else }}
-                    <a href="#" class="prev" style="visibility: hidden"></a>
+                    <a href="#" class="prev disabled"></a>
                 {{ end }}
                 {{ if .Nav.Next }}
                     <a href="{{ .Nav.Next.URL }}" class="next">
                         <svg height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Arrow / Caret_Right_SM"> <path id="Vector" d="M11 9L14 12L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
                     </a>
                 {{ else }}
-                    <a href="#" class="next" style="visibility: hidden"></a>
+                    <a href="#" class="next disabled"></a>
                 {{ end }}
             </div>
         </nav>
+
+        <script type="module" defer>
+          import { animate, createDraggable, utils } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
+
+          const img = document.querySelector('.current');
+          const prev = document.querySelector('a.prev:not(.disabled)');
+          const next = document.querySelector('a.next:not(.disabled)');
+          const clamp = 100;
+          const threshold = 80;
+
+          createDraggable(img, {
+            x: true,
+            y: false,
+            container: [0, prev ? clamp : 0, 0, next ? -clamp : 0],
+            onUpdate: (e) => {
+              const x = e.x < 0 ? -e.x : e.x;
+              const opacity = utils.mapRange(x, 0, clamp, 1, 0.5);
+              img.style.opacity = opacity;
+            },
+            onRelease: (e) => {
+              if (prev && e.destX > threshold) {
+                prev.click();
+              } else if (next && e.destX < -threshold) {
+                next.click();
+              } else {
+                e.reset();
+                img.style.opacity = 1;
+              }
+            }
+          });
+        </script>
     </body>
 </html>
