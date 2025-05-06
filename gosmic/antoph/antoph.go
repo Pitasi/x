@@ -260,7 +260,7 @@ func Register(mux *http.ServeMux) {
 		}
 	})
 
-	mux.HandleFunc("GET anto.ph/tags/{tag}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET anto.ph/tags/{tag}/", func(w http.ResponseWriter, r *http.Request) {
 		tag := r.PathValue("tag")
 		view, ok := imgsByKeywords[tag]
 		if !ok {

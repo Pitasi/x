@@ -102,6 +102,7 @@
             {{ range $i, $img := .Imgs }}
             <a href="{{ if $img.URL }}{{ $img.URL }}{{ else }}/pic/{{ $img.ID }}{{ end }}">
                 <img
+                  id="{{ $img.ID }}"
                   width="500"
                   height="500"
                   src="{{ $img.CanonicalURL }}/q_500.webp"
@@ -117,7 +118,7 @@
                   loading="lazy"
                   decoding="async"
                   {{ end }}
-                />
+                >
             </a>
             {{ end }}
         </div>
