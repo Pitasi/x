@@ -1,10 +1,10 @@
 ---
 title: "Build your own ResponseWriter: safer HTTP in Go"
-date: "2025-04-23"
-description: "TODO"
+date: "2025-05-07"
+description: "Go's `http.ResponseWriter` writes directly to the socket, which can lead to subtle bugs like forgetting to set a status code or accidentally modifying headers too late. In this article I explain how to write your own defensive ResponseWriter."
 categories:
   - "go"
-published: false
+published: true
 ---
 
 Go's `http.ResponseWriter` writes directly to the socket, which can lead to
@@ -60,7 +60,8 @@ effect and you won't receive any sort of errors:
 ```go
 http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
   w.WriteHeader(200)
-  w.Header().Set("content-type", "application/json") // silently has no effects
+  // WARN: the following line silently has no effects
+  w.Header().Set("content-type", "application/json")
   w.Write([]byte("helo world"))
 })
 ```
@@ -139,11 +140,11 @@ func (w *HttpWriter) WriteHeader(statusCode int) {
 ```
 
 ```go
-// it's actually a good idea to implement a Flusher version for our writer as
-// well
+// it's actually a good idea to implement a
+// Flusher version for our writer as well
 
 type HttpWriterFlusher struct {
-  *HttpWriter   // wrap our writer
+  *HttpWriter   // wrap our "normal" writer
   http.Flusher  // keep a ref to the wrapped Flusher
 }
 
@@ -151,8 +152,8 @@ func (w *HttpWriterFlusher) Flush() {
   w.Flusher.Flush()
 }
 
-// modify the constructor to either return HttpWriter or HttpWriterFlusher
-// depending on the writer being wrapped
+// modify the constructor to either return HttpWriter or
+// HttpWriterFlusher depending on the writer being wrapped
 
 func NewHttpWriter(w http.ResponseWriter) http.ResponseWriter {
   httpWriter := &HttpWriter{
@@ -186,7 +187,8 @@ func middleware(h http.Handler) http.Handler {
 
 And now, it's time to have some fun by customizing the implementation of `HttpWriter`.
 
-Want a warning log every time you invoke `Write()` without `WriteHeader()`? You can!
+**Example 1**: Want a warning log every time you invoke `Write()` without
+`WriteHeader()`? You can!
 
 ```go
 type HttpWriter struct {
@@ -208,7 +210,8 @@ func (w *HttpWriter) WriteHeader(statusCode int) {
 }
 ```
 
-Want to avoid writing anything at all if the status code has been set to 500?
+**Example 2**: Want to avoid writing anything at all if the status code has
+been set to 500?
 
 ```go
 type HttpWriter struct {
