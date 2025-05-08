@@ -72,7 +72,7 @@ func init() {
 			},
 		},
 		Colors: []template.CSS{
-			"rgb(245 179 255)",
+			"var(--color-default-bg)",
 			"var(--color-white)",
 			"var(--color-lime-200)",
 			"var(--color-amber-300)",

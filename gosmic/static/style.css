@@ -282,6 +282,8 @@
     --color-black: #000;
     --color-white: #fff;
 
+    --color-default-bg: rgb(248 204 255);
+
     --breakpoint-sm: 40rem;
     --breakpoint-md: 48rem;
     --breakpoint-lg: 64rem;
@@ -291,8 +293,7 @@
 
 :root {
     --foreground: var(--color-black);
-    --background: rgb(248 204 255);
-    ;
+    --background: var(--color-default-bg);
 
     /* derived colors */
     --fg-muted: color-mix(in oklch, var(--foreground) 60%, transparent);
