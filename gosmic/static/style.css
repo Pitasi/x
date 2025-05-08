@@ -291,7 +291,8 @@
 
 :root {
     --foreground: var(--color-black);
-    --background: rgb(245 179 255);
+    --background: rgb(248 204 255);
+    ;
 
     /* derived colors */
     --fg-muted: color-mix(in oklch, var(--foreground) 60%, transparent);
