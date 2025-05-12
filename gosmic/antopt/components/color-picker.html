@@ -2,7 +2,7 @@
     <button class="toggle" id="toggleBtn"></button>
     <dialog id="colorDialog">
         <div class="color-options">
-            <button class="color-option" id="colorClose">X</button>
+            <button class="color-option" id="colorClose" aria-label="Close background color picker">X</button>
             {{ range .Colors }}
             <button
                 {{ if eq $.Selected . }}
@@ -12,6 +12,7 @@
                 {{ end }}
                 style="background-color: {{ . }}"
                 data-color="{{ . }}"
+                aria-label="Open background color picker"
             >{{ if eq $.Selected . }}✌️{{ end }}</button>
             {{ end }}
         </div>
