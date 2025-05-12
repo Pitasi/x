@@ -1,0 +1,62 @@
+<div class="color-picker">
+    <button class="toggle" id="toggleBtn"></button>
+    <dialog id="colorDialog">
+        <div class="color-options">
+            <button class="color-option" id="colorClose">X</button>
+            {{ range .Colors }}
+            <button
+                {{ if eq $.Selected . }}
+                class="color-option active"
+                {{ else }}
+                class="color-option"
+                {{ end }}
+                style="background-color: {{ . }}"
+                data-color="{{ . }}"
+            >{{ if eq $.Selected . }}✌️{{ end }}</button>
+            {{ end }}
+        </div>
+    </dialog>
+
+    <form
+        id="colorForm"
+        action="/submit-color"
+        method="POST"
+        style="display: none"
+    >
+        <input type="hidden" name="color" id="selectedColor">
+        <input type="hidden" name="redirectTo" id="redirectTo">
+    </form>
+
+    <script>
+        const toggleBtn = document.getElementById("toggleBtn");
+        const colorDialog = document.getElementById("colorDialog");
+        const colorOptions = document.querySelectorAll(".color-option");
+        const colorForm = document.getElementById("colorForm");
+        const selectedColorInput = document.getElementById("selectedColor");
+        const redirectToInput = document.getElementById("redirectTo");
+        redirectToInput.value = window.location.pathname;
+
+        toggleBtn.addEventListener("click", () => {
+            colorDialog.showModal();
+            const wrapper = toggleBtn.offsetParent;
+            const centerOffset = colorOptions[0].getBoundingClientRect().width / 2;
+            colorDialog.style.left = wrapper.offsetLeft + centerOffset + "px";
+            colorDialog.style.top = wrapper.offsetTop + "px";
+        });
+
+        colorOptions.forEach((option) => {
+            if (option.id === "colorClose") {
+                option.addEventListener("click", () => {
+                    colorDialog.close();
+                });
+                return;
+            }
+            option.addEventListener("click", () => {
+                const selectedColor = option.getAttribute("data-color");
+                selectedColorInput.value = selectedColor;
+                colorForm.submit();
+                colorDialog.close();
+            });
+        });
+    </script>
+</div>

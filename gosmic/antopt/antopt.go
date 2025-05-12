@@ -1,0 +1,110 @@
+package antopt
+
+import (
+	"embed"
+	"g2/antopt/components"
+	"g2/antopt/lastfm"
+	"g2/antopt/pages"
+	"g2/fsx"
+	"g2/httpx"
+	"g2/static"
+	"g2/templates"
+	"html/template"
+	"net/http"
+	"os"
+	"runtime/debug"
+	"strings"
+)
+
+//go:embed components/*.html
+//go:embed pages/*.html
+var resources embed.FS
+
+//go:embed static/*
+var s embed.FS
+
+type Website struct {
+	Colors []template.CSS
+
+	debug components.Debug
+}
+
+var _ httpx.Website = &Website{}
+
+func (ws *Website) Register(devmode bool) http.Handler {
+	info, ok := debug.ReadBuildInfo()
+	if ok {
+		ws.debug.GoVersion = info.GoVersion
+		for _, kv := range info.Settings {
+			if kv.Key == "GOARCH" {
+				ws.debug.BuildArch = kv.Value
+			}
+			if kv.Key == "GOOS" {
+				ws.debug.BuildOS = kv.Value
+			}
+			if kv.Key == "vcs.revision" {
+				ws.debug.GosmicVersion = kv.Value
+			}
+		}
+	}
+
+	mux := http.NewServeMux()
+
+	sfs := static.NewStaticFS(fsx.Or(devmode, s, "./antopt"))
+
+	t := templates.New(fsx.Or(devmode, resources, "./antopt"), devmode, template.FuncMap{
+		"hash": sfs.FileHash,
+	})
+
+	mux.Handle("GET /static/", sfs.Handler())
+	mux.HandleFunc("POST /submit-color", ws.preferences)
+	ws.articles(t, mux)
+	ws.colophon(t, mux)
+	ws.plausible(mux)
+	ws.redirects(mux)
+	ws.uses(t, mux)
+	ws.x(mux)
+
+	lastfmAPIKey := os.Getenv("LASTFM_API_KEY")
+	if lastfmAPIKey != "" {
+		c := &lastfm.Client{
+			APIKey: lastfmAPIKey,
+		}
+		ws.nowPlaying(c, mux)
+	}
+
+	var h http.Handler = mux
+	h = httpx.Recoverer(h)
+	h = httpx.Logger(h)
+	h = httpx.Compress(h)
+	h = userMiddleware(h)
+	return h
+}
+
+func (ws *Website) common(r *http.Request) pages.Common {
+	user := GetUser(r.Context())
+	var selectedColor template.CSS
+	if user != nil {
+		selectedColor = user.Preferences.Background
+	}
+
+	currentURL := ""
+	switch {
+	case r.URL.Path == "/" || strings.HasPrefix(r.URL.Path, "/articles"):
+		currentURL = "/"
+	case strings.HasPrefix(r.URL.Path, "/uses"):
+		currentURL = "/uses"
+	}
+
+	return pages.NewCommon(
+		[]components.NavItem{
+			{Title: "Articles", URL: "/"},
+			{Title: "Uses", URL: "/uses"},
+			{Title: "Pics", URL: "https://anto.ph"},
+		},
+		currentURL,
+		ws.Colors,
+		selectedColor,
+		ws.debug,
+	)
+}

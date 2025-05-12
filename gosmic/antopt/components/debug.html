@@ -1,0 +1,11 @@
+{{ define "debug" }}
+<details>
+  <summary>nerd stats</summary>
+  <p>go version: {{ .GoVersion }}</p>
+  <p>built on {{ .BuildOS }}/{{ .BuildArch }}</p>
+  {{ if .GosmicVersion }}
+  <p>gosmic version:
+    <a href="https://github.com/Pitasi/x/tree/{{ .GosmicVersion }}/gosmic">{{ .GosmicVersion }}</a></p>
+  {{ end }}
+</details>
+{{ end }}

@@ -1,0 +1,14 @@
+{{define "base-headers"}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="Antonio Pitasi, software engineer, blockchain, distributed systems, photography">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon.png">
+<link rel="icon" type="image/webp" href="/static/images/favicon.webp">
+<link rel="icon" href="/static/images/favicon.ico">
+<link rel="stylesheet" href="/static/style.css?v={{ hash "style.css" }}">
+<link href="/articles/feed.atom" type="application/atom+xml" rel="alternate" title="Articles">
+<script defer data-domain="anto.pt" src="/js/ps.js"></script>
+{{ if .SelectedColor }}
+<style>:root { --background: {{ .SelectedColor }} }</style>
+{{ end }}
+{{ end }}

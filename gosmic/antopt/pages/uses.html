@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{ template "base-headers" .BaseHeaders }}
+    <title>{{ .App.Title }} - Antonio Pitasi</title>
+    <meta name="description" content="I have been using {{ .App.Title }}, check it out!">
+    <meta property="og:site_name" content="Antonio Pitasi">
+    <meta property="og:url" content="https://anto.pt/uses/{{ .App.Slug }}">
+    <meta property="og:title" content="{{ .App.Title }}">
+    <meta property="og:description" content="I have been using {{ .App.Title }}, check it out!">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://anto.pt/socialimg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://anto.pt/socialimg">
+    <meta name="twitter:site" content="@zaphodias">
+    <meta name="twitter:creator" content="@zaphodias">
+    <meta name="twitter:title" content="{{ .App.Title }}">
+    <meta name="twitter:description" content="I have been using {{ .App.Title }}, check it out!">
+  </head>
+  <body>
+    <div class="content">
+      {{ template "nav.html" .Nav }}
+      <article class="uses">
+        <div class="uses-title">
+          <img src="{{ .App.Icon }}" loading=lazy>
+          <h1>{{ .App.Title }}</h1>
+        </div>
+        {{ .App.Content }}
+        <a href="{{ .App.URL }}" target=_blank>Visit website</a>
+      </article>
+    </div>
+    {{ template "footer.html" }}
+  </body>
+</html>

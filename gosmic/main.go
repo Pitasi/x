@@ -1,55 +1,56 @@
 package main
 
 import (
+	"g2/antoph"
+	"g2/antopt"
+	"g2/httpx"
+	"html/template"
 	"log"
 	"net/http"
-	"os"
+	"time"
 
-	"gosmic/antoph"
-	"gosmic/lastfm"
-	"gosmic/nofrills"
-)
-
-var (
-	devMode      = os.Getenv("DEV_MODE") == "true"
-	lastfmAPIKey = os.Getenv("LASTFM_API_KEY")
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
-	addr := "0.0.0.0:8080"
-	go serveMetrics(":9090")
-
 	mux := http.NewServeMux()
 
-	if lastfmAPIKey != "" {
-		c := &lastfm.Client{
-			APIKey: lastfmAPIKey,
-		}
-		NowPlaying(c, mux)
+	httpx.RegisterWebsite("anto.pt", &antopt.Website{
+		Colors: []template.CSS{
+			"var(--color-default-bg)",
+			"var(--color-white)",
+			"var(--color-lime-200)",
+			"var(--color-amber-300)",
+			"var(--color-blue-200)",
+			"var(--color-orange-400)",
+		},
+	}, mux)
+	httpx.RegisterWebsite("anto.ph", antoph.Website{}, mux)
+
+	handler := httpx.MetricsInc(mux)
+	handler = httpx.RewriteHost(handler)
+
+	s := http.Server{
+		Addr:         "0.0.0.0:8080",
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}
+	go ServeMetrics(":9090")
 
-	articles(mux)
-	uses(mux)
-	colophon(mux)
-	x(mux)
-	redirects(mux)
-	prefs(mux)
-	static(mux)
-	plausible(mux)
-	notfound(mux)
-	nofrills.Register(mux)
-	antoph.Register(mux)
+	log.Println("Listening on", s.Addr)
+	log.Fatal(s.ListenAndServe())
+}
 
-	var h http.Handler = mux
-	h = recoverer(h)
-	h = logger(h)
-	h = compress(h)
-	h = userMiddleware(h)
-	h = metricsMiddleware(h)
-	if devMode {
-		h = rewriteHost(h)
+func ServeMetrics(addr string) {
+	metricsMux := http.NewServeMux()
+	metricsMux.Handle("/metrics", promhttp.Handler())
+	metricsServer := &http.Server{
+		Addr:         addr,
+		Handler:      metricsMux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}
-
-	log.Println("Listening on", addr)
-	log.Fatal(http.ListenAndServe(addr, h))
+	log.Println("Metrics server listening on", addr)
+	log.Fatal(metricsServer.ListenAndServe())
 }

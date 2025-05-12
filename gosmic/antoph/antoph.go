@@ -3,7 +3,9 @@ package antoph
 import (
 	"embed"
 	"fmt"
-	"gosmic/plausible"
+	"g2/fsx"
+	"g2/httpx"
+	"g2/templates"
 	"html/template"
 	"io/fs"
 	"log/slog"
@@ -17,8 +19,8 @@ import (
 	"time"
 )
 
-//go:embed templates
-var templates embed.FS
+//go:embed pages/*.html
+var resources embed.FS
 
 type Index struct {
 	Sections []Section
@@ -191,11 +193,17 @@ func prettyDate(t time.Time) string {
 	return t.Format(time.RFC822)
 }
 
-func Register(mux *http.ServeMux) {
+type Website struct{}
+
+var _ httpx.Website = Website{}
+
+func (Website) Register(devmode bool) http.Handler {
+	mux := http.NewServeMux()
+
 	photodbPath := os.Getenv("PHOTODB_PATH")
 	if photodbPath == "" {
-		slog.Warn("PHOTODB_PATH not set, disabling anto.ph")
-		return
+		slog.Warn("PHOTODB_PATH not set")
+		return nil
 	}
 
 	imgs, err := openPhotoDB(photodbPath)
@@ -217,28 +225,21 @@ func Register(mux *http.ServeMux) {
 	}
 	sort.Slice(data.Sections, func(i, j int) bool { return data.Sections[i].Title > data.Sections[j].Title })
 
-	homepage := template.Must(template.ParseFS(templates, "templates/index.html"))
-	imagepage, err := template.New("image.html").Funcs(template.FuncMap{
+	t := templates.New(fsx.Or(devmode, resources, "./antoph"), devmode, template.FuncMap{
 		"prettyDate": prettyDate,
-	}).ParseFS(templates, "templates/image.html")
-	if err != nil {
-		panic(err)
-	}
-
-	mux.HandleFunc("GET anto.ph/{$}", func(w http.ResponseWriter, r *http.Request) {
-		err := homepage.Execute(w, data)
-		if err != nil {
-			slog.Error("rendering anto.ph homepage", "err", err)
-		}
 	})
 
-	mux.HandleFunc("GET anto.ph/random/{$}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+		t.Render(w, "index.html", data)
+	})
+
+	mux.HandleFunc("GET /random/{$}", func(w http.ResponseWriter, r *http.Request) {
 		random := rand.IntN(len(imgs))
 		id := imgs[random].ID
 		http.Redirect(w, r, fmt.Sprintf("/pic/%s", id), http.StatusFound)
 	})
 
-	mux.HandleFunc("GET anto.ph/pic/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /pic/{id}", func(w http.ResponseWriter, r *http.Request) {
 		idx, ok := imgsByID[r.PathValue("id")]
 		if !ok {
 			http.NotFound(w, r)
@@ -253,14 +254,13 @@ func Register(mux *http.ServeMux) {
 			img.Nav.Next = &imgs[idx+1]
 		}
 
-		w.Header().Set("Cache-Control", "public, max-age=300")
-		err := imagepage.Execute(w, img)
-		if err != nil {
-			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)
+		if !devmode {
+			w.Header().Set("Cache-Control", "public, max-age=300")
 		}
+		t.Render(w, "image.html", img)
 	})
 
-	mux.HandleFunc("GET anto.ph/tags/{tag}/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /tags/{tag}/", func(w http.ResponseWriter, r *http.Request) {
 		tag := r.PathValue("tag")
 		view, ok := imgsByKeywords[tag]
 		if !ok {
@@ -268,7 +268,7 @@ func Register(mux *http.ServeMux) {
 			return
 		}
 
-		err := homepage.Execute(w, Index{
+		t.Render(w, "index.html", Index{
 			Sections: []Section{
 				{
 					Title: fmt.Sprintf("#%s (%d photos)", tag, view.Len()),
@@ -276,12 +276,9 @@ func Register(mux *http.ServeMux) {
 				},
 			},
 		})
-		if err != nil {
-			slog.Error("rendering anto.ph tag", "err", err, "tag", tag)
-		}
 	})
 
-	mux.HandleFunc("GET anto.ph/tags/{tag}/pic/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /tags/{tag}/pic/{id}", func(w http.ResponseWriter, r *http.Request) {
 		tag := r.PathValue("tag")
 
 		view, ok := imgsByKeywords[tag]
@@ -296,11 +293,10 @@ func Register(mux *http.ServeMux) {
 			return
 		}
 
-		w.Header().Set("Cache-Control", "public, max-age=300")
-		err := imagepage.Execute(w, img)
-		if err != nil {
-			slog.Error("rendering anto.ph image", "err", err, "id", img.ID)
+		if !devmode {
+			w.Header().Set("Cache-Control", "public, max-age=300")
 		}
+		t.Render(w, "image.html", img)
 	})
 
 	imageFilenames := []string{
@@ -313,13 +309,17 @@ func Register(mux *http.ServeMux) {
 		"w_2500.webp",
 	}
 	for _, name := range imageFilenames {
-		mux.HandleFunc("GET anto.ph/pic/{id}/"+name, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("GET /pic/{id}/"+name, func(w http.ResponseWriter, r *http.Request) {
 			id := r.PathValue("id")
-			w.Header().Set("Cache-Control", "public, max-age=31536000")
+			if !devmode {
+				w.Header().Set("Cache-Control", "public, max-age=31536000")
+			}
 			http.ServeFile(w, r, path.Join(photodbPath, id, name))
 		})
 	}
 
-	mux.Handle("GET anto.ph/js/ps.js", plausible.Proxy)
-	mux.Handle("GET anto.ph/api/event", plausible.Proxy)
+	// mux.Handle("GET anto.ph/js/ps.js", plausible.Proxy)
+	// mux.Handle("GET anto.ph/api/event", plausible.Proxy)
+
+	return mux
 }

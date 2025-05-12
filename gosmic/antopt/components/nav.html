@@ -1,0 +1,10 @@
+<nav>
+    <ul>
+        {{ range .Nav }}
+        <li><a href="{{ .URL }}" {{ if eq $.CurrentURL .URL }}class="active"{{ end }}>{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+    <div>
+        {{ template "color-picker.html" .ColorPicker }}
+    </div>
+</nav>

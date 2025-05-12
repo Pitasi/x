@@ -1,0 +1,7 @@
+{{define "button"}}
+<button class="button-container">
+  <a class="button {{if .IsPrimary}}primary{{end}}" {{if eq .IsSubmit true}} type="submit" {{else}} href="{{.Link}}" {{end}}>
+    {{.Text}}
+  </a>
+</button>
+{{end}}
