@@ -390,7 +390,14 @@ func (Website) Register(devmode bool) http.Handler {
 		id := r.PathValue("id")
 		img, ok := featuredView.Get(id)
 		if !ok {
-			http.NotFound(w, r)
+			// the image is not featured, but let's see if it exists and redirect
+			_, ok := allView.Get(id)
+			if !ok {
+				http.NotFound(w, r)
+				return
+			}
+
+			http.Redirect(w, r, fmt.Sprintf("/all/pic/%s", id), http.StatusFound)
 			return
 		}
 
