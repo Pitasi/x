@@ -466,7 +466,7 @@ func (Website) Register(devmode bool) http.Handler {
 	}
 
 	mux.Handle("GET /js/ps.js", plausible.Proxy)
-	mux.Handle("GET /api/event", plausible.Proxy)
+	mux.Handle("POST /api/event", plausible.Proxy)
 
 	return mux
 }
