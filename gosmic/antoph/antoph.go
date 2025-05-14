@@ -9,6 +9,7 @@ import (
 	"g2/templates"
 	"html/template"
 	"io/fs"
+	"log"
 	"log/slog"
 	"math/rand/v2"
 	"net/http"
@@ -185,6 +186,10 @@ func byKeywords(imgs []Img) map[string]*ByKeywordView {
 	views := make(map[string]*ByKeywordView)
 	for _, img := range imgs {
 		for _, keyword := range img.Meta.Keywords {
+			if keyword == "" {
+				log.Printf("img %s has empty keyword", img.ID)
+				continue
+			}
 			if _, ok := views[keyword]; !ok {
 				views[keyword] = newByKeywordView(keyword)
 			}
