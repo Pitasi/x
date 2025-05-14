@@ -46,7 +46,14 @@
             a {
                 color: black;
                 text-decoration: none;
+            }
+
+            a.bold {
                 font-weight: bold;
+            }
+
+            a:hover {
+                text-decoration: underline;
             }
         }
 
@@ -82,18 +89,54 @@
                 visibility: hidden;
             }
         }
+
+        nav {
+            padding: 10px;
+            max-width: 900px;
+            margin: 3rem auto 0 auto;
+
+            a.tag, a.tag:visited {
+                display: inline-block;
+                border-radius: 4px;
+                padding: 2px 6px;
+                text-decoration: none;
+                color: black;
+                background-color: rgba(0, 0, 0, 0.05);
+                margin-bottom: 0.7em;
+                margin-right: 0.5em;
+
+                &::before {
+                    content: "#";
+                }
+            }
+
+            a:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <a href="/">
-            antonio pitasi
-        </a>
-        <a href="https://anto.pt">
+        <div>
+            <a href="/" class="bold">antonio pitasi</a>
+            &mdash;
+            <a href="/all">all the photos</a>
+            &mdash;
+            <a href="/random">random photo</a>
+        </div>
+        <a href="https://anto.pt" class="bold">
             anto.pt →
         </a>
     </header>
+    {{ if .Tags }}
+    <nav>
+            {{ range .Tags }}
+            <a href="/tags/{{ . }}" class="tag">{{ . }}</a>
+            {{ end }}
+    </nav>
+    {{ end }}
     {{ range .Sections }}
     <section>
         <h1>{{ .Title }}</h1>

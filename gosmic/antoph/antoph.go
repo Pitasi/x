@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"g2/fsx"
 	"g2/httpx"
+	"g2/plausible"
 	"g2/templates"
 	"html/template"
 	"io/fs"
@@ -22,8 +23,20 @@ import (
 //go:embed pages/*.html
 var resources embed.FS
 
+var featured []string
+
+func init() {
+	for s := range strings.SplitSeq(os.Getenv("FEATURED"), ",") {
+		s = strings.TrimSpace(s)
+		if s != "" {
+			featured = append(featured, s)
+		}
+	}
+}
+
 type Index struct {
 	Sections []Section
+	Tags     []string
 }
 
 type Section struct {
@@ -129,14 +142,6 @@ func byYear(imgs []Img) map[int][]Img {
 	return y
 }
 
-func byID(imgs []Img) map[string]int {
-	m := make(map[string]int)
-	for i, img := range imgs {
-		m[img.ID] = i
-	}
-	return m
-}
-
 type ByKeywordView struct {
 	keyword string
 	ids     map[string]int
@@ -189,6 +194,103 @@ func byKeywords(imgs []Img) map[string]*ByKeywordView {
 	return views
 }
 
+type AllView struct {
+	ids  map[string]int
+	imgs []Img
+}
+
+func (v *AllView) Append(img Img) {
+	img.URL = template.URL(fmt.Sprintf("/all/pic/%s", img.ID))
+	if len(v.imgs) > 0 {
+		img.Nav.Prev = &v.imgs[len(v.imgs)-1]
+		v.imgs[len(v.imgs)-1].Nav.Next = &img
+	}
+	v.ids[img.ID] = len(v.imgs)
+	v.imgs = append(v.imgs, img)
+}
+
+func (v *AllView) Len() int {
+	return len(v.imgs)
+}
+
+func (v *AllView) Images() []Img {
+	return v.imgs
+}
+
+func (v *AllView) Get(id string) (Img, bool) {
+	idx, ok := v.ids[id]
+	if !ok {
+		return Img{}, false
+	}
+	return v.imgs[idx], true
+}
+
+func (v *AllView) ByYear() Index {
+	var data = Index{}
+	for y, imgs := range byYear(v.imgs) {
+		data.Sections = append(data.Sections, Section{
+			Title: strconv.Itoa(y),
+			Imgs:  imgs,
+		})
+	}
+	sort.Slice(data.Sections, func(i, j int) bool { return data.Sections[i].Title > data.Sections[j].Title })
+	return data
+}
+
+func newAllView(imgs []Img) AllView {
+	v := AllView{
+		ids:  make(map[string]int),
+		imgs: make([]Img, 0, len(imgs)),
+	}
+	for _, i := range imgs {
+		v.Append(i)
+	}
+	return v
+}
+
+type FeaturedView struct {
+	ids  map[string]int
+	imgs []Img
+}
+
+func newFeaturedView(imgs []Img) *FeaturedView {
+	v := &FeaturedView{
+		ids:  make(map[string]int),
+		imgs: make([]Img, 0, len(imgs)),
+	}
+
+	for _, img := range imgs {
+		for _, feat := range featured {
+			if img.ID == feat {
+				v.Append(img)
+			}
+		}
+
+	}
+
+	return v
+}
+
+func (v *FeaturedView) Images() []Img { return v.imgs }
+
+func (v *FeaturedView) Get(id string) (Img, bool) {
+	idx, ok := v.ids[id]
+	if !ok {
+		return Img{}, false
+	}
+	return v.imgs[idx], true
+}
+
+func (v *FeaturedView) Append(img Img) {
+	img.URL = template.URL(fmt.Sprintf("/pic/%s", img.ID))
+	if len(v.imgs) > 0 {
+		img.Nav.Prev = &v.imgs[len(v.imgs)-1]
+		v.imgs[len(v.imgs)-1].Nav.Next = &img
+	}
+	v.ids[img.ID] = len(v.imgs)
+	v.imgs = append(v.imgs, img)
+}
+
 func prettyDate(t time.Time) string {
 	return t.Format(time.RFC822)
 }
@@ -212,11 +314,18 @@ func (Website) Register(devmode bool) http.Handler {
 	}
 
 	imgs.Sort()
-	imgsByID := byID(imgs)
 	imgsByYear := byYear(imgs)
 	imgsByKeywords := byKeywords(imgs)
 
-	var data = Index{}
+	var keywords []string
+	for k := range imgsByKeywords {
+		keywords = append(keywords, k)
+	}
+	sort.Strings(keywords)
+
+	var data = Index{
+		Tags: keywords,
+	}
 	for y, imgs := range imgsByYear {
 		data.Sections = append(data.Sections, Section{
 			Title: strconv.Itoa(y),
@@ -229,29 +338,55 @@ func (Website) Register(devmode bool) http.Handler {
 		"prettyDate": prettyDate,
 	})
 
-	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
-		t.Render(w, "index.html", data)
+	featuredView := newFeaturedView(imgs)
+
+	if len(featured) == 0 {
+		// fallback: homepage show all the images
+		mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+			t.Render(w, "index.html", data)
+		})
+	} else {
+		mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+			t.Render(w, "index.html", Index{
+				Sections: []Section{{Title: "Top pic(k)s", Imgs: featuredView.Images()}},
+				Tags:     keywords,
+			})
+		})
+	}
+
+	allView := newAllView(imgs)
+	allViewData := allView.ByYear()
+
+	mux.HandleFunc("GET /all/{$}", func(w http.ResponseWriter, r *http.Request) {
+		t.Render(w, "index.html", allViewData)
+	})
+
+	mux.HandleFunc("GET /all/pic/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		img, ok := allView.Get(id)
+		if !ok {
+			http.NotFound(w, r)
+			return
+		}
+
+		if !devmode {
+			w.Header().Set("Cache-Control", "public, max-age=300")
+		}
+		t.Render(w, "image.html", img)
 	})
 
 	mux.HandleFunc("GET /random/{$}", func(w http.ResponseWriter, r *http.Request) {
 		random := rand.IntN(len(imgs))
 		id := imgs[random].ID
-		http.Redirect(w, r, fmt.Sprintf("/pic/%s", id), http.StatusFound)
+		http.Redirect(w, r, fmt.Sprintf("/all/pic/%s", id), http.StatusFound)
 	})
 
 	mux.HandleFunc("GET /pic/{id}", func(w http.ResponseWriter, r *http.Request) {
-		idx, ok := imgsByID[r.PathValue("id")]
+		id := r.PathValue("id")
+		img, ok := featuredView.Get(id)
 		if !ok {
 			http.NotFound(w, r)
 			return
-		}
-		img := imgs[idx]
-
-		if idx > 0 {
-			img.Nav.Prev = &imgs[idx-1]
-		}
-		if idx < len(imgs)-1 {
-			img.Nav.Next = &imgs[idx+1]
 		}
 
 		if !devmode {
@@ -318,8 +453,8 @@ func (Website) Register(devmode bool) http.Handler {
 		})
 	}
 
-	// mux.Handle("GET anto.ph/js/ps.js", plausible.Proxy)
-	// mux.Handle("GET anto.ph/api/event", plausible.Proxy)
+	mux.Handle("GET /js/ps.js", plausible.Proxy)
+	mux.Handle("GET /api/event", plausible.Proxy)
 
 	return mux
 }
