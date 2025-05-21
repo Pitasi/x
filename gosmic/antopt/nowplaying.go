@@ -59,7 +59,11 @@ func (ws Website) nowPlaying(c *lastfm.Client, mux *http.ServeMux) {
 		}
 	}()
 
+	keepalive := 30 * time.Second
+	keepaliveTimer := time.NewTicker(keepalive)
 	mux.HandleFunc("GET /now-playing", func(w http.ResponseWriter, r *http.Request) {
+		ctrl := http.NewResponseController(w)
+
 		w.Header().Set("content-type", "text/event-stream")
 		w.Header().Set("cache-control", "no-cache")
 		w.WriteHeader(200)
@@ -75,14 +79,16 @@ func (ws Website) nowPlaying(c *lastfm.Client, mux *http.ServeMux) {
 			select {
 			case <-r.Context().Done():
 				return
+			case <-keepaliveTimer.C:
+				_, _ = w.Write([]byte("data: ping"))
+				_, _ = w.Write([]byte("\n\n"))
+				_ = ctrl.Flush()
 			case data := <-newTrack:
 				_, _ = w.Write([]byte("event: now-playing\n"))
 				_, _ = w.Write([]byte("data: "))
 				_, _ = w.Write(data)
 				_, _ = w.Write([]byte("\n\n"))
-				if w, ok := w.(http.Flusher); ok {
-					w.Flush()
-				}
+				_ = ctrl.Flush()
 			}
 		}
 	})

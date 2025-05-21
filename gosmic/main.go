@@ -34,10 +34,9 @@ func main() {
 	handler = httpx.RewriteHost(handler)
 
 	s := http.Server{
-		Addr:         "0.0.0.0:8080",
-		Handler:      handler,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		Addr:        "0.0.0.0:8080",
+		Handler:     handler,
+		ReadTimeout: 10 * time.Second,
 	}
 	go ServeMetrics(":9090")
 
