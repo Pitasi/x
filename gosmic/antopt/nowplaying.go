@@ -60,7 +60,6 @@ func (ws Website) nowPlaying(c *lastfm.Client, mux *http.ServeMux) {
 	}()
 
 	keepalive := 30 * time.Second
-	keepaliveTimer := time.NewTicker(keepalive)
 	mux.HandleFunc("GET /now-playing", func(w http.ResponseWriter, r *http.Request) {
 		ctrl := http.NewResponseController(w)
 
@@ -75,6 +74,7 @@ func (ws Website) nowPlaying(c *lastfm.Client, mux *http.ServeMux) {
 			close(newTrack)
 		}()
 
+		keepaliveTimer := time.NewTicker(keepalive)
 		for {
 			select {
 			case <-r.Context().Done():
