@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"html/template"
-	"log"
 	"net/http"
 	"time"
 )
@@ -63,7 +62,7 @@ func GetUser(ctx context.Context) *User {
 func updatePrefs(w http.ResponseWriter, prefs *UserPreferences) {
 	prefsJson, err := json.Marshal(prefs)
 	if err != nil {
-		log.Println("marhsalling prefs cookie", err)
+		logger.Error("marhsalling preferences cookie", "err", err)
 		return
 	}
 	http.SetCookie(w, &http.Cookie{

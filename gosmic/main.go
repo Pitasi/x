@@ -1,16 +1,19 @@
 package main
 
 import (
-	"g2/antoph"
-	"g2/antopt"
-	"g2/httpx"
 	"html/template"
-	"log"
 	"net/http"
 	"time"
 
+	"anto.pt/x/log"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
+	"anto.pt/x/gosmic/antoph"
+	"anto.pt/x/gosmic/antopt"
+	"anto.pt/x/gosmic/httpx"
 )
+
+var logger = log.Module("gosmic")
 
 func main() {
 	mux := http.NewServeMux()
@@ -38,11 +41,12 @@ func main() {
 	}
 	go ServeMetrics(":9090")
 
-	log.Println("Listening on", s.Addr)
-	log.Fatal(s.ListenAndServe())
+	logger.Info("listening", "addr", s.Addr)
+	logger.Error("listening", "err", s.ListenAndServe())
 }
 
 func ServeMetrics(addr string) {
+	logger := log.Module("metrics_server")
 	metricsMux := http.NewServeMux()
 	metricsMux.Handle("/metrics", promhttp.Handler())
 	metricsServer := &http.Server{
@@ -51,6 +55,6 @@ func ServeMetrics(addr string) {
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
-	log.Println("Metrics server listening on", addr)
-	log.Fatal(metricsServer.ListenAndServe())
+	logger.Info("listening", "addr", addr)
+	logger.Error("listening", "err", metricsServer.ListenAndServe())
 }

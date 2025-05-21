@@ -3,14 +3,8 @@ package antoph
 import (
 	"embed"
 	"fmt"
-	"g2/fsx"
-	"g2/httpx"
-	"g2/plausible"
-	"g2/templates"
 	"html/template"
 	"io/fs"
-	"log"
-	"log/slog"
 	"math/rand/v2"
 	"net/http"
 	"os"
@@ -19,10 +13,19 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"anto.pt/x/log"
+
+	"anto.pt/x/gosmic/fsx"
+	"anto.pt/x/gosmic/httpx"
+	"anto.pt/x/gosmic/plausible"
+	"anto.pt/x/gosmic/templates"
 )
 
 //go:embed pages/*.html
 var resources embed.FS
+
+var logger = log.Module("anto.ph")
 
 var featured []string
 
@@ -187,7 +190,7 @@ func byKeywords(imgs []Img) map[string]*ByKeywordView {
 	for _, img := range imgs {
 		for _, keyword := range img.Meta.Keywords {
 			if keyword == "" {
-				log.Printf("img %s has empty keyword", img.ID)
+				logger.Warn("img has empty keyword", "id", img.ID)
 				continue
 			}
 			if _, ok := views[keyword]; !ok {
@@ -309,7 +312,7 @@ func (Website) Register(devmode bool) http.Handler {
 
 	photodbPath := os.Getenv("PHOTODB_PATH")
 	if photodbPath == "" {
-		slog.Warn("PHOTODB_PATH not set")
+		logger.Warn("PHOTODB_PATH not set")
 		return nil
 	}
 

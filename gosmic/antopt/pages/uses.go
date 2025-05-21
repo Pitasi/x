@@ -1,9 +1,10 @@
 package pages
 
 import (
-	"g2/antopt/uses"
-	"g2/templates"
 	"net/http"
+
+	"anto.pt/x/gosmic/antopt/uses"
+	"anto.pt/x/gosmic/templates"
 )
 
 func RenderUses(t *templates.T, w http.ResponseWriter, common Common, app uses.App) {

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log/slog"
 	"net"
 	"net/http"
 	"os"
@@ -24,7 +23,7 @@ func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		next.ServeHTTP(w, r)
-		slog.Info(r.URL.String(),
+		logger.Info(r.URL.String(),
 			"remote_addr", r.RemoteAddr,
 			"method", r.Method,
 			"host", r.Host,
@@ -40,7 +39,7 @@ func Recoverer(next http.Handler) http.Handler {
 					panic(rvr)
 				}
 
-				slog.Error("panic", "err", rvr)
+				logger.Error("panic", "err", rvr)
 				fmt.Fprintln(os.Stderr, string(debug.Stack()))
 
 				if r.Header.Get("Connection") != "Upgrade" {

@@ -1,8 +1,9 @@
-module g2
+module anto.pt/x/gosmic
 
 go 1.24.3
 
 require (
+	anto.pt/x/log v0.0.0-20250521134508-844ee6a9d901
 	anto.pt/x/socialimg v0.0.0-20250508114621-c78b65a0270c
 	github.com/prometheus/client_golang v1.22.0
 	github.com/yuin/goldmark v1.7.11

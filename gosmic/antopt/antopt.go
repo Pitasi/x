@@ -2,18 +2,21 @@ package antopt
 
 import (
 	"embed"
-	"g2/antopt/components"
-	"g2/antopt/lastfm"
-	"g2/antopt/pages"
-	"g2/fsx"
-	"g2/httpx"
-	"g2/static"
-	"g2/templates"
 	"html/template"
 	"net/http"
 	"os"
 	"runtime/debug"
 	"strings"
+
+	"anto.pt/x/log"
+
+	"anto.pt/x/gosmic/antopt/components"
+	"anto.pt/x/gosmic/antopt/lastfm"
+	"anto.pt/x/gosmic/antopt/pages"
+	"anto.pt/x/gosmic/fsx"
+	"anto.pt/x/gosmic/httpx"
+	"anto.pt/x/gosmic/static"
+	"anto.pt/x/gosmic/templates"
 )
 
 //go:embed components/*.html
@@ -22,6 +25,8 @@ var resources embed.FS
 
 //go:embed static/*
 var s embed.FS
+
+var logger = log.Module("anto.pt")
 
 type Website struct {
 	Colors []template.CSS

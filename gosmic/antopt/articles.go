@@ -1,13 +1,13 @@
 package antopt
 
 import (
-	"anto.pt/x/socialimg"
 	"fmt"
-	"g2/antopt/articles"
-	"g2/antopt/pages"
-	"g2/templates"
-	"log"
 	"net/http"
+
+	"anto.pt/x/gosmic/antopt/articles"
+	"anto.pt/x/gosmic/antopt/pages"
+	"anto.pt/x/gosmic/templates"
+	"anto.pt/x/socialimg"
 )
 
 func (ws *Website) articles(t *templates.T, mux *http.ServeMux) {
@@ -38,7 +38,7 @@ func (ws *Website) articles(t *templates.T, mux *http.ServeMux) {
 		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		if err := coverGenerator.Generate(w, "Antonio Pitasi", "https://anto.pt"); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("error generating social image: %v", err)
+			logger.Error("generating social image", "err", err)
 			return
 		}
 	})
@@ -67,7 +67,7 @@ func (ws *Website) articles(t *templates.T, mux *http.ServeMux) {
 		subtitle := fmt.Sprintf("written on %s", article.Date.Format("02 Jan 2006"))
 		if err := coverGenerator.Generate(w, article.Title, subtitle); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("error generating social image: %v", err)
+			logger.Error("generating social image", "err", err)
 			return
 		}
 	})

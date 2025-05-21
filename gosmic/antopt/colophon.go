@@ -1,9 +1,10 @@
 package antopt
 
 import (
-	"g2/antopt/pages"
-	"g2/templates"
 	"net/http"
+
+	"anto.pt/x/gosmic/antopt/pages"
+	"anto.pt/x/gosmic/templates"
 )
 
 func (ws *Website) colophon(t *templates.T, mux *http.ServeMux) {

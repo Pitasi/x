@@ -3,9 +3,9 @@ package antopt
 import (
 	"net/http"
 
-	"g2/antopt/pages"
-	"g2/antopt/uses"
-	"g2/templates"
+	"anto.pt/x/gosmic/antopt/pages"
+	"anto.pt/x/gosmic/antopt/uses"
+	"anto.pt/x/gosmic/templates"
 )
 
 func (ws *Website) uses(t *templates.T, mux *http.ServeMux) {

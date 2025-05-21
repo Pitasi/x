@@ -11,13 +11,13 @@ import (
 	"strings"
 	"time"
 
-	"g2/markdown"
-
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
 	"go.abhg.dev/goldmark/frontmatter"
+
+	"anto.pt/x/gosmic/markdown"
 )
 
 //go:embed *.md

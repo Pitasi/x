@@ -1,9 +1,10 @@
 package pages
 
 import (
-	"g2/antopt/articles"
-	"g2/templates"
 	"net/http"
+
+	"anto.pt/x/gosmic/antopt/articles"
+	"anto.pt/x/gosmic/templates"
 )
 
 func RenderArticle(t *templates.T, w http.ResponseWriter, common Common, article articles.Article) {

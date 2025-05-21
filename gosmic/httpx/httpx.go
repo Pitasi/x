@@ -1,16 +1,19 @@
 package httpx
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"runtime/debug"
+
+	"anto.pt/x/log"
 )
 
 var (
 	devmode     = os.Getenv("DEVMODE") != ""
 	rewriteHost = os.Getenv("REWRITE_HOST")
 )
+
+var logger = log.Module("httpx")
 
 type Website interface {
 	Register(devmode bool) http.Handler
@@ -21,15 +24,15 @@ func RegisterWebsite(domain string, website Website, mux *http.ServeMux) {
 		return
 	}
 
+	logger := logger.With("domain", domain)
+
 	defer func() {
 		v := recover()
 		if v != nil {
-			log.Printf("%s: panic: %v", domain, v)
-			debug.PrintStack()
+			logger.Error("panic recovered", "err", v, "stack", debug.Stack())
 		}
 	}()
 
-	log.Println("devmode", devmode)
 	h := website.Register(devmode)
 	mux.Handle(domain+"/", h)
 }

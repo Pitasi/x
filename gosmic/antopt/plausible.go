@@ -1,8 +1,9 @@
 package antopt
 
 import (
-	p "g2/plausible"
 	"net/http"
+
+	p "anto.pt/x/gosmic/plausible"
 )
 
 func (ws *Website) plausible(mux *http.ServeMux) {

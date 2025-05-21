@@ -1,8 +1,9 @@
 package pages
 
 import (
-	"g2/antopt/components"
 	"html/template"
+
+	"anto.pt/x/gosmic/antopt/components"
 )
 
 type Common struct {

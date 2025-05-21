@@ -1,8 +1,9 @@
 package pages
 
 import (
-	"g2/templates"
 	"net/http"
+
+	"anto.pt/x/gosmic/templates"
 )
 
 func RenderColophon(t *templates.T, w http.ResponseWriter, common Common) {

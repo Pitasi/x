@@ -3,12 +3,12 @@ package antopt
 import (
 	"context"
 	"encoding/json"
-	"g2/antopt/lastfm"
 	"iter"
-	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"anto.pt/x/gosmic/antopt/lastfm"
 )
 
 type nowPlayingSubs struct {
@@ -48,11 +48,11 @@ func (ws Website) nowPlaying(c *lastfm.Client, mux *http.ServeMux) {
 	go func() {
 		for track := range nowPlayingIter(c) {
 			if track != nil {
-				log.Println("now playing", track.Name, "-", track.Artist)
+				logger.Info("now playing", "name", track.Name, "artist", track.Artist)
 			}
 			data, err := json.Marshal(track)
 			if err != nil {
-				log.Println("error marshalling now playing track:", err)
+				logger.Error("marshalling now playing track", "err", err)
 			} else {
 				subs.broadcast(data)
 			}
@@ -96,7 +96,7 @@ func nowPlayingIter(c *lastfm.Client) iter.Seq[*lastfm.Track] {
 			track, err := c.NowPlaying(ctx)
 			cancel()
 			if err != nil {
-				log.Println("fetching last.fm now playing:", err)
+				logger.Error("fetching last.fm now playing", "err", err)
 			} else if (last == nil && track != nil) || (last != nil && track == nil) || (last != nil && track != nil && *last != *track) {
 				last = track
 				if !yield(last) {

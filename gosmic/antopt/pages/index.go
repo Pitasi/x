@@ -3,8 +3,8 @@ package pages
 import (
 	"net/http"
 
-	"g2/antopt/articles"
-	"g2/templates"
+	"anto.pt/x/gosmic/antopt/articles"
+	"anto.pt/x/gosmic/templates"
 )
 
 func RenderIndex(t *templates.T, w http.ResponseWriter, common Common, a []articles.ArticlesByYear) {

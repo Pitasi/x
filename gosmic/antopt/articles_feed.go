@@ -8,9 +8,10 @@ package antopt
 import (
 	"encoding/xml"
 	"errors"
-	"g2/antopt/articles"
 	"iter"
 	"time"
+
+	"anto.pt/x/gosmic/antopt/articles"
 )
 
 type Feed struct {
