@@ -29,6 +29,8 @@ pub fn main() !void {
     const inputDir = args[1];
     const outputDirPath = args[2];
 
+    try std.fs.cwd().makePath(outputDirPath);
+
     var outputDir = try std.fs.cwd().openDir(outputDirPath, .{});
     defer outputDir.close();
 
@@ -52,7 +54,8 @@ pub fn main() !void {
             continue;
         }
         const task = try allocator.create(Task);
-        const inputPath = try std.fs.path.joinZ(allocator, &[_][]const u8{ inputDir, entry.basename });
+        const inputPath = try std.fs.path.joinZ(allocator, &[_][]const u8{ inputDir, entry.path });
+        defer allocator.free(inputPath);
         try task.init(inputPath, outputDirPath, outputDir);
         pool.spawnWg(&wg, work, .{ allocator, task });
     }
