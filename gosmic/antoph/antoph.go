@@ -88,7 +88,7 @@ type ImgMeta struct {
 	Date         time.Time
 	Camera       string
 	Lens         string
-	ISO          string
+	ISO          int
 	ShutterSpeed string
 	Aperture     string
 	Keywords     []string

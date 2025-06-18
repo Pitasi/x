@@ -222,7 +222,7 @@
 
             <p>{{ .Meta.Camera }}</p>
             <p>{{ .Meta.Lens }}</p>
-            <p>{{ .Meta.ShutterSpeed }}s • ƒ/{{ .Meta.Aperture }} • ISO {{ .Meta.ISO }}</p>
+            <p>{{if .Meta.ShutterSpeed }}{{ .Meta.ShutterSpeed }}s {{ end }}{{ if .Meta.Aperture }}• ƒ/{{ .Meta.Aperture }} {{ end }}{{ if .Meta.ISO }}• ISO {{ .Meta.ISO }}{{ end }}</p>
 
             <hr>
 
