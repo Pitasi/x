@@ -87,7 +87,7 @@ func process(path string) {
 	}
 
 	if res.StatusCode == http.StatusNotFound {
-		log.Fatalln("no lyrics for", path)
+		log.Println("no lyrics for", path)
 		return
 	}
 
@@ -105,7 +105,8 @@ func process(path string) {
 	}
 
 	if resPayload.PlainLyrics == "" && resPayload.SyncedLyrics == "" {
-		log.Fatal("no lyrics")
+		log.Println("response doesn't contain plain or synced lyrics for", path)
+		return
 	}
 
 	if resPayload.SyncedLyrics != "" {
