@@ -2,6 +2,8 @@
   "general_settings": {
     "betaFeatures": false,
     "legacyMode": false,
+    "openBehavior": "popup",
+    "saveBehavior": "addToObsidian",
     "showMoreActionsButton": false,
     "silentOpen": false
   },
@@ -18,6 +20,7 @@
     "models": [],
     "providers": []
   },
+  "migrationVersion": 1,
   "property_types": [
     {
       "defaultValue": "{{title}}",
@@ -182,10 +185,21 @@
       "defaultValue": "{{selector:#repo-stars-counter-star}}",
       "name": "stars",
       "type": "number"
+    },
+    {
+      "name": "categories",
+      "type": "multitext"
     }
   ],
+  "reader_settings": {
+    "fontSize": 1.5,
+    "lineHeight": 1.6,
+    "maxWidth": 38,
+    "theme": "default",
+    "themeMode": "auto"
+  },
   "stats": {
-    "addToObsidian": 163,
+    "addToObsidian": 211,
     "copyToClipboard": 1,
     "saveFile": 0,
     "share": 0
@@ -247,7 +261,7 @@
     "properties": [
       {
         "id": "1734955521717ggak7u3",
-        "name": "category",
+        "name": "categories",
         "value": "[[Places]]",
         "type": "multitext"
       },
@@ -331,7 +345,8 @@
       }
     ],
     "triggers": [
-      "https://www.google.com/maps/place/"
+      "https://www.google.com/maps/place/",
+      "https://www.google.it/maps/place/"
     ],
     "id": "17349555217119tqy2jv",
     "context": ""
@@ -392,93 +407,6 @@
     ],
     "id": "1734955577525zn98p5c"
   },
-  "template_1734955598148lj0rhlo": {
-    "schemaVersion": "0.1.0",
-    "name": "IMDB",
-    "behavior": "create",
-    "noteNameFormat": "{{schema:name}}",
-    "path": "References",
-    "noteContentFormat": "",
-    "properties": [
-      {
-        "id": "1734955598155hp0swh8",
-        "name": "category",
-        "value": "[[Movies]]",
-        "type": "multitext"
-      },
-      {
-        "id": "17349555981559510of3",
-        "name": "genre",
-        "value": "{{schema:genre|wikilink|join}}",
-        "type": "multitext"
-      },
-      {
-        "id": "173495559815511mhfxd",
-        "name": "director",
-        "value": "{{schema:director[*].name|wikilink|join}}",
-        "type": "multitext"
-      },
-      {
-        "id": "1734955598155937xb94",
-        "name": "rating",
-        "value": "",
-        "type": "number"
-      },
-      {
-        "id": "1734955598155dkh2nbf",
-        "name": "scoreImdb",
-        "value": "{{schema:aggregateRating.ratingValue}}",
-        "type": "number"
-      },
-      {
-        "id": "1734955598155m6lphl9",
-        "name": "cast",
-        "value": "{{schema:actor[*].name|slice:0,5|wikilink|join}}",
-        "type": "multitext"
-      },
-      {
-        "id": "1734955598155vn9jx32",
-        "name": "cover",
-        "value": "{{schema:image}}",
-        "type": "text"
-      },
-      {
-        "id": "1734955598155p9ih0ts",
-        "name": "plot",
-        "value": "{{schema:description}}",
-        "type": "text"
-      },
-      {
-        "id": "1734955598155fu3sd60",
-        "name": "year",
-        "value": "{{schema:datePublished|split:\\\"-\\\"|slice:0,1}}",
-        "type": "number"
-      },
-      {
-        "id": "173495559815507jfrtz",
-        "name": "created",
-        "value": "{{date}}",
-        "type": "date"
-      },
-      {
-        "id": "17349555981554z3hut3",
-        "name": "tags",
-        "value": "movies, review, to-watch",
-        "type": "multitext"
-      },
-      {
-        "id": "17350628498565cpveoa4g",
-        "name": "source",
-        "value": "{{url}}",
-        "type": "text"
-      }
-    ],
-    "triggers": [
-      "schema:@Movie"
-    ],
-    "id": "1734955598148lj0rhlo",
-    "context": ""
-  },
   "template_1734955607415wncflde": {
     "schemaVersion": "0.1.0",
     "name": "IMDB reference",
@@ -489,7 +417,7 @@
     "properties": [
       {
         "id": "1734955607419qq9hnr1",
-        "name": "category",
+        "name": "categories",
         "value": "[[Movies]]",
         "type": "multitext"
       },
@@ -562,7 +490,7 @@
       {
         "id": "17349556074193p37hnw",
         "name": "tags",
-        "value": "movies, reviews, to-watch",
+        "value": "movies, to-watch",
         "type": "multitext"
       },
       {
@@ -586,7 +514,7 @@
     "properties": [
       {
         "id": "1734955674199clm0q2m",
-        "name": "category",
+        "name": "categories",
         "value": "[[Clippings]]",
         "type": "multitext"
       },
@@ -628,11 +556,12 @@
       }
     ],
     "triggers": [
-      "/^https:\\/\\/[a-z]{2,3}\\.wikipedia\\.org\\/wiki\\/?$/"
+      "/^https:\\/\\/[a-z-.]+\\.wikipedia\\.org\\/wiki\\/.*$/"
     ],
     "noteNameFormat": "{{title}}",
     "path": "Clippings",
-    "id": "1734955674199iuel27k"
+    "id": "1734955674199iuel27k",
+    "context": ""
   },
   "template_17349556963891t2jag4": {
     "schemaVersion": "0.1.0",
@@ -644,7 +573,7 @@
     "properties": [
       {
         "id": "1734955696391ts72558",
-        "name": "category",
+        "name": "categories",
         "value": "[[Products]]",
         "type": "multitext"
       },
@@ -676,7 +605,7 @@
         "id": "1734955696391bb4ivsp",
         "name": "price",
         "value": "{{meta:property:product:price:amount}}",
-        "type": "number"
+        "type": "text"
       },
       {
         "id": "1734955696391lf9s8nc",
@@ -688,7 +617,8 @@
     "triggers": [
       "schema:@Product"
     ],
-    "id": "17349556963891t2jag4"
+    "id": "17349556963891t2jag4",
+    "context": ""
   },
   "template_1734978132478wi422wgb1": {
     "schemaVersion": "0.1.0",
@@ -700,7 +630,7 @@
     "properties": [
       {
         "id": "1734955598155hp0swh8",
-        "name": "category",
+        "name": "categories",
         "value": "[[Shows]]",
         "type": "multitext"
       },
@@ -761,7 +691,7 @@
       {
         "id": "17349555981554z3hut3",
         "name": "tags",
-        "value": "shows, review, to-watch",
+        "value": "shows, to-watch",
         "type": "multitext"
       },
       {
@@ -854,7 +784,7 @@
       {
         "id": "1735062787028hjajq2j",
         "name": "tags",
-        "value": "books, to-read, review",
+        "value": "books, to-read",
         "type": "multitext"
       },
       {
@@ -865,7 +795,7 @@
       },
       {
         "id": "17350641270942gaywc4mi",
-        "name": "category",
+        "name": "categories",
         "value": "[[Books]]",
         "type": "multitext"
       }
@@ -886,7 +816,7 @@
     "properties": [
       {
         "id": "17353193367486092030bf",
-        "name": "category",
+        "name": "categories",
         "value": "[[Games]]",
         "type": "multitext"
       },
@@ -941,7 +871,7 @@
       {
         "id": "1735319405637kooq7dolc",
         "name": "tags",
-        "value": "games, review, to-play",
+        "value": "games, to-play",
         "type": "multitext"
       },
       {
@@ -1019,6 +949,87 @@
     "id": "1735327426812u9dcgkl",
     "context": ""
   },
+  "template_1760788389006rot66y7": {
+    "schemaVersion": "0.1.0",
+    "name": "IMDB",
+    "behavior": "create",
+    "noteNameFormat": "{{schema:name}}",
+    "path": "References",
+    "noteContentFormat": "",
+    "properties": [
+      {
+        "id": "1760788389009h09h4cb",
+        "name": "categories",
+        "value": "[[Movies]]",
+        "type": "multitext"
+      },
+      {
+        "id": "17607883890090hepso7",
+        "name": "genre",
+        "value": "{{schema:genre|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1760788389009i7r4btv",
+        "name": "director",
+        "value": "{{selector:[data-testid=\\\"title-pc-principal-credit\\\"]:first-child a|unique|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "17607883890092q2gnvh",
+        "name": "rating",
+        "value": "{{selector:[data-testid=\\\"hero-rating-bar__user-rating__score\\\"] span|unique}}",
+        "type": "number"
+      },
+      {
+        "id": "1760788389009jpqx2z0",
+        "name": "scoreImdb",
+        "value": "{{schema:aggregateRating.ratingValue}}",
+        "type": "number"
+      },
+      {
+        "id": "17607883890099bhdcut",
+        "name": "cast",
+        "value": "{{selector:[data-testid=\\\"title-pc-principal-credit\\\"]:nth-child(3) div a|unique|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "17607883890092s8uwlu",
+        "name": "cover",
+        "value": "{{schema:image}}",
+        "type": "text"
+      },
+      {
+        "id": "1760788389009pvod1gt",
+        "name": "plot",
+        "value": "{{schema:description}}",
+        "type": "text"
+      },
+      {
+        "id": "17607883890092d6hgfh",
+        "name": "year",
+        "value": "{{schema:datePublished|split:\\\"-\\\"|slice:0,1}}",
+        "type": "number"
+      },
+      {
+        "id": "1760788389009nj246jw",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "176078838900913u8kmk",
+        "name": "tags",
+        "value": "movies, to-watch",
+        "type": "multitext"
+      }
+    ],
+    "triggers": [
+      "/^https:\\/\\/www\\.imdb\\.com\\/title\\/tt\\d+(?!\\/reference\\/)(\\/[^\\s]*)?$/"
+    ],
+    "id": "1760788389006rot66y7",
+    "context": ""
+  },
   "template_list": [
     "1734955411472p93zhcbp7",
     "1735319308659rspl367we",
@@ -1027,7 +1038,7 @@
     "17349556963891t2jag4",
     "1734955674199iuel27k",
     "1734955607415wncflde",
-    "1734955598148lj0rhlo",
+    "1760788389006rot66y7",
     "1734955577525zn98p5c",
     "17349555217119tqy2jv",
     "1735327426812u9dcgkl"
