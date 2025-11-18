@@ -50,19 +50,19 @@ func main() {
 			continue
 		}
 
-		if slices.Contains(data.Category, "[[Shows]]") {
+		if slices.Contains(data.Categories, "[[Shows]]") {
 			shows = append(shows, data)
 		}
 
-		if slices.Contains(data.Category, "[[Movies]]") {
+		if slices.Contains(data.Categories, "[[Movies]]") {
 			movies = append(movies, data)
 		}
 
-		if slices.Contains(data.Category, "[[Places]]") {
+		if slices.Contains(data.Categories, "[[Places]]") {
 			places = append(places, data)
 		}
 
-		if slices.Contains(data.Category, "[[Books]]") {
+		if slices.Contains(data.Categories, "[[Books]]") {
 			books = append(books, data)
 		}
 	}
@@ -145,14 +145,14 @@ func sectionHandler(templateName string, data any) http.HandlerFunc {
 }
 
 type frontmatterData struct {
-	Title   string
-	Source  string    `yaml:"source"`
-	Created time.Time `yaml:"created"`
-	Tags    []string  `yaml:"tags"`
+	Title      string
+	Source     string    `yaml:"source"`
+	Created    time.Time `yaml:"created"`
+	Tags       []string  `yaml:"tags"`
+	Categories []string  `yaml:"categories"`
 
 	// Movies/Shows
 
-	Category  []string `yaml:"category"`
 	Genre     []string `yaml:"genre"`
 	Rating    int      `yaml:"rating"`
 	ScoreIMDB float64  `yaml:"scoreImdb"`
