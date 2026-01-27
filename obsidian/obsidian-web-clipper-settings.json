@@ -189,6 +189,55 @@
     {
       "name": "categories",
       "type": "multitext"
+    },
+    {
+      "name": "coordinates",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{url}}",
+      "name": "source_url",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:div.game-itemid|replace:\\\"BGG Item ID: \\\":\\\"\\\"}}",
+      "name": "id",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:span.gameplay-weight-light}}",
+      "name": "complexityRating",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:div.rating-overall span[itemprop=\\\"ratingValue\\\"]}}",
+      "name": "onlineRating",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:p.gameplay-item-primary span[ng-if=\\\"min > 0\\\"]|first}}",
+      "name": "minPlayers",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:p.gameplay-item-primary span[ng-if=\\\"max>0 && min != max\\\"]|first|replace:\\\"–\\\":\\\"\\\"}}",
+      "name": "maxPlayers",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:gameplay-module > div > div > ul > li:nth-child(2) > p > span > span|replace:\\\"–\\\":\\\" - \\\"}} minutes",
+      "name": "playtime",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{selector:div.game-header-image > ng-include > div > a > img?src}}",
+      "name": "banner",
+      "type": "text"
+    },
+    {
+      "defaultValue": "0",
+      "name": "personalRating",
+      "type": "text"
     }
   ],
   "reader_settings": {
@@ -199,7 +248,7 @@
     "themeMode": "auto"
   },
   "stats": {
-    "addToObsidian": 211,
+    "addToObsidian": 276,
     "copyToClipboard": 1,
     "saveFile": 0,
     "share": 0
@@ -216,37 +265,44 @@
       {
         "id": "1734955411472ty3fsov1l",
         "name": "title",
-        "value": "{{title}}"
+        "value": "{{title}}",
+        "type": "text"
       },
       {
         "id": "1734955411472dtctej25k",
         "name": "source",
-        "value": "{{url}}"
+        "value": "{{url}}",
+        "type": "text"
       },
       {
         "id": "1734955411472p8a228jjr",
         "name": "author",
-        "value": "{{author|split:\", \"|wikilink|join}}"
+        "value": "{{author|split:\\\", \\\"|wikilink|join}}",
+        "type": "multitext"
       },
       {
         "id": "1734955411472q60eujwv2",
         "name": "published",
-        "value": "{{published}}"
+        "value": "{{published}}",
+        "type": "date"
       },
       {
         "id": "1734955411472afoazjy1i",
         "name": "created",
-        "value": "{{date}}"
+        "value": "{{date}}",
+        "type": "date"
       },
       {
         "id": "1734955411472059b2p6qe",
         "name": "description",
-        "value": "{{description}}"
+        "value": "{{description}}",
+        "type": "text"
       },
       {
         "id": "1734955411472a9f3zsl28",
-        "name": "tags",
-        "value": "clippings"
+        "name": "categories",
+        "value": "[[Clippings]]",
+        "type": "multitext"
       }
     ],
     "triggers": []
@@ -285,7 +341,7 @@
       },
       {
         "id": "1734955521717xiipwwi",
-        "name": "location",
+        "name": "coordinates",
         "value": "{{url|split:\\\"/@\\\"|slice:1|split:\\\",\\\"|slice:0,2}}",
         "type": "multitext"
       },
@@ -330,12 +386,6 @@
         "name": "last",
         "value": "",
         "type": "date"
-      },
-      {
-        "id": "1734955521717dk16y7j",
-        "name": "tags",
-        "value": "places, to-visit",
-        "type": "multitext"
       },
       {
         "id": "17349657348608c7fpbr76",
@@ -397,15 +447,16 @@
       },
       {
         "id": "1734955577527csdl10a",
-        "name": "tags",
-        "value": "videos",
+        "name": "categories",
+        "value": "[[Videos]]",
         "type": "multitext"
       }
     ],
     "triggers": [
       "https://www.youtube.com/watch?v="
     ],
-    "id": "1734955577525zn98p5c"
+    "id": "1734955577525zn98p5c",
+    "context": ""
   },
   "template_1734955607415wncflde": {
     "schemaVersion": "0.1.0",
@@ -939,6 +990,12 @@
         "name": "created",
         "value": "{{date}}",
         "type": "date"
+      },
+      {
+        "id": "1765136348519bjp7xdlw0",
+        "name": "categories",
+        "value": "[[Repos]]",
+        "type": "multitext"
       }
     ],
     "triggers": [
@@ -1030,8 +1087,108 @@
     "id": "1760788389006rot66y7",
     "context": ""
   },
+  "template_1768858329396jbx052u": {
+    "schemaVersion": "0.1.0",
+    "name": "BoardGameGeek",
+    "behavior": "create",
+    "noteContentFormat": "{{selector:div.game-description > div.panel.panel-condensed.panel-expandable.ng-scope.ng-isolate-scope.expandable.full > div.expandable-envelope > div > article > div}}\n",
+    "properties": [
+      {
+        "id": "1768858329411g2ldkng",
+        "name": "categories",
+        "value": "[[Board games]]",
+        "type": "multitext"
+      },
+      {
+        "id": "176885832941186iu85o",
+        "name": "year",
+        "value": "{{selector:div.game-header-title-info span.game-year|replace:\\\"(\\\":\\\"\\\",\\\")\\\":\\\"\\\"}}",
+        "type": "number"
+      },
+      {
+        "id": "1768858329411gd0am7p",
+        "name": "source",
+        "value": "BoardGameGeek",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411heuqbxv",
+        "name": "source_url",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411o1pbjv1",
+        "name": "id",
+        "value": "{{selector:div.game-itemid|replace:\\\"BGG Item ID: \\\":\\\"\\\"}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411sse0ji9",
+        "name": "complexityRating",
+        "value": "{{selector:span.gameplay-weight-light}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411l1nh2jj",
+        "name": "onlineRating",
+        "value": "{{selector:div.rating-overall span[itemprop=\\\"ratingValue\\\"]}}",
+        "type": "text"
+      },
+      {
+        "id": "176885832941171wbm31",
+        "name": "minPlayers",
+        "value": "{{selector:p.gameplay-item-primary span[ng-if=\\\"min > 0\\\"]|first}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411um6czc3",
+        "name": "maxPlayers",
+        "value": "{{selector:p.gameplay-item-primary span[ng-if=\\\"max>0 && min != max\\\"]|first|replace:\\\"–\\\":\\\"\\\"}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411f3h5wz8",
+        "name": "playtime",
+        "value": "{{selector:gameplay-module > div > div > ul > li:nth-child(2) > p > span > span|replace:\\\"–\\\":\\\" - \\\"}} minutes",
+        "type": "text"
+      },
+      {
+        "id": "17688583294111esxlsy",
+        "name": "banner",
+        "value": "{{selector:div.game-header-image > ng-include > div > a > img?src}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411fkswyck",
+        "name": "image",
+        "value": "{{selector:div.game-header-image > ng-include > div > a > img?src}}",
+        "type": "text"
+      },
+      {
+        "id": "1768858329411fg5ijvf",
+        "name": "rating",
+        "value": "0",
+        "type": "number"
+      },
+      {
+        "id": "176885837298240vm823tf",
+        "name": "last",
+        "value": "{{date}}",
+        "type": "date"
+      }
+    ],
+    "triggers": [
+      "https://boardgamegeek.com/boardgame"
+    ],
+    "noteNameFormat": "{{title}}",
+    "path": "References/",
+    "id": "1768858329396jbx052u",
+    "context": ""
+  },
   "template_list": [
     "1734955411472p93zhcbp7",
+    "1768858329396jbx052u",
     "1735319308659rspl367we",
     "1735062787024ygmq53a",
     "1734978132478wi422wgb1",
