@@ -65,6 +65,7 @@ func (ws *Website) Register(devmode bool) http.Handler {
 	mux.HandleFunc("POST /submit-color", ws.preferences)
 	ws.articles(t, mux)
 	ws.colophon(t, mux)
+	ws.cv(t, mux)
 	ws.plausible(mux)
 	ws.redirects(mux)
 	ws.uses(t, mux)
@@ -106,6 +107,7 @@ func (ws *Website) common(r *http.Request) pages.Common {
 			{Title: "Articles", URL: "/"},
 			{Title: "Uses", URL: "/uses"},
 			{Title: "Pics", URL: "https://anto.ph"},
+			{Title: "CV", URL: "/cv"},
 		},
 		currentURL,
 		ws.Colors,

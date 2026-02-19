@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>cv — antonio pitasi</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+		<style>
+			:root {
+				--blue: #0000EE;
+				--blue-visited: #551A8B;
+				--black: #111;
+				--gray: #666;
+				--light: #ccc;
+				--bg: #fff;
+				--font: 'IBM Plex Mono', 'Courier New', monospace;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			
+			html {
+				font-size: 15px;
+				-webkit-font-smoothing: antialiased;
+			}
+			
+			body {
+				font-family: var(--font);
+				color: var(--black);
+				background: var(--bg);
+				line-height: 1.6;
+				padding: 3rem 1.5rem;
+				max-width: 680px;
+				margin: 0 auto;
+			}
+			
+			/* --- header --- */
+			header {
+				margin-bottom: 3rem;
+			}
+			
+			h1 {
+				font-size: 1.4rem;
+				font-weight: 600;
+				letter-spacing: -0.02em;
+				margin-bottom: 0.25rem;
+			}
+			
+			.tagline {
+				color: var(--gray);
+				font-size: 0.8rem;
+				margin-bottom: 1rem;
+			}
+			
+			.links {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.25rem 1.25rem;
+				font-size: 0.8rem;
+			}
+			
+			.links a {
+				color: var(--blue);
+				text-decoration: none;
+			}
+			
+			.links a:visited {
+				color: var(--blue);
+			}
+			
+			.links a:hover {
+				text-decoration: underline;
+			}
+			
+			.links span.sep {
+				display: none;
+			}
+			
+			/* --- sections --- */
+			section {
+				margin-bottom: 2.5rem;
+			}
+			
+			h2 {
+				font-size: 0.75rem;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				color: var(--blue);
+				border-bottom: 1px solid var(--light);
+				padding-bottom: 0.4rem;
+				margin-bottom: 1.25rem;
+			}
+			
+			/* --- work entries --- */
+			.entry {
+				margin-bottom: 1.5rem;
+			}
+			
+			.entry-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				flex-wrap: wrap;
+				gap: 0.25rem 1rem;
+				margin-bottom: 0.2rem;
+			}
+			
+			.entry-title {
+				font-weight: 600;
+				font-size: 0.9rem;
+			}
+			
+			.entry-date {
+				font-size: 0.75rem;
+				color: var(--gray);
+				white-space: nowrap;
+			}
+			
+			.entry-company {
+				font-size: 0.8rem;
+				color: var(--gray);
+				margin-bottom: 0.35rem;
+			}
+			
+			.entry-company a {
+				color: var(--blue);
+				text-decoration: none;
+			}
+			
+			.entry-company a:hover {
+				text-decoration: underline;
+			}
+			
+			.entry-desc {
+				font-size: 0.8rem;
+				color: var(--black);
+				line-height: 1.65;
+			}
+			
+			.entry-desc li {
+				margin-bottom: 0.15rem;
+				list-style: none;
+			}
+			
+			.entry-desc li::before {
+				content: "- ";
+				color: var(--gray);
+			}
+			
+			/* --- minor entries --- */
+			.entry-minor {
+				font-size: 0.8rem;
+				color: var(--gray);
+				margin-bottom: 0.5rem;
+				line-height: 1.55;
+			}
+			
+			.entry-minor strong {
+				color: var(--black);
+				font-weight: 600;
+			}
+			
+			/* --- projects --- */
+			.project {
+				margin-bottom: 1.25rem;
+			}
+			
+			.project-name {
+				font-weight: 600;
+				font-size: 0.85rem;
+			}
+			
+			.project-name a {
+				color: var(--blue);
+				text-decoration: none;
+			}
+			
+			.project-name a:hover {
+				text-decoration: underline;
+			}
+			
+			.project-desc {
+				font-size: 0.8rem;
+				color: var(--gray);
+				margin-top: 0.1rem;
+			}
+			
+			/* --- skills --- */
+			.skills-grid {
+				display: grid;
+				grid-template-columns: auto 1fr;
+				gap: 0.4rem 1.5rem;
+				font-size: 0.8rem;
+			}
+			
+			.skill-label {
+				color: var(--gray);
+				white-space: nowrap;
+			}
+			
+			.skill-value {
+				color: var(--black);
+			}
+			
+			/* --- footer --- */
+			footer {
+				margin-top: 3rem;
+				padding-top: 1rem;
+				border-top: 1px solid var(--light);
+				font-size: 0.7rem;
+				color: var(--light);
+			}
+			
+			footer .cursor {
+				display: inline-block;
+				width: 0.5em;
+				height: 1em;
+				background: var(--blue);
+				vertical-align: text-bottom;
+				animation: blink 1s step-end infinite;
+				margin-left: 0.15em;
+			}
+			
+			@keyframes blink {
+				50% { opacity: 0; }
+			}
+			
+			/* --- print --- */
+			@media print {
+				body {
+					padding: 0;
+					font-size: 13px;
+				}
+				footer .cursor {
+					display: none;
+				}
+			}
+			
+			/* --- mobile --- */
+			@media (max-width: 500px) {
+				html { font-size: 14px; }
+				body { padding: 2rem 1.25rem; }
+				.entry-header { flex-direction: column; gap: 0; }
+				.skills-grid { grid-template-columns: 1fr; gap: 0.2rem; }
+				.skill-label { font-weight: 500; }
+			}
+		</style>
+	</head>
+	<body>
+
+		<header>
+			<h1>Antonio Pitasi</h1>
+			<div class="tagline">backend engineer · distributed systems · Go</div>
+			<nav class="links">
+				<a href="mailto:antonio@pitasi.dev">antonio@pitasi.dev</a>
+				<a href="https://anto.pt">blog</a>
+				<a href="https://github.com/pitasi">github</a>
+				<a href="https://linkedin.com/in/pitasi">linkedin</a>
+			</nav>
+		</header>
+
+		<section>
+			<h2>Experience</h2>
+
+			<div class="entry">
+				<div class="entry-header">
+					<span class="entry-title">Founding Engineer</span>
+					<span class="entry-date">2024 — present</span>
+				</div>
+				<div class="entry-company">Warden Protocol</div>
+				<ul class="entry-desc">
+					<li>Architected and built a distributed consensus system from the ground up in Go</li>
+					<li>Owned all technical decisions: system design, infrastructure, CI/CD, observability</li>
+					<li>Grew the company from 1 engineer (me) to a 30-person organization; hiring, roadmap, stakeholder communication</li>
+				</ul>
+			</div>
+
+			<div class="entry">
+				<div class="entry-header">
+					<span class="entry-title">Backend Engineer</span>
+					<span class="entry-date">2022 — 2024</span>
+				</div>
+				<div class="entry-company">Qredo</div>
+				<ul class="entry-desc">
+					<li>Developed core features for a distributed MPC (multi-party computation) custody platform in Go</li>
+					<li>R&D on cryptographic performance: benchmarked and prototyped optimizations for signature verification throughput</li>
+					<li>Drove codebase refactoring and knowledge sharing across the backend team</li>
+				</ul>
+			</div>
+
+			<div class="entry">
+				<div class="entry-header">
+					<span class="entry-title">Sr. Backend Engineer</span>
+					<span class="entry-date">2022</span>
+				</div>
+				<div class="entry-company">Ignite (formerly Tendermint)</div>
+				<ul class="entry-desc">
+					<li>Optimized data indexers ingesting 100M+ transactions from 28 distributed networks</li>
+					<li>Cross-functional work across frontend, backend, and product teams</li>
+					<li>Product reached 50K monthly active users during open beta</li>
+				</ul>
+			</div>
+
+			<div class="entry">
+				<div class="entry-header">
+					<span class="entry-title">Backend Engineer</span>
+					<span class="entry-date">2020 — 2022</span>
+				</div>
+				<div class="entry-company">Geckosoft / Traent</div>
+				<ul class="entry-desc">
+					<li>Built B2B document platform with notarization features in C# / ASP.NET Core</li>
+					<li>Reduced CI/CD pipeline runtime from 70 to 10 minutes</li>
+					<li>Strong engineering culture: thorough code reviews, high test coverage, clean architecture</li>
+				</ul>
+			</div>
+
+			<div class="entry-minor">
+				Backend Engineer, <strong>Nextworks</strong>
+				<span class="entry-date">2019 — 2020</span>
+				— Postgres replication engine for IoT over unreliable connectivity
+			</div>
+
+			<div class="entry-minor">
+				Fullstack Engineer, <strong>Zerynth</strong>
+				<span class="entry-date">2018 — 2019</span>
+				— Early engineer at Industrial IoT startup; hardware to React dashboards
+			</div>
+		</section>
+
+		<section>
+			<h2>Projects</h2>
+
+			<div class="project">
+				<div class="project-name"><a href="https://pisa.dev">pisa.dev</a></div>
+				<div class="project-desc">Founded the largest software dev community in Pisa, Italy. Organized monthly meetups, invited speakers, managed venues and registrations.</div>
+			</div>
+
+			<div class="project">
+				<div class="project-name">openswit.ch (defunct)</div>
+				<div class="project-desc">Nintendo Switch game price comparison tool. Next.js, Go, Postgres. 3K monthly active users.</div>
+			</div>
+
+			<div class="project">
+				<div class="project-name"><a href="https://anto.pt">anto.pt</a></div>
+				<div class="project-desc">Personal blog and photography portfolio.</div>
+			</div>
+
+			<div class="project">
+				<div class="project-name">Speaking</div>
+				<div class="project-desc">Various talks at GDG Pisa DevFest, Elastic Meetup, Go MAD.</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>Skills</h2>
+			<div class="skills-grid">
+				<span class="skill-label">languages</span>
+				<span class="skill-value">Go, C#, TypeScript, Rust, Python</span>
+				<span class="skill-label">systems</span>
+				<span class="skill-value">distributed systems, consensus protocols, event-driven architecture</span>
+				<span class="skill-label">data</span>
+				<span class="skill-value">PostgreSQL, Redis, high-throughput data pipelines</span>
+				<span class="skill-label">infra</span>
+				<span class="skill-value">Linux, Docker, CI/CD, observability</span>
+			</div>
+		</section>
+
+		<section>
+			<h2>Education</h2>
+			<div class="entry">
+				<div class="entry-header">
+					<span class="entry-title">Computer Science, B.Sc.</span>
+					<span class="entry-date">2014 — 2019</span>
+				</div>
+				<div class="entry-company">University of Pisa</div>
+			</div>
+		</section>
+
+		<footer>
+			<span>last updated: 2026-02-19</span><span class="cursor"></span>
+		</footer>
+	</body>
+</html>
