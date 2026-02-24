@@ -41,7 +41,7 @@
 			
 			/* --- header --- */
 			header {
-				margin-bottom: 3rem;
+				margin-bottom: 2rem;
 			}
 			
 			h1 {
@@ -168,7 +168,7 @@
 			
 			/* --- projects --- */
 			.project {
-				margin-bottom: 1.25rem;
+				margin-bottom: .5rem;
 			}
 			
 			.project-name {
@@ -176,12 +176,12 @@
 				font-size: 0.85rem;
 			}
 			
-			.project-name a {
+			a.project-name {
 				color: var(--blue);
 				text-decoration: none;
 			}
 			
-			.project-name a:hover {
+			a.project-name:hover {
 				text-decoration: underline;
 			}
 			
@@ -266,70 +266,72 @@
 		</header>
 
 		<section>
+			<p>7+ years building distributed systems in Go. Founding engineer who built from scratch and scaled a team from 1 to 30. Engineering culture advocate: CI as law, thorough code reviews, clean git history. Community builder, open source tinkerer.</p>
+		</section>
+
+		<section>
 			<h2>Experience</h2>
 
 			<div class="entry">
 				<div class="entry-header">
-					<span class="entry-title">Founding Engineer</span>
-					<span class="entry-date">2024 — present</span>
+					<div>
+						<span class="entry-title">Founding Engineer</span>
+						<span class="entry-company">@ Warden Protocol</span>
+					</div>
+					<span class="entry-date">2024 — 2026</span>
 				</div>
-				<div class="entry-company">Warden Protocol</div>
 				<ul class="entry-desc">
-					<li>Architected and built a distributed consensus system from the ground up in Go</li>
-					<li>Owned all technical decisions: system design, infrastructure, CI/CD, observability</li>
-					<li>Grew the company from 1 engineer (me) to a 30-person organization; hiring, roadmap, stakeholder communication</li>
+					<li><strong>Designed and built a distributed consensus system in Go</strong>: custom protocol layer, validator coordination, and fault-tolerant state management across a network of independent nodes</li>
+					<li>Sole engineer at inception; <strong>grew the company from 1 to 30 people</strong>
+						while owning architecture, hiring bar, technical roadmap, and stakeholder communication</li>
+					<li>Built cryptographic systems including distributed key management and threshold signature schemes</li>
 				</ul>
 			</div>
 
 			<div class="entry">
 				<div class="entry-header">
-					<span class="entry-title">Backend Engineer</span>
+					<div>
+						<span class="entry-title">Backend Engineer</span>
+						<span class="entry-company">@ Qredo</span>
+					</div>
 					<span class="entry-date">2022 — 2024</span>
 				</div>
-				<div class="entry-company">Qredo</div>
 				<ul class="entry-desc">
-					<li>Developed core features for a distributed MPC (multi-party computation) custody platform in Go</li>
-					<li>R&D on cryptographic performance: benchmarked and prototyped optimizations for signature verification throughput</li>
-					<li>Drove codebase refactoring and knowledge sharing across the backend team</li>
+					<li>Developed core services for a <strong>distributed multi-party computation (MPC) platform in Go</strong>: threshold cryptography, distributed key generation and signing across geo-distributed nodes</li>
+					<li>Benchmarked and prototyped optimizations for signature verification throughput</li>
 				</ul>
 			</div>
 
 			<div class="entry">
 				<div class="entry-header">
-					<span class="entry-title">Sr. Backend Engineer</span>
+					<div>
+						<span class="entry-title">Senior Backend Engineer</span>
+						<span class="entry-company">@ Ignite (formerly Tendermint)</span>
+					</div>
 					<span class="entry-date">2022</span>
 				</div>
-				<div class="entry-company">Ignite (formerly Tendermint)</div>
 				<ul class="entry-desc">
-					<li>Optimized data indexers ingesting 100M+ transactions from 28 distributed networks</li>
-					<li>Cross-functional work across frontend, backend, and product teams</li>
-					<li>Product reached 50K monthly active users during open beta</li>
-				</ul>
-			</div>
-
-			<div class="entry">
-				<div class="entry-header">
-					<span class="entry-title">Backend Engineer</span>
-					<span class="entry-date">2020 — 2022</span>
-				</div>
-				<div class="entry-company">Geckosoft / Traent</div>
-				<ul class="entry-desc">
-					<li>Built B2B document platform with notarization features in C# / ASP.NET Core</li>
-					<li>Reduced CI/CD pipeline runtime from 70 to 10 minutes</li>
-					<li>Strong engineering culture: thorough code reviews, high test coverage, clean architecture</li>
+					<li><strong>Built and optimized data indexers ingesting 100M+ transactions from 28 distributed networks</strong>: high-throughput event processing with strict ordering guarantees</li>
+					<li>Cross-functional shipping across frontend, backend, and product; <strong>product reached 50K MAU</strong></li>
 				</ul>
 			</div>
 
 			<div class="entry-minor">
-				Backend Engineer, <strong>Nextworks</strong>
+				<strong>Geckosoft</strong>
+				<span class="entry-date">2020 — 2022</span>
+				— Cryptographic notarization B2B platform. Shaped engineering culture with thorough code reviews, reduced CI pipelines from 70 to 10 minutes.
+			</div>
+
+			<div class="entry-minor">
+				<strong>Nextworks</strong>
 				<span class="entry-date">2019 — 2020</span>
-				— Postgres replication engine for IoT over unreliable connectivity
+				— Postgres replication engine for IoT over satellite connectivity
 			</div>
 
 			<div class="entry-minor">
-				Fullstack Engineer, <strong>Zerynth</strong>
+				<strong>Zerynth</strong>
 				<span class="entry-date">2018 — 2019</span>
-				— Early engineer at Industrial IoT startup; hardware to React dashboards
+				— Early engineer at IoT startup; Championed migration from Python to Go
 			</div>
 		</section>
 
@@ -337,23 +339,19 @@
 			<h2>Projects</h2>
 
 			<div class="project">
-				<div class="project-name"><a href="https://pisa.dev">pisa.dev</a></div>
-				<div class="project-desc">Founded the largest software dev community in Pisa, Italy. Organized monthly meetups, invited speakers, managed venues and registrations.</div>
+				<a class="project-name" href="https://pisa.dev">pisa.dev</a>
+				<span class="project-desc">Founded dev community in Pisa, Italy. Organized monthly meetups.</span>
 			</div>
 
 			<div class="project">
-				<div class="project-name">openswit.ch (defunct)</div>
-				<div class="project-desc">Nintendo Switch game price comparison tool. Next.js, Go, Postgres. 3K monthly active users.</div>
+				<span class="project-name">Open source</span>
+				<span class="project-desc">Tinkering in Go, Rust, Zig, and more. <a href="https://github.com/Pitasi/rscx" target="_blank">rscx</a>
+					(Rust Server Components), <a href="https://github.com/Pitasi/plainvoice" target="_blank">plainvoice</a>. (Very) minor contributor to the Go standard library.</span>
 			</div>
 
 			<div class="project">
-				<div class="project-name"><a href="https://anto.pt">anto.pt</a></div>
-				<div class="project-desc">Personal blog and photography portfolio.</div>
-			</div>
-
-			<div class="project">
-				<div class="project-name">Speaking</div>
-				<div class="project-desc">Various talks at GDG Pisa DevFest, Elastic Meetup, Go MAD.</div>
+				<span class="project-name">Speaking & Writing</span>
+				<span class="project-desc">Various talks at GDG Pisa DevFest, Elastic Meetup, Go MAD (Madrid). Technical blog at <a href="https://anto.pt">anto.pt</a>.</span>
 			</div>
 		</section>
 
@@ -361,29 +359,31 @@
 			<h2>Skills</h2>
 			<div class="skills-grid">
 				<span class="skill-label">languages</span>
-				<span class="skill-value">Go, C#, TypeScript, Rust, Python</span>
+				<span class="skill-value">Go (primary, 7+ years), TypeScript, Zig</span>
 				<span class="skill-label">systems</span>
 				<span class="skill-value">distributed systems, consensus protocols, event-driven architecture</span>
 				<span class="skill-label">data</span>
-				<span class="skill-value">PostgreSQL, Redis, high-throughput data pipelines</span>
+				<span class="skill-value">PostgreSQL, Redis, time-series data, data indexing at scale</span>
 				<span class="skill-label">infra</span>
-				<span class="skill-value">Linux, Docker, CI/CD, observability</span>
+				<span class="skill-value">Linux, Docker, CI/CD, observability, gRPC / ConnectRPC</span>
+				<span class="skill-label">engineering</span>
+				<span class="skill-value">system design, code review culture, testing practices, mentoring, hiring</span>
 			</div>
 		</section>
 
 		<section>
 			<h2>Education</h2>
 			<div class="entry">
-				<div class="entry-header">
-					<span class="entry-title">Computer Science, B.Sc.</span>
+				<div class="entry-minor">
+					<strong>Computer Science, B.Sc.</strong>
 					<span class="entry-date">2014 — 2019</span>
+					— University of Pisa
 				</div>
-				<div class="entry-company">University of Pisa</div>
 			</div>
 		</section>
 
 		<footer>
-			<span>last updated: 2026-02-19</span><span class="cursor"></span>
+			<span>last updated: 2026-02-24</span><span class="cursor"></span>
 		</footer>
 	</body>
 </html>
