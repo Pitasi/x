@@ -192,7 +192,7 @@
     },
     {
       "name": "coordinates",
-      "type": "text"
+      "type": "multitext"
     },
     {
       "defaultValue": "{{url}}",
@@ -238,6 +238,33 @@
       "defaultValue": "0",
       "name": "personalRating",
       "type": "text"
+    },
+    {
+      "defaultValue": "{{schema:name}}",
+      "name": "album",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{schema:@MusicRelease:creditedTo}}",
+      "name": "artist",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{schema:@MusicRelease:hasReleaseRegion[0].releaseDate}}",
+      "name": "releaseDate",
+      "type": "date"
+    },
+    {
+      "name": "listenedOn",
+      "type": "date"
+    },
+    {
+      "name": "members",
+      "type": "multitext"
+    },
+    {
+      "name": "founded",
+      "type": "text"
     }
   ],
   "reader_settings": {
@@ -248,7 +275,7 @@
     "themeMode": "auto"
   },
   "stats": {
-    "addToObsidian": 276,
+    "addToObsidian": 335,
     "copyToClipboard": 1,
     "saveFile": 0,
     "share": 0
@@ -324,7 +351,7 @@
       {
         "id": "1734955521717fg7nwke",
         "name": "type",
-        "value": "{{selector:button[jsaction*=category}}",
+        "value": "{{selector:button[jsaction*=category]}}",
         "type": "multitext"
       },
       {
@@ -342,7 +369,7 @@
       {
         "id": "1734955521717xiipwwi",
         "name": "coordinates",
-        "value": "{{url|split:\\\"/@\\\"|slice:1|split:\\\",\\\"|slice:0,2}}",
+        "value": "{{url|split:\\\"/@\\\"|slice:1|split:\\\",\\\"|slice:0,2|join}}",
         "type": "multitext"
       },
       {
@@ -1186,6 +1213,114 @@
     "id": "1768858329396jbx052u",
     "context": ""
   },
+  "template_1772639623807wwqktsl": {
+    "schemaVersion": "0.1.0",
+    "name": "MusicBrainz Release",
+    "behavior": "create",
+    "noteContentFormat": "![image](https:{{schema:@MusicRelease:image.thumbnail[1].contentUrl}})\n\n## Tracklist\n\n| # | Title| Duration |\n| :--- | :--- | :--- |\n{% for track in schema:@MusicRelease:track  %}\n| {{loop.index}} | {{track.name}} | {{track.duration|duration}} |\n{% endfor %}",
+    "properties": [
+      {
+        "id": "1772639623809e3p089k",
+        "name": "categories",
+        "value": "[[Albums]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1772639623809f97azum",
+        "name": "image",
+        "value": "https:{{schema:@MusicRelease:image.thumbnail[1].contentUrl}}",
+        "type": "text"
+      },
+      {
+        "id": "1772639623809czfl2og",
+        "name": "artist",
+        "value": "[[{{schema:@MusicRelease:creditedTo}}]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1772639623809zaker4g",
+        "name": "releaseDate",
+        "value": "{{schema:@MusicRelease:hasReleaseRegion[0].releaseDate}}",
+        "type": "date"
+      },
+      {
+        "id": "177263962380980bmxdi",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1772639623809zoxszeb",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      },
+      {
+        "id": "1772639623809it2qe96",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      }
+    ],
+    "triggers": [
+      "https://musicbrainz.org/release/"
+    ],
+    "noteNameFormat": "{{schema:name}}",
+    "path": "References",
+    "id": "1772639623807wwqktsl",
+    "context": ""
+  },
+  "template_1772640130188jisw64nz8": {
+    "schemaVersion": "0.1.0",
+    "name": "MusicBrainz Artist",
+    "behavior": "create",
+    "noteContentFormat": "{{selector:div.wikipedia-extract bdi | join}}",
+    "properties": [
+      {
+        "id": "1772639623809e3p089k",
+        "name": "categories",
+        "value": "[[Artist]]",
+        "type": "multitext"
+      },
+      {
+        "id": "1772639623809f97azum",
+        "name": "founded",
+        "value": "{{schema:@MusicGroup:foundingDate}}",
+        "type": "text"
+      },
+      {
+        "id": "17726406491323uqduabu3",
+        "name": "members",
+        "value": "{{schema:@MusicGroup:member[*].member.name|unique|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1772639623809it2qe96",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "177263962380980bmxdi",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "1772639623809zoxszeb",
+        "name": "rating",
+        "value": "",
+        "type": "number"
+      }
+    ],
+    "triggers": [
+      "https://musicbrainz.org/artist/"
+    ],
+    "noteNameFormat": "{{schema:name}}",
+    "path": "References",
+    "id": "1772640130188jisw64nz8",
+    "context": ""
+  },
   "template_list": [
     "1734955411472p93zhcbp7",
     "1768858329396jbx052u",
@@ -1198,7 +1333,9 @@
     "1760788389006rot66y7",
     "1734955577525zn98p5c",
     "17349555217119tqy2jv",
-    "1735327426812u9dcgkl"
+    "1735327426812u9dcgkl",
+    "1772640130188jisw64nz8",
+    "1772639623807wwqktsl"
   ],
   "vaults": []
 }
