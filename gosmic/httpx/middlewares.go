@@ -170,7 +170,12 @@ var httpReqs = promauto.NewCounterVec(prometheus.CounterOpts{
 
 func MetricsInc(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		httpReqs.WithLabelValues(r.Host, r.URL.String()).Inc()
 		h.ServeHTTP(w, r)
+
+		pattern := r.Pattern
+		if pattern == "" {
+			pattern = "__unmatched__"
+		}
+		httpReqs.WithLabelValues(r.Host, pattern).Inc()
 	})
 }
